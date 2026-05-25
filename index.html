@@ -915,6 +915,116 @@ function removeMealItem(mealIndex,itemIndex){var entry=DS.todayNutrition();entry
 function beep(freq,dur){try{if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();var o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.frequency.value=freq||880;o.type='sine';g.gain.value=.3;o.start();o.stop(audioCtx.currentTime+(dur||.12))}catch(e){}}
 function tickBeep(){beep(660,.08)}
 function doneBeep(){beep(1200,.25)}
+function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function fmtBig(s){if(s<0)s=0;return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
+function renderDayStart(key, days){
+  if(!days) days=getActiveDays();
+  var day=days[key];if(!day)return;
+  var panel=document.getElementById('p-'+key);if(!panel)return;
+  var totalEx=expand(day).filter(function(s){return s.type==='ex'}).length;
+  var preview='';
+  for(var b=0;b<day.blocks.length;b++){
+    var bl=day.blocks[b];
+    preview+='<div style="text-align:left;margin-top:.75rem"><h4 style="font-size:.78rem;color:var(--a2);text-transform:uppercase;margin-bottom:.3rem">'+bl.name+' <span style="font-weight:400;color:var(--muted);text-transform:none">('+bl.rounds+(bl.rounds===1?' round':' rounds')+')</span></h4><ul style="list-style:none;padding:0;margin:0">';
+    var seen={};
+    for(var e=0;e<bl.ex.length;e++){
+      var ex=bl.ex[e],info=EX[ex.k];
+      if(!seen[ex.k]){seen[ex.k]=true;preview+='<li style="display:flex;justify-content:space-between;padding:.25rem 0;border-bottom:1px solid var(--border);font-size:.82rem"><span style="color:var(--text)">'+info.n+'</span><span style="color:var(--accent);font-weight:600">'+ex.reps+'</span></li>'}
+    }
+    preview+='</ul></div>';
+  }
+  panel.innerHTML='<div class="static" style="text-align:center"><h2>'+day.icon+' '+day.title+'</h2><p style="margin:.5rem 0">'+day.time+' \u00B7 '+totalEx+' exercises</p><div class="warmup-card"><strong>\uD83D\uDD25 Warm-up first</strong> '+day.warmup+'</div><button class="start-btn" onclick="startWorkout(\''+key+'\')">&#9654; START WORKOUT</button><div style="margin-top:1rem;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.75rem;box-shadow:var(--sh)"><h3 style="font-size:.88rem;color:var(--accent);margin-bottom:.25rem">\uD83D\uDCCB Today\'s Exercises</h3><p style="font-size:.72rem;color:var(--muted);margin-bottom:.4rem">Equipment & exercises at a glance</p>'+preview+'</div></div>';
+}
+function startWorkout(key){
+  requestWakeLock();
+  var days=getActiveDays();
+  var day=days[key];
+  steps=expand(day);idx=0;started=true;
+  stopCountdown();clearInterval(demoTimer);stopSessionTimer();stSeconds=0;
+  currentSession={date:new Date().toISOString().slice(0,10),day:key,duration:0,exercises:[],notes:''};
+  if(day.sessionTimer)startSessionTimer();
+  renderStep(key);
+}
+function renderStep(key){
+  var days=getActiveDays();
+  var day=days[key];
+  var panel=document.getElementById('p-'+key);
+  if(idx>=steps.length){renderComplete(key);return}
+  var step=steps[idx];
+  var totalEx=steps.filter(function(s){return s.type==='ex'}).length;
+  var doneEx=steps.slice(0,idx).filter(function(s){return s.type==='ex'}).length;
+  var pct=totalEx?(doneEx/totalEx*100):0;
+  var h='';
+  if(day.sessionTimer)h+='<div class="session-timer"><div class="st-label">Session Time</div><div class="st-time" id="st-display">'+fmt(stSeconds)+'</div><button onclick="startSessionTimer()">&#9654;</button><button class="st-stop" onclick="stopSessionTimer()">&#9208;</button><button class="st-reset" onclick="resetSessionTimer()">&#8634;</button></div>';
+  if(step.type==='rest'){h+=renderRestStep(step)}else{h+=renderExStep(step)}
+  h+='<div class="prog-bar"><div class="fill" style="width:'+pct+'%"></div></div><div class="prog-text">'+doneEx+' / '+totalEx+' exercises done</div>';
+  h+=renderUpcoming();
+  panel.innerHTML=h;
+  clearInterval(demoTimer);
+  if(step.type==='rest')autoStartRest(step.sec);
+}
+function renderExStep(s){
+  var h='<div class="now-card"><div class="now-block">'+s.block+'</div><div class="now-set">Set <span>'+s.set+'</span> of <span>'+s.of+'</span></div><div class="now-name">'+s.name+'</div><div class="now-reps">'+s.reps+'</div>';
+  if(s.imgKey&&IMG[s.imgKey+'_0']){h+='<div class="demo-imgs"><img src="'+IMG[s.imgKey+'_0']+'" alt="Start position"><img class="img-b" src="'+IMG[s.imgKey+'_1']+'" alt="End position"></div>'}
+  h+='<div class="now-cue">\uD83D\uDCAD '+s.cue+'</div>';
+  if(s.timed&&s.sec>0){h+='<div class="now-timer"><div class="big-time" id="cd-display">'+fmtBig(s.sec)+'</div><div><button class="btn-start" id="cd-btn" onclick="toggleCountdown('+s.sec+')">&#9654; START</button></div></div>'}
+  h+='<div class="now-details"><div class="now-howto">'+s.howTo;
+  if(s.vid){h+='<br><a class="now-vid" href="https://www.youtube.com/watch?v='+s.vid+'" target="_blank">\uD83D\uDCFA Watch on YouTube</a>'}
+  h+='</div></div>'+buildWeightInputArea(s);
+  h+='<button class="btn-done" onclick="nextStep()">\u2714 DONE \u2192 NEXT</button>';
+  if(idx>0)h+='<button class="btn-back" onclick="prevStep()">\u2190 BACK</button>';
+  h+='</div>';return h;
+}
+function renderRestStep(s){
+  var h='<div class="rest-card-auto"><div class="rest-label">Rest</div><div class="rest-time" id="cd-display">'+fmtBig(s.sec)+'</div><button class="skip-btn" onclick="nextStep()">Skip \u2192</button>';
+  if(idx>0)h+='<br><button class="skip-btn" style="margin-top:.3rem" onclick="prevStep()">\u2190 Back</button>';
+  return h+'</div>';
+}
+function renderUpcoming(){
+  var upcoming=steps.slice(idx+1,idx+5);if(!upcoming.length)return'';
+  var h='<div class="upcoming"><h4>Coming up</h4>';
+  for(var i=0;i<upcoming.length;i++){var s=upcoming[i];if(s.type==='rest')h+='<div class="up-item up-rest"><span>\u23F3 Rest '+s.sec+'s</span><span></span></div>';else h+='<div class="up-item"><span class="up-name">'+s.name+'</span><span class="up-reps">'+s.reps+' \u00B7 '+s.set+'/'+s.of+'</span></div>'}
+  return h+'</div>';
+}
+function renderComplete(key){
+  releaseWakeLock();
+  var days=getActiveDays();
+  var day=days[key];
+  var panel=document.getElementById('p-'+key);
+  captureExerciseInput();stopSessionTimer();
+  if(currentSession)currentSession.duration=stSeconds;
+  var sum=sessionSummary(currentSession),time='';
+  if(day.sessionTimer&&stSeconds>0)time='<p style="font-size:1.2rem;margin:.5rem 0">\u23F1\uFE0F Time: <strong>'+fmt(stSeconds)+'</strong></p>';
+  panel.innerHTML='<div class="complete-card"><div class="emoji">\uD83C\uDF89</div><h2>Workout Complete!</h2>'+time+'<p style="color:var(--muted);margin-top:.5rem">Recovery starts now.</p><div class="workout-summary"><div class="ws-row"><span>Total logged sets</span><strong>'+sum.exerciseCount+'</strong></div><div class="ws-row"><span>Total volume</span><strong>'+Math.round(sum.volume)+' kg</strong></div>'+(sum.rowDistance?'<div class="ws-row"><span>Total row distance</span><strong>'+Math.round(sum.rowDistance)+' m</strong></div>':'')+(sum.rowTime?'<div class="ws-row"><span>Total row time</span><strong>'+fmt(Math.round(sum.rowTime))+'</strong></div>':'')+'</div><div class="workout-summary"><label for="workout-notes">Notes</label><textarea id="workout-notes" placeholder="How did it feel?">'+esc(currentSession&&currentSession.notes||'')+'</textarea></div><button class="start-btn" style="margin-top:1rem" onclick="saveCurrentSession(\''+key+'\')">Save Workout</button><button class="btn-back" onclick="renderDayStart(\''+key+'\')">&#8592; Back</button></div>';
+}
+function saveCurrentSession(key){
+  if(!currentSession){renderDayStart(key);return}
+  var notes=document.getElementById('workout-notes');
+  if(notes)currentSession.notes=notes.value||'';
+  currentSession.duration=stSeconds;
+  DS.saveWorkout(JSON.parse(JSON.stringify(currentSession)));
+  alert('Workout saved');currentSession=null;
+  renderHistory();renderDayStart(key);
+}
+function nextStep(){if(steps[idx]&&steps[idx].type==='ex')captureExerciseInput();stopCountdown();clearInterval(demoTimer);idx++;renderStep(currentDay)}
+function prevStep(){if(steps[idx]&&steps[idx].type==='ex')captureExerciseInput();stopCountdown();clearInterval(demoTimer);if(idx>0)idx--;renderStep(currentDay)}
+function toggleCountdown(sec){
+  var btn=document.getElementById('cd-btn');var display=document.getElementById('cd-display');
+  if(cdInterval){clearInterval(cdInterval);cdInterval=null;btn.textContent='\u25B6 RESUME';btn.className='btn-start'}
+  else{if(cdRemaining<=0)cdRemaining=sec;btn.textContent='\u23F3 PAUSE';btn.className='btn-pause';display.classList.add('running');display.classList.remove('danger','done');
+    cdInterval=setInterval(function(){cdRemaining--;display.textContent=fmtBig(cdRemaining);if(cdRemaining<=5&&cdRemaining>0){display.classList.add('danger');display.classList.remove('running');tickBeep()}if(cdRemaining<=0){clearInterval(cdInterval);cdInterval=null;cdRemaining=0;display.textContent='\u2714 DONE';display.classList.remove('danger');display.classList.add('done');doneBeep();setTimeout(doneBeep,200)}},1000)}
+}
+function autoStartRest(sec){
+  cdRemaining=sec;var display=document.getElementById('cd-display');
+  cdInterval=setInterval(function(){cdRemaining--;if(display)display.textContent=fmtBig(cdRemaining);if(cdRemaining<=5&&cdRemaining>0){if(display)display.classList.add('danger');tickBeep()}if(cdRemaining<=0){clearInterval(cdInterval);cdInterval=null;doneBeep();setTimeout(doneBeep,200);setTimeout(function(){nextStep()},800)}},1000);
+}
+function stopCountdown(){if(cdInterval){clearInterval(cdInterval);cdInterval=null}cdRemaining=0}
+function startSessionTimer(){if(stInterval)return;stInterval=setInterval(function(){stSeconds++;var d=document.getElementById('st-display');if(d)d.textContent=fmt(stSeconds)},1000)}
+function stopSessionTimer(){if(stInterval){clearInterval(stInterval);stInterval=null}}
+function resetSessionTimer(){stopSessionTimer();stSeconds=0;var d=document.getElementById('st-display');if(d)d.textContent='00:00'}
+var demoState=0;
+function startDemoCycle(){demoState=0;demoTimer=setInterval(cycleDemo,1500)}
+function cycleDemo(){var img=document.getElementById('demo-img');var d0=document.getElementById('dot0');var d1=document.getElementById('dot1');var lbl=document.getElementById('demo-label');if(!img)return;var step=steps[idx];if(!step||!step.imgKey)return;demoState=1-demoState;if(demoState===1){img.src=IMG[step.imgKey+'_1'];if(d0)d0.classList.remove('active');if(d1)d1.classList.add('active');if(lbl)lbl.textContent='End position'}else{img.src=IMG[step.imgKey+'_0'];if(d1)d1.classList.remove('active');if(d0)d0.classList.add('active');if(lbl)lbl.textContent='Start position'}}
 // === PROGRAMME CONFIGURATION ===
 var PROGRAMMES = {
   5: { days: DAYS, keys: ['mon','tue','wed','thu','fri'], labels: ['MON','TUE','WED','THU','FRI'], restLabel: 'SAT/SUN' },
