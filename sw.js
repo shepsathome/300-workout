@@ -1,4 +1,4 @@
-const CACHE_NAME = '300-v5';
+const CACHE_NAME = '300-v6';
 const ASSETS = [
   './',
   './index.html',

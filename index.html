@@ -474,7 +474,8 @@ var DS={
         gistId:'',
         defaultDbWeight:10,
         defaultKbWeight:7.5,
-        nutritionTargets:{calories:2200,protein:150,carbs:250,fat:70}
+        nutritionTargets:{calories:2200,protein:150,carbs:250,fat:70},
+        macroCalc:{weight:80,height:178,age:35,sex:'M',activity:'moderate',goal:'recomp'}
       },
       workouts:[],
       nutrition:[],
@@ -685,7 +686,21 @@ var FOODS = [
   { name: 'Oat Milk', cal: 46, protein: 1, carbs: 6.7, fat: 1.5, serving: 250, unit: 'ml' },
   { name: 'Almond Milk', cal: 13, protein: 0.4, carbs: 0.3, fat: 1.1, serving: 250, unit: 'ml' },
   { name: 'Coca-Cola Zero', cal: 1, protein: 0, carbs: 0, fat: 0, serving: 330, unit: 'ml' },
-  { name: 'Electrolyte Drink', cal: 24, protein: 0, carbs: 5.9, fat: 0, serving: 500, unit: 'ml' }
+  { name: 'Electrolyte Drink', cal: 24, protein: 0, carbs: 5.9, fat: 0, serving: 500, unit: 'ml' },
+
+  // Adam's Custom Foods
+  { name: 'Homemade Granola', cal: 544, protein: 14, carbs: 50, fat: 32, serving: 50, unit: 'g' },
+  { name: 'Greek Yoghurt (full fat)', cal: 97, protein: 9, carbs: 3.6, fat: 5, serving: 150, unit: 'g' },
+  { name: 'Blueberries', cal: 57, protein: 0.7, carbs: 14.5, fat: 0.3, serving: 80, unit: 'g' },
+  { name: 'Raspberries', cal: 52, protein: 1.2, carbs: 12, fat: 0.6, serving: 80, unit: 'g' },
+  { name: 'Strawberries', cal: 32, protein: 0.7, carbs: 7.7, fat: 0.3, serving: 80, unit: 'g' },
+  { name: 'Protein Bar (homemade)', cal: 443, protein: 21, carbs: 43, fat: 22, serving: 35, unit: 'g' },
+  { name: 'Bean Mix (homemade)', cal: 75, protein: 4.5, carbs: 10, fat: 0.6, serving: 400, unit: 'g' },
+  { name: 'WillPowders Bone Broth Protein', cal: 547, protein: 63.5, carbs: 11.2, fat: 19.8, serving: 25, unit: 'g' },
+  { name: 'Chocolate Chip Cookie (homemade)', cal: 473, protein: 7.5, carbs: 60, fat: 22.5, serving: 40, unit: 'g' },
+  { name: 'Green Tea', cal: 1, protein: 0, carbs: 0.3, fat: 0, serving: 250, unit: 'ml' },
+  { name: 'Dark Chocolate (80%)', cal: 580, protein: 12, carbs: 33, fat: 46, serving: 10, unit: 'g' },
+  { name: 'Cachet Almonds & Orange Dark Choc', cal: 532, protein: 6.8, carbs: 43, fat: 35, serving: 8, unit: 'g' }
 ];
 
 function mealTotals(meal){var t={calories:0,protein:0,carbs:0,fat:0};(meal.items||[]).forEach(function(item){t.calories+=safeNum(item.calories,0);t.protein+=safeNum(item.protein,0);t.carbs+=safeNum(item.carbs,0);t.fat+=safeNum(item.fat,0)});return t}
@@ -735,12 +750,52 @@ function renderHistory(){
   panel.innerHTML=h;
 }
 function settingsStatusMarkup(){var text=syncState.text||(DS.get().settings.gistPat?'Ready to sync':'Not configured');var cls=syncState.cls||(DS.get().settings.gistPat?'sync-ok':'sync-err');return '<span id="sync-status" class="sync-status '+cls+'">'+esc(text)+'</span>'}
+function updateMacroCalcFromForm(){
+  var d=DS.get();
+  if(!d.settings.macroCalc)d.settings.macroCalc={};
+  var mc=d.settings.macroCalc;
+  mc.weight=safeNum((document.getElementById('mc-weight')||{}).value,mc.weight||80);
+  mc.height=safeNum((document.getElementById('mc-height')||{}).value,mc.height||178);
+  mc.age=safeNum((document.getElementById('mc-age')||{}).value,mc.age||35);
+  mc.sex=(document.getElementById('mc-sex')||{}).value||'M';
+  mc.activity=(document.getElementById('mc-activity')||{}).value||'moderate';
+  mc.goal=(document.getElementById('mc-goal')||{}).value||'recomp';
+  DS.save();
+}
+function calcMacros(){
+  var d=DS.get(),mc=d.settings.macroCalc||{};
+  var w=safeNum(mc.weight,80),h=safeNum(mc.height,178),a=safeNum(mc.age,35);
+  var bmr;
+  if(mc.sex==='F') bmr=10*w+6.25*h-5*a-161;
+  else bmr=10*w+6.25*h-5*a+5;
+  var actMult={sedentary:1.2,light:1.375,moderate:1.55,active:1.725,very_active:1.9};
+  var tdee=bmr*(actMult[mc.activity]||1.55);
+  var goalAdj={lose_fat:-300,recomp:0,lean_bulk:250,bulk:500};
+  var target=Math.round(tdee+(goalAdj[mc.goal]||0));
+  var proteinG=Math.round(w*2);
+  var fatG=Math.round(w*1);
+  var proteinCal=proteinG*4,fatCal=fatG*9;
+  var carbsCal=target-proteinCal-fatCal;
+  var carbsG=Math.round(Math.max(carbsCal/4,50));
+  var t=d.settings.nutritionTargets;
+  t.calories=target;t.protein=proteinG;t.carbs=carbsG;t.fat=fatG;
+  DS.save();
+  renderSettings();
+}
 function renderSettings(){
   var panel=document.getElementById('sec-settings'),s=DS.get().settings;
   panel.innerHTML='<div class="static"><h2>⚙️ Settings</h2><p>Manage sync, defaults, nutrition targets, and your local data.</p></div>'+
   '<div class="settings-section"><h3>GitHub Sync</h3><div class="settings-row"><label>Personal Access Token</label><input id="gist-pat-input" type="password" value="'+esc(s.gistPat)+'" onchange="updateSettingsFromForm()"></div><div class="settings-row"><label>Sync status</label><div><button class="settings-btn" onclick="testGistConnection()">Test Connection</button>'+settingsStatusMarkup()+'</div></div><div class="settings-row"><label>Gist ID</label><input id="gist-id-input" type="text" value="'+esc(s.gistId||'')+'" onchange="updateSettingsFromForm()"></div></div>'+
   '<div class="settings-section"><h3>Default Weights</h3><div class="settings-row"><label>Dumbbell (kg)</label><input id="default-db-input" type="number" step="0.5" value="'+safeNum(s.defaultDbWeight,10)+'" onchange="updateSettingsFromForm()"></div><div class="settings-row"><label>Kettlebell (kg)</label><input id="default-kb-input" type="number" step="0.5" value="'+safeNum(s.defaultKbWeight,7.5)+'" onchange="updateSettingsFromForm()"></div></div>'+
-  '<div class="settings-section"><h3>Nutrition Targets</h3><div class="settings-row"><label>Calories</label><input id="target-calories" type="number" step="1" value="'+safeNum(s.nutritionTargets.calories,2200)+'" onchange="updateSettingsFromForm()"></div><div class="settings-row"><label>Protein (g)</label><input id="target-protein" type="number" step="1" value="'+safeNum(s.nutritionTargets.protein,150)+'" onchange="updateSettingsFromForm()"></div><div class="settings-row"><label>Carbs (g)</label><input id="target-carbs" type="number" step="1" value="'+safeNum(s.nutritionTargets.carbs,250)+'" onchange="updateSettingsFromForm()"></div><div class="settings-row"><label>Fat (g)</label><input id="target-fat" type="number" step="1" value="'+safeNum(s.nutritionTargets.fat,70)+'" onchange="updateSettingsFromForm()"></div></div>'+
+  '<div class="settings-section"><h3>📊 Macro Calculator</h3><p style="font-size:.82rem;color:var(--muted);margin-bottom:.6rem">Calculate your ideal macros based on your stats and goals. Results auto-fill the Nutrition Targets below.</p>'+
+  '<div class="settings-row"><label>Weight (kg)</label><input id="mc-weight" type="number" step="0.5" value="'+safeNum((s.macroCalc||{}).weight,80)+'" onchange="updateMacroCalcFromForm()"></div>'+
+  '<div class="settings-row"><label>Height (cm)</label><input id="mc-height" type="number" step="1" value="'+safeNum((s.macroCalc||{}).height,178)+'" onchange="updateMacroCalcFromForm()"></div>'+
+  '<div class="settings-row"><label>Age</label><input id="mc-age" type="number" step="1" value="'+safeNum((s.macroCalc||{}).age,35)+'" onchange="updateMacroCalcFromForm()"></div>'+
+  '<div class="settings-row"><label>Sex</label><select id="mc-sex" onchange="updateMacroCalcFromForm()"><option value="M"'+((s.macroCalc||{}).sex==='M'?' selected':'')+'>Male</option><option value="F"'+((s.macroCalc||{}).sex==='F'?' selected':'')+'>Female</option></select></div>'+
+  '<div class="settings-row"><label>Activity Level</label><select id="mc-activity" onchange="updateMacroCalcFromForm()"><option value="sedentary"'+((s.macroCalc||{}).activity==='sedentary'?' selected':'')+'>Sedentary (desk job)</option><option value="light"'+((s.macroCalc||{}).activity==='light'?' selected':'')+'>Light (1-2 days/wk)</option><option value="moderate"'+((!(s.macroCalc||{}).activity||(s.macroCalc||{}).activity==='moderate')?' selected':'')+'>Moderate (3-5 days/wk)</option><option value="active"'+((s.macroCalc||{}).activity==='active'?' selected':'')+'>Active (6-7 days/wk)</option><option value="very_active"'+((s.macroCalc||{}).activity==='very_active'?' selected':'')+'>Very Active (2x/day)</option></select></div>'+
+  '<div class="settings-row"><label>Goal</label><select id="mc-goal" onchange="updateMacroCalcFromForm()"><option value="lose_fat"'+((s.macroCalc||{}).goal==='lose_fat'?' selected':'')+'>Lose Fat (-300 kcal)</option><option value="recomp"'+((!(s.macroCalc||{}).goal||(s.macroCalc||{}).goal==='recomp')?' selected':'')+'>Recomposition (maintenance)</option><option value="lean_bulk"'+((s.macroCalc||{}).goal==='lean_bulk'?' selected':'')+'>Lean Bulk (+250 kcal)</option><option value="bulk"'+((s.macroCalc||{}).goal==='bulk'?' selected':'')+'>Bulk (+500 kcal)</option></select></div>'+
+  '<div style="margin-top:.6rem"><button class="settings-btn" onclick="calcMacros()">🎯 Calculate & Apply Macros</button></div></div>'+
+  '<div class="settings-section"><h3>Nutrition Targets</h3><div class="settings-row"><label>Calories</label><input id="target-calories" type="number" step="1" value="'+safeNum(s.nutritionTargets.calories,2200)+'" onchange="updateSettingsFromForm()"></div><div class="settings-row"><label>Protein (g)</label><input id="target-protein" type="number" step="1" value="'+safeNum(s.nutritionTargets.protein,150)+'" onchange="updateSettingsFromForm()"></div><div class="settings-row"><label>Carbs (g)</label><input id="target-carbs" type="number" step="1" value="'+safeNum(s.nutritionTargets.carbs,250)+'" onchange="updateSettingsFromForm()"></div><div class="settings-row"><label>Fat (g)</label><input id="target-fat" type="number" step="1" value="'+safeNum(s.nutritionTargets.fat,70)+'" onchange="updateSettingsFromForm()"></div></div>'+ 
   '<div class="settings-section"><h3>Data Management</h3><div style="display:flex;gap:.5rem;flex-wrap:wrap"><button class="settings-btn secondary" onclick="exportData()">Export JSON</button><button class="settings-btn" onclick="document.getElementById(\'import-data-file\').click()">Import JSON</button><button class="settings-btn danger" onclick="clearAllData()">Clear All Data</button><input id="import-data-file" type="file" accept="application/json" style="display:none" onchange="handleImportData(event)"></div></div>'+
   '<div class="settings-section"><h3>App Updates</h3><p style="font-size:.82rem;color:var(--muted);margin-bottom:.6rem">Check for the latest version from GitHub. Your saved data (workouts, nutrition, settings) will not be affected.</p><div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center"><button class="settings-btn" onclick="checkForAppUpdate()" id="update-btn">\uD83D\uDD04 Check for Updates</button><span id="update-status" style="font-size:.78rem;color:var(--muted)"></span></div></div>';
 }
