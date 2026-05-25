@@ -45,12 +45,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Ro
 .main-section{display:none}.main-section.active{display:block}
 /* === WORKOUT CARDS === */
 .now-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.1rem;margin-bottom:.75rem;box-shadow:var(--sh);border-left:3px solid var(--accent)}
-.now-block{font-size:.68rem;color:var(--a2);font-weight:700;text-transform:uppercase;margin-bottom:.2rem;letter-spacing:.5px}
-.now-set{font-size:.72rem;color:var(--muted);font-weight:600;margin-bottom:.5rem}
+.now-block{font-size:.78rem;color:var(--a2);font-weight:700;text-transform:uppercase;margin-bottom:.2rem;letter-spacing:.5px}
+.now-set{font-size:.82rem;color:var(--muted);font-weight:600;margin-bottom:.5rem}
 .now-set span{color:var(--accent);font-weight:800}
-.now-name{font-size:1.25rem;font-weight:800;color:var(--text);margin-bottom:.15rem}
-.now-reps{font-size:1.1rem;color:var(--accent);font-weight:700;margin-bottom:.5rem}
-.now-cue{font-size:.8rem;color:var(--yellow);font-style:italic;margin-bottom:.6rem;padding:.5rem .7rem;background:rgba(210,153,34,.1);border-radius:10px;border:1px solid rgba(210,153,34,.2)}
+.now-name{font-size:1.35rem;font-weight:800;color:var(--text);margin-bottom:.15rem}
+.now-reps{font-size:1.2rem;color:var(--accent);font-weight:700;margin-bottom:.5rem}
+.now-cue{font-size:.88rem;color:var(--yellow);font-style:italic;margin-bottom:.6rem;padding:.5rem .7rem;background:rgba(210,153,34,.1);border-radius:10px;border:1px solid rgba(210,153,34,.2)}
 .now-timer{text-align:center;margin:.6rem 0}
 .now-timer .big-time{font-size:3rem;font-weight:900;font-family:'SF Mono','Courier New',monospace;color:var(--accent)}
 .now-timer .big-time.running{color:var(--green)}
@@ -62,9 +62,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Ro
 .now-timer .btn-start{background:var(--green);color:#fff}
 .now-timer .btn-pause{background:var(--red);color:#fff}
 .now-details{margin-top:.5rem}
-.now-howto{font-size:.8rem;color:var(--muted);line-height:1.6;padding:.5rem 0}
+.now-howto{font-size:.88rem;color:var(--muted);line-height:1.6;padding:.5rem 0}
 .now-howto strong{color:var(--a2)}
-.now-vid{display:inline-block;font-size:.72rem;color:var(--a2);text-decoration:none;border:1px solid var(--a2);padding:.25rem .7rem;border-radius:8px;margin-top:.3rem;transition:background .2s}
+.now-vid{display:inline-block;font-size:.82rem;color:var(--a2);text-decoration:none;border:1px solid var(--a2);padding:.25rem .7rem;border-radius:8px;margin-top:.3rem;transition:background .2s}
 .now-vid:active{background:rgba(77,166,255,.1)}
 .demo-imgs{width:100%;max-width:300px;margin:.6rem auto;text-align:center;position:relative}
 .demo-imgs img{width:100%;border-radius:10px;display:block;margin:0 auto}
@@ -91,16 +91,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Ro
 /* === PROGRESS === */
 .prog-bar{background:var(--border);border-radius:8px;height:6px;margin:.5rem 0;overflow:hidden}
 .prog-bar .fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--green));border-radius:8px;transition:width .3s}
-.prog-text{font-size:.7rem;color:var(--muted);text-align:center;margin-bottom:.6rem}
+.prog-text{font-size:.78rem;color:var(--muted);text-align:center;margin-bottom:.6rem}
 /* === UPCOMING === */
 .upcoming{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:.6rem;box-shadow:var(--sh)}
-.upcoming h4{font-size:.72rem;color:var(--muted);text-transform:uppercase;margin-bottom:.3rem}
-.up-item{display:flex;justify-content:space-between;padding:.3rem 0;border-bottom:1px solid var(--border);font-size:.8rem}
+.upcoming h4{font-size:.8rem;color:var(--muted);text-transform:uppercase;margin-bottom:.3rem}
+.up-item{display:flex;justify-content:space-between;padding:.3rem 0;border-bottom:1px solid var(--border);font-size:.85rem}
 .up-item:last-child{border:none}
 .up-item .up-name{color:var(--text)}.up-item .up-reps{color:var(--accent);font-weight:600}
 .up-item.up-rest{color:var(--green);font-style:italic}
 /* === WARMUP === */
-.warmup-card{background:rgba(63,185,80,.08);border-left:3px solid var(--green);padding:.5rem .7rem;border-radius:0 10px 10px 0;margin-bottom:.7rem;font-size:.82rem;color:var(--green)}
+.warmup-card{background:rgba(63,185,80,.08);border-left:3px solid var(--green);padding:.6rem .8rem;border-radius:0 10px 10px 0;margin-bottom:.7rem;font-size:.88rem;color:var(--green)}
 .warmup-card strong{display:block;margin-bottom:.1rem}
 /* === COMPLETE === */
 .complete-card{text-align:center;padding:2rem 1rem;background:var(--card);border:1px solid var(--green);border-radius:16px;box-shadow:var(--sh)}
@@ -741,7 +741,8 @@ function renderSettings(){
   '<div class="settings-section"><h3>GitHub Sync</h3><div class="settings-row"><label>Personal Access Token</label><input id="gist-pat-input" type="password" value="'+esc(s.gistPat)+'" onchange="updateSettingsFromForm()"></div><div class="settings-row"><label>Sync status</label><div><button class="settings-btn" onclick="testGistConnection()">Test Connection</button>'+settingsStatusMarkup()+'</div></div><div class="settings-row"><label>Gist ID</label><input id="gist-id-input" type="text" value="'+esc(s.gistId||'')+'" onchange="updateSettingsFromForm()"></div></div>'+
   '<div class="settings-section"><h3>Default Weights</h3><div class="settings-row"><label>Dumbbell (kg)</label><input id="default-db-input" type="number" step="0.5" value="'+safeNum(s.defaultDbWeight,10)+'" onchange="updateSettingsFromForm()"></div><div class="settings-row"><label>Kettlebell (kg)</label><input id="default-kb-input" type="number" step="0.5" value="'+safeNum(s.defaultKbWeight,7.5)+'" onchange="updateSettingsFromForm()"></div></div>'+
   '<div class="settings-section"><h3>Nutrition Targets</h3><div class="settings-row"><label>Calories</label><input id="target-calories" type="number" step="1" value="'+safeNum(s.nutritionTargets.calories,2200)+'" onchange="updateSettingsFromForm()"></div><div class="settings-row"><label>Protein (g)</label><input id="target-protein" type="number" step="1" value="'+safeNum(s.nutritionTargets.protein,150)+'" onchange="updateSettingsFromForm()"></div><div class="settings-row"><label>Carbs (g)</label><input id="target-carbs" type="number" step="1" value="'+safeNum(s.nutritionTargets.carbs,250)+'" onchange="updateSettingsFromForm()"></div><div class="settings-row"><label>Fat (g)</label><input id="target-fat" type="number" step="1" value="'+safeNum(s.nutritionTargets.fat,70)+'" onchange="updateSettingsFromForm()"></div></div>'+
-  '<div class="settings-section"><h3>Data Management</h3><div style="display:flex;gap:.5rem;flex-wrap:wrap"><button class="settings-btn secondary" onclick="exportData()">Export JSON</button><button class="settings-btn" onclick="document.getElementById(\'import-data-file\').click()">Import JSON</button><button class="settings-btn danger" onclick="clearAllData()">Clear All Data</button><input id="import-data-file" type="file" accept="application/json" style="display:none" onchange="handleImportData(event)"></div></div>';
+  '<div class="settings-section"><h3>Data Management</h3><div style="display:flex;gap:.5rem;flex-wrap:wrap"><button class="settings-btn secondary" onclick="exportData()">Export JSON</button><button class="settings-btn" onclick="document.getElementById(\'import-data-file\').click()">Import JSON</button><button class="settings-btn danger" onclick="clearAllData()">Clear All Data</button><input id="import-data-file" type="file" accept="application/json" style="display:none" onchange="handleImportData(event)"></div></div>'+
+  '<div class="settings-section"><h3>App Updates</h3><p style="font-size:.82rem;color:var(--muted);margin-bottom:.6rem">Check for the latest version from GitHub. Your saved data (workouts, nutrition, settings) will not be affected.</p><div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center"><button class="settings-btn" onclick="checkForAppUpdate()" id="update-btn">\uD83D\uDD04 Check for Updates</button><span id="update-status" style="font-size:.78rem;color:var(--muted)"></span></div></div>';
 }
 function updateSettingsFromForm(){
   var d=DS.get(),t=d.settings.nutritionTargets;
@@ -772,6 +773,31 @@ async function testGistConnection(){
 function exportData(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(DS.get(),null,2)],{type:'application/json'}));a.download='300-data-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},500)}
 function handleImportData(evt){var file=evt.target.files&&evt.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(e){try{var parsed=JSON.parse(e.target.result);if(!confirm('Import and overwrite local data?'))return;DS._data=Object.assign(DS.defaultData(),parsed);DS.save();setSyncState('Imported local data','sync-ok');renderSettings();renderNutrition();renderHistory();alert('Data imported.')}catch(err){console.error('Import failed:',err);alert('Import failed — invalid JSON.')}};reader.readAsText(file);evt.target.value=''}
 function clearAllData(){if(!confirm('Clear all saved workouts, nutrition, and settings?'))return;DS._data=DS.defaultData();DS.save();currentSession=null;setSyncState('All local data cleared','sync-err');renderSettings();renderNutrition();renderHistory()}
+async function checkForAppUpdate(){
+  var btn=document.getElementById('update-btn');var status=document.getElementById('update-status');
+  if(btn)btn.disabled=true;if(status)status.textContent='Checking...';
+  try{
+    if('serviceWorker' in navigator){
+      var reg=await navigator.serviceWorker.getRegistration();
+      if(reg){
+        await reg.update();
+        var waiting=reg.waiting||reg.installing;
+        if(waiting){
+          if(status)status.textContent='Update found! Applying...';
+          waiting.addEventListener('statechange',function(){if(waiting.state==='activated')window.location.reload()});
+          if(waiting.state==='installed'){waiting.postMessage({type:'SKIP_WAITING'})}
+          var keys=await caches.keys();await Promise.all(keys.map(function(k){return caches.delete(k)}));
+          setTimeout(function(){window.location.reload()},2000);
+          return;
+        }
+      }
+      var keys2=await caches.keys();
+      if(keys2.length>0){await Promise.all(keys2.map(function(k){return caches.delete(k)}));if(status)status.textContent='Cache cleared. Reloading...';setTimeout(function(){window.location.reload()},800);return}
+    }
+    if(status)status.textContent='\u2714 You are on the latest version.';if(status)status.style.color='var(--green)';
+  }catch(e){if(status){status.textContent='Update check failed: '+e.message;status.style.color='var(--red)'}}
+  finally{if(btn)btn.disabled=false}
+}
 var _activeMealIndex = -1;
 
 function addMealItem(mealIndex) {

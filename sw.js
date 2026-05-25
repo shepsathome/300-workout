@@ -1,4 +1,4 @@
-const CACHE_NAME = '300-v4';
+const CACHE_NAME = '300-v5';
 const ASSETS = [
   './',
   './index.html',
@@ -6,6 +6,13 @@ const ASSETS = [
   './icons/icon-192.png',
   './icons/icon-512.png'
 ];
+
+// Listen for skip-waiting message from app
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
 
 // Install: cache all assets
 self.addEventListener('install', event => {
