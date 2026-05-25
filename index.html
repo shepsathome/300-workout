@@ -781,6 +781,14 @@ function calcMacros(){
   t.calories=target;t.protein=proteinG;t.carbs=carbsG;t.fat=fatG;
   DS.save();
   renderSettings();
+  setTimeout(function(){
+    var btn=document.getElementById('mc-apply-btn');
+    if(btn){
+      btn.textContent='\u2705 Applied! '+target+' kcal | '+proteinG+'g P | '+carbsG+'g C | '+fatG+'g F';
+      btn.style.background='#2e7d32';btn.style.color='#fff';btn.style.border='1px solid #4caf50';
+      setTimeout(function(){btn.textContent='\uD83C\uDFAF Calculate & Apply Macros';btn.style.background='';btn.style.color='';btn.style.border='';},4000);
+    }
+  },50);
 }
 function renderSettings(){
   var panel=document.getElementById('sec-settings'),s=DS.get().settings;
@@ -794,7 +802,7 @@ function renderSettings(){
   '<div class="settings-row"><label>Sex</label><select id="mc-sex" onchange="updateMacroCalcFromForm()"><option value="M"'+((s.macroCalc||{}).sex==='M'?' selected':'')+'>Male</option><option value="F"'+((s.macroCalc||{}).sex==='F'?' selected':'')+'>Female</option></select></div>'+
   '<div class="settings-row"><label>Activity Level</label><select id="mc-activity" onchange="updateMacroCalcFromForm()"><option value="sedentary"'+((s.macroCalc||{}).activity==='sedentary'?' selected':'')+'>Sedentary (desk job)</option><option value="light"'+((s.macroCalc||{}).activity==='light'?' selected':'')+'>Light (1-2 days/wk)</option><option value="moderate"'+((!(s.macroCalc||{}).activity||(s.macroCalc||{}).activity==='moderate')?' selected':'')+'>Moderate (3-5 days/wk)</option><option value="active"'+((s.macroCalc||{}).activity==='active'?' selected':'')+'>Active (6-7 days/wk)</option><option value="very_active"'+((s.macroCalc||{}).activity==='very_active'?' selected':'')+'>Very Active (2x/day)</option></select></div>'+
   '<div class="settings-row"><label>Goal</label><select id="mc-goal" onchange="updateMacroCalcFromForm()"><option value="lose_fat"'+((s.macroCalc||{}).goal==='lose_fat'?' selected':'')+'>Lose Fat (-300 kcal)</option><option value="recomp"'+((!(s.macroCalc||{}).goal||(s.macroCalc||{}).goal==='recomp')?' selected':'')+'>Recomposition (maintenance)</option><option value="lean_bulk"'+((s.macroCalc||{}).goal==='lean_bulk'?' selected':'')+'>Lean Bulk (+250 kcal)</option><option value="bulk"'+((s.macroCalc||{}).goal==='bulk'?' selected':'')+'>Bulk (+500 kcal)</option></select></div>'+
-  '<div style="margin-top:.6rem"><button class="settings-btn" onclick="calcMacros()">🎯 Calculate & Apply Macros</button></div></div>'+
+  '<div style="margin-top:.6rem"><button class="settings-btn" id="mc-apply-btn" onclick="calcMacros()">🎯 Calculate & Apply Macros</button></div></div>'+
   '<div class="settings-section"><h3>Nutrition Targets</h3><div class="settings-row"><label>Calories</label><input id="target-calories" type="number" step="1" value="'+safeNum(s.nutritionTargets.calories,2200)+'" onchange="updateSettingsFromForm()"></div><div class="settings-row"><label>Protein (g)</label><input id="target-protein" type="number" step="1" value="'+safeNum(s.nutritionTargets.protein,150)+'" onchange="updateSettingsFromForm()"></div><div class="settings-row"><label>Carbs (g)</label><input id="target-carbs" type="number" step="1" value="'+safeNum(s.nutritionTargets.carbs,250)+'" onchange="updateSettingsFromForm()"></div><div class="settings-row"><label>Fat (g)</label><input id="target-fat" type="number" step="1" value="'+safeNum(s.nutritionTargets.fat,70)+'" onchange="updateSettingsFromForm()"></div></div>'+ 
   '<div class="settings-section"><h3>Data Management</h3><div style="display:flex;gap:.5rem;flex-wrap:wrap"><button class="settings-btn secondary" onclick="exportData()">Export JSON</button><button class="settings-btn" onclick="document.getElementById(\'import-data-file\').click()">Import JSON</button><button class="settings-btn danger" onclick="clearAllData()">Clear All Data</button><input id="import-data-file" type="file" accept="application/json" style="display:none" onchange="handleImportData(event)"></div></div>'+
   '<div class="settings-section"><h3>App Updates</h3><p style="font-size:.82rem;color:var(--muted);margin-bottom:.6rem">Check for the latest version from GitHub. Your saved data (workouts, nutrition, settings) will not be affected.</p><div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center"><button class="settings-btn" onclick="checkForAppUpdate()" id="update-btn">\uD83D\uDD04 Check for Updates</button><span id="update-status" style="font-size:.78rem;color:var(--muted)"></span></div></div>';
