@@ -763,33 +763,41 @@ function updateMacroCalcFromForm(){
   DS.save();
 }
 function calcMacros(){
-  var d=DS.get(),mc=d.settings.macroCalc||{};
-  var w=safeNum(mc.weight,80),h=safeNum(mc.height,178),a=safeNum(mc.age,35);
-  var bmr;
-  if(mc.sex==='F') bmr=10*w+6.25*h-5*a-161;
-  else bmr=10*w+6.25*h-5*a+5;
-  var actMult={sedentary:1.2,light:1.375,moderate:1.55,active:1.725,very_active:1.9};
-  var tdee=bmr*(actMult[mc.activity]||1.55);
-  var goalAdj={lose_fat:-300,recomp:0,lean_bulk:250,bulk:500};
-  var target=Math.round(tdee+(goalAdj[mc.goal]||0));
-  var proteinG=Math.round(w*2);
-  var fatG=Math.round(w*1);
-  var proteinCal=proteinG*4,fatCal=fatG*9;
-  var carbsCal=target-proteinCal-fatCal;
-  var carbsG=Math.round(Math.max(carbsCal/4,50));
-  var t=d.settings.nutritionTargets;
-  t.calories=target;t.protein=proteinG;t.carbs=carbsG;t.fat=fatG;
-  DS.save();
-  var _t=target,_p=proteinG,_c=carbsG,_f=fatG;
-  renderSettings();
-  setTimeout(function(){
+  try{
+    updateMacroCalcFromForm();
+    var d=DS.get(),mc=d.settings.macroCalc||{};
+    var w=safeNum(mc.weight,80),h=safeNum(mc.height,178),a=safeNum(mc.age,35);
+    var sex=(mc.sex||'M'),act=(mc.activity||'moderate'),goal=(mc.goal||'recomp');
+    var bmr;
+    if(sex==='F') bmr=10*w+6.25*h-5*a-161;
+    else bmr=10*w+6.25*h-5*a+5;
+    var actMult={sedentary:1.2,light:1.375,moderate:1.55,active:1.725,very_active:1.9};
+    var tdee=bmr*(actMult[act]||1.55);
+    var goalAdj={lose_fat:-300,recomp:0,lean_bulk:250,bulk:500};
+    var target=Math.round(tdee+(goalAdj[goal]||0));
+    var proteinG=Math.round(w*2);
+    var fatG=Math.round(w*1);
+    var proteinCal=proteinG*4,fatCal=fatG*9;
+    var carbsCal=target-proteinCal-fatCal;
+    var carbsG=Math.round(Math.max(carbsCal/4,50));
+    var t=d.settings.nutritionTargets;
+    t.calories=target;t.protein=proteinG;t.carbs=carbsG;t.fat=fatG;
+    DS.save();
     var res=document.getElementById('mc-result');
     if(res){
       res.style.display='block';
-      res.innerHTML='\u2705 Macros Applied!<br><span style="font-size:1.1rem">'+_t+' kcal &bull; '+_p+'g protein &bull; '+_c+'g carbs &bull; '+_f+'g fat</span>';
+      res.innerHTML='\u2705 Macros Applied!<br><span style="font-size:1.1rem">'+target+' kcal \u2022 '+proteinG+'g protein \u2022 '+carbsG+'g carbs \u2022 '+fatG+'g fat</span>';
       res.scrollIntoView({behavior:'smooth',block:'center'});
     }
-  },50);
+    var calEl=document.getElementById('target-calories');
+    var proEl=document.getElementById('target-protein');
+    var carEl=document.getElementById('target-carbs');
+    var fatEl=document.getElementById('target-fat');
+    if(calEl)calEl.value=target;
+    if(proEl)proEl.value=proteinG;
+    if(carEl)carEl.value=carbsG;
+    if(fatEl)fatEl.value=fatG;
+  }catch(e){alert('Macro calc error: '+e.message);console.error(e);}
 }
 function renderSettings(){
   var panel=document.getElementById('sec-settings'),s=DS.get().settings;
