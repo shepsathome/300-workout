@@ -1,0 +1,86 @@
+var FOODS = [
+  // Proteins
+  { name: 'Chicken Breast (cooked)', cal: 165, protein: 31, carbs: 0, fat: 3.6, serving: 150, unit: 'g' },
+  { name: 'Turkey Breast (cooked)', cal: 135, protein: 29, carbs: 0, fat: 1.6, serving: 150, unit: 'g' },
+  { name: 'Salmon', cal: 208, protein: 20.4, carbs: 0, fat: 13.4, serving: 140, unit: 'g' },
+  { name: 'Tuna (canned in water)', cal: 116, protein: 25.5, carbs: 0, fat: 0.8, serving: 120, unit: 'g' },
+  { name: 'Cod', cal: 82, protein: 18, carbs: 0, fat: 0.7, serving: 150, unit: 'g' },
+  { name: 'Prawns', cal: 99, protein: 24, carbs: 0.2, fat: 0.3, serving: 150, unit: 'g' },
+  { name: 'Eggs (whole)', cal: 143, protein: 12.6, carbs: 0.7, fat: 9.5, serving: 120, unit: 'g' },
+  { name: 'Egg Whites', cal: 52, protein: 10.9, carbs: 0.7, fat: 0.2, serving: 150, unit: 'g' },
+  { name: 'Beef Steak (lean)', cal: 187, protein: 29, carbs: 0, fat: 7, serving: 180, unit: 'g' },
+  { name: 'Beef Mince (5% fat)', cal: 137, protein: 21, carbs: 0, fat: 5, serving: 150, unit: 'g' },
+  { name: 'Pork Loin', cal: 172, protein: 27, carbs: 0, fat: 6, serving: 150, unit: 'g' },
+  { name: 'Greek Yoghurt (0% fat)', cal: 59, protein: 10.3, carbs: 3.6, fat: 0.4, serving: 170, unit: 'g' },
+  { name: 'Cottage Cheese', cal: 98, protein: 11.1, carbs: 3.4, fat: 4.3, serving: 150, unit: 'g' },
+  { name: 'Whey Protein Powder', cal: 400, protein: 80, carbs: 8, fat: 7, serving: 30, unit: 'g' },
+  { name: 'Tofu', cal: 144, protein: 17.3, carbs: 2.8, fat: 8.7, serving: 150, unit: 'g' },
+  { name: 'Tempeh', cal: 193, protein: 20.3, carbs: 7.6, fat: 10.8, serving: 120, unit: 'g' },
+  { name: 'Skyr', cal: 63, protein: 11, carbs: 4, fat: 0.2, serving: 170, unit: 'g' },
+
+  // Carbs
+  { name: 'White Rice (cooked)', cal: 130, protein: 2.7, carbs: 28.2, fat: 0.3, serving: 180, unit: 'g' },
+  { name: 'Brown Rice (cooked)', cal: 123, protein: 2.7, carbs: 25.6, fat: 1, serving: 180, unit: 'g' },
+  { name: 'Pasta (cooked)', cal: 157, protein: 5.8, carbs: 30.9, fat: 0.9, serving: 180, unit: 'g' },
+  { name: 'Quinoa (cooked)', cal: 120, protein: 4.4, carbs: 21.3, fat: 1.9, serving: 185, unit: 'g' },
+  { name: 'Oats (dry)', cal: 389, protein: 16.9, carbs: 66.3, fat: 6.9, serving: 50, unit: 'g' },
+  { name: 'Granola', cal: 471, protein: 10, carbs: 64, fat: 20, serving: 50, unit: 'g' },
+  { name: 'Sweet Potato (baked)', cal: 90, protein: 2, carbs: 20.7, fat: 0.2, serving: 200, unit: 'g' },
+  { name: 'White Potato (baked)', cal: 93, protein: 2.5, carbs: 21.2, fat: 0.1, serving: 250, unit: 'g' },
+  { name: 'Bread (white)', cal: 265, protein: 8.7, carbs: 49, fat: 3.2, serving: 30, unit: 'g' },
+  { name: 'Bread (wholemeal)', cal: 247, protein: 12.5, carbs: 41.2, fat: 4.2, serving: 30, unit: 'g' },
+  { name: 'Banana', cal: 89, protein: 1.1, carbs: 22.8, fat: 0.3, serving: 120, unit: 'g' },
+  { name: 'Apple', cal: 52, protein: 0.3, carbs: 13.8, fat: 0.2, serving: 180, unit: 'g' },
+  { name: 'Rice Cakes', cal: 387, protein: 8, carbs: 81, fat: 3, serving: 18, unit: 'g' },
+  { name: 'Bagel', cal: 250, protein: 10, carbs: 49, fat: 1.5, serving: 90, unit: 'g' },
+  { name: 'Wrap (plain tortilla)', cal: 310, protein: 8, carbs: 52, fat: 7, serving: 60, unit: 'g' },
+
+  // Fats & Nuts
+  { name: 'Avocado', cal: 160, protein: 2, carbs: 8.5, fat: 14.7, serving: 100, unit: 'g' },
+  { name: 'Olive Oil', cal: 884, protein: 0, carbs: 0, fat: 100, serving: 15, unit: 'g' },
+  { name: 'Peanut Butter', cal: 588, protein: 25, carbs: 20, fat: 50, serving: 20, unit: 'g' },
+  { name: 'Almond Butter', cal: 614, protein: 21, carbs: 19, fat: 56, serving: 20, unit: 'g' },
+  { name: 'Almonds', cal: 579, protein: 21.2, carbs: 21.6, fat: 49.9, serving: 30, unit: 'g' },
+  { name: 'Walnuts', cal: 654, protein: 15.2, carbs: 13.7, fat: 65.2, serving: 30, unit: 'g' },
+  { name: 'Cashews', cal: 553, protein: 18.2, carbs: 30.2, fat: 43.8, serving: 30, unit: 'g' },
+  { name: 'Coconut Oil', cal: 892, protein: 0, carbs: 0, fat: 100, serving: 15, unit: 'g' },
+  { name: 'Mixed Nuts', cal: 607, protein: 20, carbs: 18, fat: 54, serving: 30, unit: 'g' },
+
+  // Dairy
+  { name: 'Whole Milk', cal: 64, protein: 3.4, carbs: 4.7, fat: 3.6, serving: 250, unit: 'ml' },
+  { name: 'Semi-skimmed Milk', cal: 47, protein: 3.6, carbs: 4.8, fat: 1.7, serving: 250, unit: 'ml' },
+  { name: 'Skimmed Milk', cal: 34, protein: 3.6, carbs: 5, fat: 0.2, serving: 250, unit: 'ml' },
+  { name: 'Cheddar Cheese', cal: 402, protein: 25, carbs: 1.3, fat: 33, serving: 30, unit: 'g' },
+  { name: 'Mozzarella', cal: 280, protein: 28, carbs: 3.1, fat: 17, serving: 50, unit: 'g' },
+  { name: 'Butter', cal: 717, protein: 0.9, carbs: 0.1, fat: 81.1, serving: 10, unit: 'g' },
+  { name: 'Cream Cheese (light)', cal: 160, protein: 7, carbs: 6, fat: 11, serving: 30, unit: 'g' },
+
+  // Vegetables
+  { name: 'Broccoli', cal: 34, protein: 2.8, carbs: 6.6, fat: 0.4, serving: 100, unit: 'g' },
+  { name: 'Spinach', cal: 23, protein: 2.9, carbs: 3.6, fat: 0.4, serving: 80, unit: 'g' },
+  { name: 'Kale', cal: 49, protein: 4.3, carbs: 8.8, fat: 0.9, serving: 80, unit: 'g' },
+  { name: 'Green Beans', cal: 31, protein: 1.8, carbs: 7, fat: 0.2, serving: 100, unit: 'g' },
+  { name: 'Peppers (bell)', cal: 31, protein: 1, carbs: 6, fat: 0.3, serving: 100, unit: 'g' },
+  { name: 'Tomatoes', cal: 18, protein: 0.9, carbs: 3.9, fat: 0.2, serving: 100, unit: 'g' },
+  { name: 'Mushrooms', cal: 22, protein: 3.1, carbs: 3.3, fat: 0.3, serving: 100, unit: 'g' },
+  { name: 'Carrots', cal: 41, protein: 0.9, carbs: 9.6, fat: 0.2, serving: 80, unit: 'g' },
+  { name: 'Cucumber', cal: 15, protein: 0.7, carbs: 3.6, fat: 0.1, serving: 100, unit: 'g' },
+  { name: 'Onion', cal: 40, protein: 1.1, carbs: 9.3, fat: 0.1, serving: 80, unit: 'g' },
+
+  // Common Meals & Snacks
+  { name: 'Protein Bar (average)', cal: 370, protein: 30, carbs: 35, fat: 10, serving: 60, unit: 'g' },
+  { name: 'Dark Chocolate (70%)', cal: 598, protein: 7.8, carbs: 45.9, fat: 42.6, serving: 25, unit: 'g' },
+  { name: 'Hummus', cal: 166, protein: 7.9, carbs: 14.3, fat: 9.6, serving: 50, unit: 'g' },
+  { name: 'Baked Beans', cal: 78, protein: 4.7, carbs: 12.9, fat: 0.2, serving: 200, unit: 'g' },
+  { name: 'Porridge with Milk (prepared)', cal: 84, protein: 3.3, carbs: 12.3, fat: 2.2, serving: 250, unit: 'g' },
+  { name: 'Overnight Oats', cal: 126, protein: 5.2, carbs: 16.5, fat: 4.1, serving: 200, unit: 'g' },
+  { name: 'Chicken Sandwich', cal: 235, protein: 17, carbs: 23, fat: 8, serving: 180, unit: 'g' },
+
+  // Drinks
+  { name: 'Orange Juice', cal: 45, protein: 0.7, carbs: 10.4, fat: 0.2, serving: 250, unit: 'ml' },
+  { name: 'Protein Shake (typical)', cal: 80, protein: 15, carbs: 4, fat: 0.8, serving: 330, unit: 'ml' },
+  { name: 'Oat Milk', cal: 46, protein: 1, carbs: 6.7, fat: 1.5, serving: 250, unit: 'ml' },
+  { name: 'Almond Milk', cal: 13, protein: 0.4, carbs: 0.3, fat: 1.1, serving: 250, unit: 'ml' },
+  { name: 'Coca-Cola Zero', cal: 1, protein: 0, carbs: 0, fat: 0, serving: 330, unit: 'ml' },
+  { name: 'Electrolyte Drink', cal: 24, protein: 0, carbs: 5.9, fat: 0, serving: 500, unit: 'ml' }
+];

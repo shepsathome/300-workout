@@ -1,4 +1,4 @@
-const CACHE_NAME = 'spartan-spider-v1';
+const CACHE_NAME = '300-v2';
 const ASSETS = [
   './',
   './index.html',
