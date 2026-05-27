@@ -174,6 +174,8 @@ a{color:var(--a2)}
 .macro-bar .macro-fill.pro{background:var(--a2)}
 .macro-bar .macro-fill.carb{background:var(--yellow)}
 .macro-bar .macro-fill.fat{background:var(--red)}
+.quick-meal-card{cursor:pointer;transition:transform .15s,background .15s}
+.quick-meal-card:active{transform:scale(.98);background:rgba(0,0,0,.03)}
 .nutrition-totals{padding:.95rem;border-color:rgba(232,89,12,.16)}
 .nutrition-totals h3{font-size:.86rem;color:var(--accent);margin-bottom:.55rem;font-weight:700}
 .nt-row{margin-bottom:.55rem}
@@ -699,7 +701,55 @@ var FOODS = [
   { name: 'Chocolate Chip Cookie (homemade)', cal: 473, protein: 7.5, carbs: 60, fat: 22.5, serving: 40, unit: 'g' },
   { name: 'Green Tea', cal: 1, protein: 0, carbs: 0.3, fat: 0, serving: 250, unit: 'ml' },
   { name: 'Dark Chocolate (80%)', cal: 580, protein: 12, carbs: 33, fat: 46, serving: 10, unit: 'g' },
-  { name: 'Cachet Almonds & Orange Dark Choc', cal: 532, protein: 6.8, carbs: 43, fat: 35, serving: 8, unit: 'g' }
+  { name: 'Cachet Almonds & Orange Dark Choc', cal: 532, protein: 6.8, carbs: 43, fat: 35, serving: 8, unit: 'g' },
+  { name: 'Sourdough Seeded Toast (1 slice)', cal: 260, protein: 9, carbs: 43, fat: 5, serving: 50, unit: 'g' },
+  { name: 'Grass-Fed Butter (unsalted)', cal: 717, protein: 0.9, carbs: 0.1, fat: 81, serving: 10, unit: 'g' },
+  { name: 'Scrambled Eggs', cal: 148, protein: 10.6, carbs: 1.6, fat: 11, serving: 120, unit: 'g' },
+  { name: 'Buttermilk Pancakes (half batch)', cal: 200, protein: 6, carbs: 28, fat: 7, serving: 225, unit: 'g' },
+  { name: 'Streaky Bacon (cooked)', cal: 541, protein: 37, carbs: 1.4, fat: 42, serving: 25, unit: 'g' },
+  { name: 'Maple Syrup', cal: 260, protein: 0, carbs: 67, fat: 0.1, serving: 60, unit: 'g' }
+];
+
+var QUICK_MEALS = [
+  {
+    name: 'Spartan Breakfast',
+    emoji: '\u{1F95A}',
+    slot: 0,
+    desc: 'Eggs on toast, shake, bananas, protein bar, granola & berries',
+    items: [
+      { name: 'Scrambled Eggs (120g)', calories: 178, protein: 12.7, carbs: 1.9, fat: 13.2 },
+      { name: 'Sourdough Seeded Toast (50g)', calories: 130, protein: 4.5, carbs: 21.5, fat: 2.5 },
+      { name: 'Grass-Fed Butter (10g)', calories: 72, protein: 0.1, carbs: 0, fat: 8.1 },
+      { name: 'WillPowders Shake (25g + 250ml milk)', calories: 297, protein: 24.4, carbs: 22.9, fat: 14 },
+      { name: 'Banana x2 (240g)', calories: 214, protein: 2.6, carbs: 54.7, fat: 0.7 },
+      { name: 'Protein Bar - homemade (35g)', calories: 155, protein: 7.4, carbs: 15.1, fat: 7.7 },
+      { name: 'Granola bowl 1 (25g) + berries', calories: 151, protein: 4, carbs: 15.5, fat: 8.3 },
+      { name: 'Granola bowl 2 (25g) + berries', calories: 151, protein: 4, carbs: 15.5, fat: 8.3 }
+    ]
+  },
+  {
+    name: 'Pancake Breakfast',
+    emoji: '\u{1F95E}',
+    slot: 0,
+    desc: 'Buttermilk pancakes, bacon & maple syrup',
+    items: [
+      { name: 'Buttermilk Pancakes - half batch (225g)', calories: 450, protein: 13.5, carbs: 63, fat: 15.8 },
+      { name: 'Streaky Bacon x3 (75g)', calories: 406, protein: 27.8, carbs: 1.1, fat: 31.5 },
+      { name: 'Maple Syrup (60g)', calories: 156, protein: 0, carbs: 40.2, fat: 0.1 }
+    ]
+  },
+  {
+    name: 'Standard Lunch',
+    emoji: '\u{1F32F}',
+    slot: 1,
+    desc: 'Bean mix, grilled chicken, wraps & chocolate',
+    items: [
+      { name: 'Bean Mix - homemade (350g)', calories: 263, protein: 15.8, carbs: 35, fat: 2.1 },
+      { name: 'Grilled Chicken Breast (150g)', calories: 248, protein: 46.5, carbs: 0, fat: 5.4 },
+      { name: 'Plain Flour Wraps x3 (180g)', calories: 558, protein: 14.4, carbs: 93.6, fat: 12.6 },
+      { name: 'Cachet Almond & Orange Choc (8g)', calories: 43, protein: 0.5, carbs: 3.4, fat: 2.8 }
+    ]
+  }
 ];
 
 function mealTotals(meal){var t={calories:0,protein:0,carbs:0,fat:0};(meal.items||[]).forEach(function(item){t.calories+=safeNum(item.calories,0);t.protein+=safeNum(item.protein,0);t.carbs+=safeNum(item.carbs,0);t.fat+=safeNum(item.fat,0)});return t}
@@ -718,6 +768,19 @@ function renderNutrition(){
   for(var m=0;m<macros.length;m++){
     var mc=macros[m],pct=mc.target>0?Math.min(100,Math.round(mc.val/mc.target*100)):0;
     h+='<div class="nt-row"><div class="nt-label"><span>'+mc.label+'</span><span class="nt-val">'+Math.round(mc.val)+' '+mc.unit+'</span><span class="nt-target">/ '+mc.target+' '+mc.unit+' ('+pct+'%)</span></div><div class="macro-bar"><div class="macro-fill '+mc.cls+'" style="width:'+pct+'%"></div></div></div>';
+  }
+  h+='</div>';
+  // Quick Meals
+  h+='<div class="settings-section" style="margin-top:.6rem"><h3>\u26A1 Quick Meals</h3>';
+  h+='<p style="font-size:.78rem;color:var(--muted);margin-bottom:.5rem">Tap to add all items to the meal slot in one go.</p>';
+  for(var q=0;q<QUICK_MEALS.length;q++){
+    var qm=QUICK_MEALS[q],qmCal=0,qmP=0,qmC=0,qmF=0;
+    for(var qi=0;qi<qm.items.length;qi++){qmCal+=qm.items[qi].calories;qmP+=qm.items[qi].protein;qmC+=qm.items[qi].carbs;qmF+=qm.items[qi].fat;}
+    h+='<div class="food-result-item quick-meal-card" onclick="addQuickMeal('+q+')" style="border-radius:10px;margin-bottom:.3rem;padding:.7rem">';
+    h+='<div><div class="fr-name">'+qm.emoji+' '+esc(qm.name)+'</div>';
+    h+='<div class="fr-macros" style="margin-top:.15rem">'+Math.round(qmCal)+' kcal \u2022 '+Math.round(qmP)+'g P \u2022 '+Math.round(qmC)+'g C \u2022 '+Math.round(qmF)+'g F</div>';
+    h+='<div style="font-size:.72rem;color:var(--muted);margin-top:.1rem">'+esc(qm.desc)+' \u2192 '+esc(DS.todayNutrition().meals[qm.slot].name)+'</div>';
+    h+='</div></div>';
   }
   h+='</div>';
   // Meals
@@ -1010,6 +1073,22 @@ function addCustomFood() {
 }
 function quickAddRecent(mealIndex,recentIndex){var entry=DS.todayNutrition(),food=DS.get().recentFoods[recentIndex];if(!food)return;entry.meals[mealIndex].items.push({name:food.name,calories:food.calories,protein:food.protein,carbs:food.carbs,fat:food.fat});DS.saveNutrition(entry);renderNutrition()}
 function removeMealItem(mealIndex,itemIndex){var entry=DS.todayNutrition();entry.meals[mealIndex].items.splice(itemIndex,1);DS.saveNutrition(entry);renderNutrition()}
+function addQuickMeal(qmIndex) {
+  var qm = QUICK_MEALS[qmIndex];
+  if (!qm) return;
+  var entry = DS.todayNutrition();
+  for (var i = 0; i < qm.items.length; i++) {
+    entry.meals[qm.slot].items.push({
+      name: qm.items[i].name,
+      calories: qm.items[i].calories,
+      protein: qm.items[i].protein,
+      carbs: qm.items[i].carbs,
+      fat: qm.items[i].fat
+    });
+  }
+  DS.saveNutrition(entry);
+  renderNutrition();
+}
 function beep(freq,dur){try{if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();var o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.frequency.value=freq||880;o.type='sine';g.gain.value=.3;o.start();o.stop(audioCtx.currentTime+(dur||.12))}catch(e){}}
 function tickBeep(){beep(660,.08)}
 function doneBeep(){beep(1200,.25)}
