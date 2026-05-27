@@ -512,7 +512,10 @@ var DS={
     if(!d.settings.gistPat){setSyncState('Sync disabled','sync-err');return}
     try{
       setSyncState('Syncing...','');
-      var body=JSON.stringify(this._data);
+      var clone=JSON.parse(JSON.stringify(this._data));
+      delete clone.settings.gistPat;
+      delete clone.settings.gistId;
+      var body=JSON.stringify(clone);
       if(d.settings.gistId){
         var updateResp=await fetch('https://api.github.com/gists/'+d.settings.gistId,{method:'PATCH',headers:{'Authorization':'Bearer '+d.settings.gistPat,'Content-Type':'application/json'},body:JSON.stringify({files:{'300-data.json':{content:body}}})});
         if(!updateResp.ok)throw new Error('HTTP '+updateResp.status);
