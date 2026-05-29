@@ -476,11 +476,14 @@ var DS={
         defaultDbWeight:10,
         defaultKbWeight:7.5,
         nutritionTargets:{calories:2200,protein:150,carbs:250,fat:70},
-        macroCalc:{weight:80,height:178,age:35,sex:'M',activity:'moderate',goal:'recomp'}
+        macroCalc:{weight:80,height:178,age:35,sex:'M',activity:'moderate',goal:'recomp'},
+        intermittentFasting:{enabled:false,windowStart:'10:00',windowEnd:'18:00',daysActive:'weekdays'}
       },
       workouts:[],
       nutrition:[],
-      recentFoods:[]
+      bodyMetrics:[],
+      recentFoods:[],
+      suggestions:null
     };
   },
   load:function(){
@@ -507,6 +510,8 @@ var DS={
     if(!entry){entry={date:today,meals:[{name:'Breakfast',items:[]},{name:'Lunch',items:[]},{name:'Dinner',items:[]},{name:'Snacks',items:[]}]}}
     return entry;
   },
+  saveBodyMetric:function(entry){var d=this.get();if(!d.bodyMetrics)d.bodyMetrics=[];var existing=d.bodyMetrics.findIndex(function(m){return m.date===entry.date});if(existing>=0)d.bodyMetrics[existing]=entry;else d.bodyMetrics.push(entry);d.bodyMetrics.sort(function(a,b){return b.date.localeCompare(a.date)});this.save();this.syncToGist()},
+  deleteBodyMetric:function(date){var d=this.get();if(!d.bodyMetrics)return;d.bodyMetrics=d.bodyMetrics.filter(function(m){return m.date!==date});this.save();this.syncToGist()},
   syncToGist:async function(){
     var d=this.get();
     if(!d.settings.gistPat){setSyncState('Sync disabled','sync-err');return}
@@ -758,7 +763,7 @@ var QUICK_MEALS = [
 function mealTotals(meal){var t={calories:0,protein:0,carbs:0,fat:0};(meal.items||[]).forEach(function(item){t.calories+=safeNum(item.calories,0);t.protein+=safeNum(item.protein,0);t.carbs+=safeNum(item.carbs,0);t.fat+=safeNum(item.fat,0)});return t}
 function nutritionTotals(entry){var t={calories:0,protein:0,carbs:0,fat:0};(entry.meals||[]).forEach(function(meal){var mt=mealTotals(meal);t.calories+=mt.calories;t.protein+=mt.protein;t.carbs+=mt.carbs;t.fat+=mt.fat});return t}
 function renderNutrition(){
-  var panel=document.getElementById('sec-nutrition'),entry=DS.todayNutrition(),targets=DS.get().settings.nutritionTargets,totals=nutritionTotals(entry);
+  var panel=document.getElementById('sec-nutrition'),entry=DS.todayNutrition(),d=DS.get(),targets=d.settings.nutritionTargets,totals=nutritionTotals(entry);
   var h='<div class="static" style="border:none;box-shadow:none;padding:0"><h2>🍽️ Nutrition Tracker</h2></div>';
   // Macro progress bars
   h+='<div class="nutrition-totals"><h3>'+entry.date+'</h3>';
@@ -773,6 +778,13 @@ function renderNutrition(){
     h+='<div class="nt-row"><div class="nt-label"><span>'+mc.label+'</span><span class="nt-val">'+Math.round(mc.val)+' '+mc.unit+'</span><span class="nt-target">/ '+mc.target+' '+mc.unit+' ('+pct+'%)</span></div><div class="macro-bar"><div class="macro-fill '+mc.cls+'" style="width:'+pct+'%"></div></div></div>';
   }
   h+='</div>';
+  var ifSettings=d.settings.intermittentFasting||{};
+  if(ifSettings.enabled){
+    var isIFDay=ifSettings.daysActive==='everyday'||(ifSettings.daysActive==='weekdays'&&[1,2,3,4,5].indexOf(new Date(entry.date+'T12:00:00').getDay())>=0);
+    if(isIFDay){
+      h+='<div style="background:rgba(0,122,255,.08);border:1px solid rgba(0,122,255,.18);border-radius:14px;padding:.65rem .85rem;margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem"><span style="font-size:1.1rem">🕐</span><div><strong style="font-size:.82rem;color:var(--a2)">16:8 Fasting</strong><br><span style="font-size:.76rem;color:var(--muted)">Eating window: '+(ifSettings.windowStart||'10:00')+' – '+(ifSettings.windowEnd||'18:00')+'</span></div></div>';
+    }
+  }
   // Quick Meals
   h+='<div class="settings-section" style="margin-top:.6rem"><h3>\u26A1 Quick Meals</h3>';
   h+='<p style="font-size:.78rem;color:var(--muted);margin-bottom:.5rem">Tap to add all items to the meal slot in one go.</p>';
@@ -803,12 +815,88 @@ function renderNutrition(){
   }
   panel.innerHTML=h;
 }
+function renderBodyMetrics(){
+  var d=DS.get(),metrics=(d.bodyMetrics||[]).slice();
+  var h='<div class="settings-section"><h3>📏 Body Measurements</h3>';
+  h+='<p style="font-size:.78rem;color:var(--muted);margin-bottom:.65rem">Track weekly to monitor progress. Weigh in same conditions each time.</p>';
+  h+='<div class="workout-summary" style="padding:.85rem">';
+  h+='<div class="settings-row"><label>Date</label><input type="date" id="bm-date" value="'+new Date().toISOString().slice(0,10)+'"></div>';
+  h+='<div class="settings-row"><label>Weight (kg)</label><input type="number" id="bm-weight" step="0.1" placeholder="76.0"></div>';
+  h+='<div class="settings-row"><label>Waist (cm)</label><input type="number" id="bm-waist" step="0.5" placeholder="82"></div>';
+  h+='<div class="settings-row"><label>Feel (1–10)</label><input type="number" id="bm-feel" min="1" max="10" step="1" placeholder="7"></div>';
+  h+='<div class="settings-row"><label>Notes</label><input type="text" id="bm-notes" placeholder="Optional notes"></div>';
+  h+='<button class="settings-btn" style="margin-top:.5rem" onclick="saveBodyMetricFromForm()">💾 Save Measurement</button>';
+  h+='</div>';
+  if(metrics.length){
+    h+='<table class="info-table" style="margin-top:.75rem"><thead><tr><th>Date</th><th>Weight</th><th>Waist</th><th>Feel</th><th></th></tr></thead><tbody>';
+    for(var i=0;i<metrics.length;i++){
+      var m=metrics[i];
+      var weightDelta='';
+      if(i<metrics.length-1&&metrics[i+1].weight&&m.weight){var diff=m.weight-metrics[i+1].weight;weightDelta=' <span style="font-size:.7rem;color:'+(diff>0?'var(--red)':'var(--green)')+'">('+(diff>0?'+':'')+diff.toFixed(1)+')</span>'}
+      h+='<tr><td>'+esc(m.date)+'</td><td>'+(m.weight||'—')+weightDelta+'</td><td>'+(m.waist||'—')+'</td><td>'+(m.feel||'—')+'</td><td><button style="background:none;border:none;color:var(--red);cursor:pointer;font-size:.85rem" onclick="if(confirm(\'Delete this measurement?\')){DS.deleteBodyMetric(\''+m.date+'\');renderHistory()}">✕</button></td></tr>';
+    }
+    h+='</tbody></table>';
+  }else{
+    h+='<p style="font-size:.8rem;color:var(--muted);margin-top:.5rem">No measurements logged yet. Start tracking!</p>';
+  }
+  h+='</div>';
+  return h;
+}
+function saveBodyMetricFromForm(){
+  var date=(document.getElementById('bm-date')||{}).value;
+  var weight=parseFloat((document.getElementById('bm-weight')||{}).value);
+  var waist=parseFloat((document.getElementById('bm-waist')||{}).value);
+  var feel=parseInt((document.getElementById('bm-feel')||{}).value);
+  var notes=(document.getElementById('bm-notes')||{}).value||'';
+  if(!date){alert('Please enter a date');return}
+  if(isNaN(weight)&&isNaN(waist)){alert('Please enter at least weight or waist');return}
+  DS.saveBodyMetric({date:date,weight:isNaN(weight)?null:weight,waist:isNaN(waist)?null:waist,feel:isNaN(feel)?null:feel,notes:notes});
+  alert('Measurement saved!');
+  renderHistory();
+}
 function renderHistory(){
   var panel=document.getElementById('sec-history'),d=DS.get(),workouts=d.workouts.slice().reverse(),nutrition=d.nutrition.slice().reverse(),h='<div class="static"><h2>📈 History & Progress</h2><table class="info-table"><thead><tr><th>Wks</th><th>Focus</th><th>Change</th></tr></thead><tbody><tr><td>1–2</td><td>Learn</td><td>Form, note weights</td></tr><tr><td>3–4</td><td>Capacity</td><td>+1–2 reps/set</td></tr><tr><td>5–6</td><td>Intensity</td><td>+1 DB increment</td></tr><tr><td>7–8</td><td>Peak</td><td>-15s rest, +1 round</td></tr><tr><td>9–10</td><td>Deload</td><td>-40% volume</td></tr><tr><td>11–12</td><td>New cycle</td><td>Heavier, tighter</td></tr></tbody></table><h3>🔑 Non-Negotiable Rules</h3><div style="font-size:.85rem;line-height:1.8;padding:.5rem 0">1. Never skip Thursday mobility<br>2. Time your Friday 300<br>3. Progressive overload<br>4. Sleep 7–8 hours<br>5. Core every session</div></div>';
+  var suggestions=d.suggestions;
+  if(suggestions){
+    h+='<div class="settings-section"><h3>🎯 Coach Suggestions <span style="font-weight:400;font-size:.72rem;color:var(--muted)">Week of '+esc(suggestions.weekOf||'')+'</span></h3>';
+    if(suggestions.training&&suggestions.training.length){
+      h+='<h4 style="font-size:.82rem;color:var(--accent);margin:.5rem 0 .3rem">Training</h4>';
+      for(var t=0;t<suggestions.training.length;t++){
+        var s=suggestions.training[t];
+        h+='<div class="workout-summary" style="padding:.65rem .75rem;margin-bottom:.4rem"><div class="ws-row"><span style="font-weight:700">'+esc(s.exercise||'')+'</span></div>';
+        if(s.currentWeight!=null&&s.suggestedWeight!=null)h+='<div class="ws-row"><span>Weight</span><span>'+s.currentWeight+'kg → <strong style="color:var(--green)">'+s.suggestedWeight+'kg</strong></span></div>';
+        if(s.currentReps&&s.suggestedReps)h+='<div class="ws-row"><span>Reps</span><span>'+esc(s.currentReps)+' → <strong style="color:var(--green)">'+esc(s.suggestedReps)+'</strong></span></div>';
+        if(s.reason)h+='<div style="font-size:.76rem;color:var(--muted);margin-top:.25rem">'+esc(s.reason)+'</div>';
+        h+='</div>';
+      }
+    }
+    if(suggestions.nutrition&&suggestions.nutrition.length){
+      h+='<h4 style="font-size:.82rem;color:#16813d;margin:.5rem 0 .3rem">Nutrition</h4>';
+      for(var n=0;n<suggestions.nutrition.length;n++){
+        var sn=suggestions.nutrition[n];
+        h+='<div class="workout-summary" style="padding:.65rem .75rem;margin-bottom:.4rem"><div style="font-size:.85rem">'+esc(sn.suggestion||'')+'</div>';
+        if(sn.reason)h+='<div style="font-size:.76rem;color:var(--muted);margin-top:.25rem">'+esc(sn.reason)+'</div>';
+        h+='</div>';
+      }
+    }
+    if(suggestions.recovery&&suggestions.recovery.length){
+      h+='<h4 style="font-size:.82rem;color:#7c3aed;margin:.5rem 0 .3rem">Recovery</h4>';
+      for(var r=0;r<suggestions.recovery.length;r++){
+        var sr=suggestions.recovery[r];
+        h+='<div class="workout-summary" style="padding:.65rem .75rem;margin-bottom:.4rem"><div style="font-size:.85rem">'+esc(sr.suggestion||'')+'</div>';
+        if(sr.reason)h+='<div style="font-size:.76rem;color:var(--muted);margin-top:.25rem">'+esc(sr.reason)+'</div>';
+        h+='</div>';
+      }
+    }
+    h+='<button class="settings-btn secondary" style="margin-top:.5rem" onclick="if(confirm(\'Clear coach suggestions?\')){var d=DS.get();d.suggestions=null;DS.save();DS.syncToGist();renderHistory()}">Clear Suggestions</button>';
+    h+='</div>';
+  }
   h+='<div class="settings-section"><h3>Recent workouts</h3>';
-  if(workouts.length){for(var i=0;i<Math.min(workouts.length,8);i++){var w=workouts[i],sum=sessionSummary(w);h+='<div class="workout-summary"><div class="ws-row"><span>'+esc(w.date)+' · '+esc(slugDay(w.day))+'</span><strong>'+fmt(w.duration||0)+'</strong></div><div class="ws-row"><span>Logged sets</span><span>'+sum.exerciseCount+'</span></div><div class="ws-row"><span>Total volume</span><span>'+Math.round(sum.volume)+' kg</span></div>'+(sum.rowDistance?'<div class="ws-row"><span>Row distance</span><span>'+Math.round(sum.rowDistance)+' m</span></div>':'')+(w.notes?'<div style="font-size:.78rem;color:var(--muted);margin-top:.35rem">'+esc(w.notes)+'</div>':'')+'</div>'}}
+  if(workouts.length){for(var i=0;i<Math.min(workouts.length,8);i++){var w=workouts[i],sum=sessionSummary(w);h+='<div class="workout-summary"><div class="ws-row"><span>'+esc(w.date)+(w.dayOfWeek?' ('+w.dayOfWeek.slice(0,3)+')':'')+' · '+esc(slugDay(w.day))+'</span><strong>'+fmt(w.duration||0)+'</strong></div><div class="ws-row"><span>Logged sets</span><span>'+sum.exerciseCount+'</span></div><div class="ws-row"><span>Total volume</span><span>'+Math.round(sum.volume)+' kg</span></div>'+(sum.rowDistance?'<div class="ws-row"><span>Row distance</span><span>'+Math.round(sum.rowDistance)+' m</span></div>':'')+(w.notes?'<div style="font-size:.78rem;color:var(--muted);margin-top:.35rem">'+esc(w.notes)+'</div>':'')+'</div>'}}
   else{h+='<p style="font-size:.8rem;color:var(--muted)">No workouts saved yet.</p>'}
-  h+='</div><div class="settings-section"><h3>Nutrition history</h3>';
+  h+='</div>';
+  h+=renderBodyMetrics();
+  h+='<div class="settings-section"><h3>Nutrition history</h3>';
   if(nutrition.length){for(var j=0;j<Math.min(nutrition.length,7);j++){var n=nutrition[j],nt=nutritionTotals(n);h+='<div class="workout-summary"><div class="ws-row"><span>'+esc(n.date)+'</span><strong>'+Math.round(nt.calories)+' kcal</strong></div><div class="ws-row"><span>Protein / Carbs / Fat</span><span>'+Math.round(nt.protein)+'g / '+Math.round(nt.carbs)+'g / '+Math.round(nt.fat)+'g</span></div></div>'}}
   else{h+='<p style="font-size:.8rem;color:var(--muted)">No nutrition saved yet.</p>'}
   h+='</div>';
@@ -879,7 +967,12 @@ function renderSettings(){
   '<div id="mc-result" style="display:none;margin-top:.6rem;padding:.75rem 1rem;border-radius:14px;background:#e8f7ed;color:#1c1c1e;border:1px solid rgba(52,199,89,.28);font-size:.9rem;text-align:center;font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.04)"></div>'+
   '<div style="margin-top:.6rem"><button class="settings-btn" id="mc-apply-btn" onclick="calcMacros()">🎯 Calculate & Apply Macros</button></div></div>'+
   '<div class="settings-section"><h3>Nutrition Targets</h3><div class="settings-row"><label>Calories</label><input id="target-calories" type="number" step="1" value="'+safeNum(s.nutritionTargets.calories,2200)+'" onchange="updateSettingsFromForm()"></div><div class="settings-row"><label>Protein (g)</label><input id="target-protein" type="number" step="1" value="'+safeNum(s.nutritionTargets.protein,150)+'" onchange="updateSettingsFromForm()"></div><div class="settings-row"><label>Carbs (g)</label><input id="target-carbs" type="number" step="1" value="'+safeNum(s.nutritionTargets.carbs,250)+'" onchange="updateSettingsFromForm()"></div><div class="settings-row"><label>Fat (g)</label><input id="target-fat" type="number" step="1" value="'+safeNum(s.nutritionTargets.fat,70)+'" onchange="updateSettingsFromForm()"></div></div>'+ 
-  '<div class="settings-section"><h3>Data Management</h3><div style="display:flex;gap:.5rem;flex-wrap:wrap"><button class="settings-btn secondary" onclick="exportData()">Export JSON</button><button class="settings-btn" onclick="document.getElementById(\'import-data-file\').click()">Import JSON</button><button class="settings-btn danger" onclick="clearAllData()">Clear All Data</button><input id="import-data-file" type="file" accept="application/json" style="display:none" onchange="handleImportData(event)"></div></div>'+
+  '<div class="settings-section"><h3>🕐 Intermittent Fasting</h3><p style="font-size:.82rem;color:var(--muted);margin-bottom:.6rem">Configure 16:8 fasting protocol. When enabled, nutrition tracking adjusts meal timing expectations.</p>'+
+  '<div class="settings-row"><label>Enable IF</label><label style="position:relative;display:inline-block;width:48px;height:28px;min-width:48px"><input type="checkbox" id="if-enabled" style="opacity:0;width:0;height:0"'+(((s.intermittentFasting||{}).enabled)?' checked':'')+' onchange="updateSettingsFromForm()"><span style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:'+(((s.intermittentFasting||{}).enabled)?'var(--green)':'#ccc')+';border-radius:28px;transition:.3s"></span></label></div>'+
+  '<div class="settings-row"><label>Window Start</label><input type="time" id="if-start" value="'+esc((s.intermittentFasting||{}).windowStart||'10:00')+'" onchange="updateSettingsFromForm()"></div>'+
+  '<div class="settings-row"><label>Window End</label><input type="time" id="if-end" value="'+esc((s.intermittentFasting||{}).windowEnd||'18:00')+'" onchange="updateSettingsFromForm()"></div>'+
+  '<div class="settings-row"><label>Active Days</label><select id="if-days" onchange="updateSettingsFromForm()"><option value="weekdays"'+((s.intermittentFasting||{}).daysActive==='weekdays'||!(s.intermittentFasting||{}).daysActive?' selected':'')+'>Weekdays (Mon–Fri)</option><option value="everyday"'+((s.intermittentFasting||{}).daysActive==='everyday'?' selected':'')+'>Every Day</option><option value="custom"'+((s.intermittentFasting||{}).daysActive==='custom'?' selected':'')+'>Custom</option></select></div></div>'+
+  '<div class="settings-section"><h3>Data Management</h3><div style="display:flex;gap:.5rem;flex-wrap:wrap"><button class="settings-btn secondary" onclick="exportData()">Export JSON</button><button class="settings-btn" onclick="document.getElementById(\'import-data-file\').click()">Import JSON</button><button class="settings-btn" onclick="document.getElementById(\'import-suggestions-file\').click()">📋 Import Coach Suggestions</button><button class="settings-btn danger" onclick="clearAllData()">Clear All Data</button><input id="import-data-file" type="file" accept="application/json" style="display:none" onchange="handleImportData(event)"><input id="import-suggestions-file" type="file" accept="application/json" style="display:none" onchange="handleImportSuggestions(event)"></div></div>'+ 
   '<div class="settings-section"><h3>App Updates</h3><p style="font-size:.82rem;color:var(--muted);margin-bottom:.6rem">Check for the latest version from GitHub. Your saved data (workouts, nutrition, settings) will not be affected.</p><div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center"><button class="settings-btn" onclick="checkForAppUpdate()" id="update-btn">\uD83D\uDD04 Check for Updates</button><span id="update-status" style="font-size:.78rem;color:var(--muted)"></span></div></div>';
 }
 function updateSettingsFromForm(){
@@ -892,6 +985,11 @@ function updateSettingsFromForm(){
   t.protein=safeNum((document.getElementById('target-protein')||{}).value,t.protein||150);
   t.carbs=safeNum((document.getElementById('target-carbs')||{}).value,t.carbs||250);
   t.fat=safeNum((document.getElementById('target-fat')||{}).value,t.fat||70);
+  d.settings.intermittentFasting=d.settings.intermittentFasting||{};
+  d.settings.intermittentFasting.enabled=!!(document.getElementById('if-enabled')||{}).checked;
+  d.settings.intermittentFasting.windowStart=(document.getElementById('if-start')||{}).value||'10:00';
+  d.settings.intermittentFasting.windowEnd=(document.getElementById('if-end')||{}).value||'18:00';
+  d.settings.intermittentFasting.daysActive=(document.getElementById('if-days')||{}).value||'weekdays';
   DS.save();
 }
 async function testGistConnection(){
@@ -910,6 +1008,7 @@ async function testGistConnection(){
 }
 function exportData(){var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(DS.get(),null,2)],{type:'application/json'}));a.download='300-data-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},500)}
 function handleImportData(evt){var file=evt.target.files&&evt.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(e){try{var parsed=JSON.parse(e.target.result);if(!confirm('Import and overwrite local data?'))return;DS._data=Object.assign(DS.defaultData(),parsed);DS.save();setSyncState('Imported local data','sync-ok');renderSettings();renderNutrition();renderHistory();alert('Data imported.')}catch(err){console.error('Import failed:',err);alert('Import failed — invalid JSON.')}};reader.readAsText(file);evt.target.value=''}
+function handleImportSuggestions(evt){var file=evt.target.files&&evt.target.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(e){try{var parsed=JSON.parse(e.target.result);if(!parsed.weekOf&&!parsed.training&&!parsed.nutrition){alert('Invalid suggestions format. Expected {weekOf, training:[], nutrition:[], recovery:[]}');return}var d=DS.get();d.suggestions=parsed;DS.save();DS.syncToGist();renderHistory();alert('Coach suggestions imported!')}catch(err){console.error('Suggestions import failed:',err);alert('Import failed — invalid JSON.')}};reader.readAsText(file);evt.target.value=''}
 function clearAllData(){if(!confirm('Clear all saved workouts, nutrition, and settings?'))return;DS._data=DS.defaultData();DS.save();currentSession=null;setSyncState('All local data cleared','sync-err');renderSettings();renderNutrition();renderHistory()}
 async function checkForAppUpdate(){
   var btn=document.getElementById('update-btn');var status=document.getElementById('update-status');
@@ -1121,7 +1220,7 @@ function startWorkout(key){
   var day=days[key];
   steps=expand(day);idx=0;started=true;
   stopCountdown();clearInterval(demoTimer);stopSessionTimer();stSeconds=0;
-  currentSession={date:new Date().toISOString().slice(0,10),day:key,duration:0,exercises:[],notes:''};
+  currentSession={date:new Date().toISOString().slice(0,10),day:key,dayOfWeek:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()],startedAt:new Date().toISOString(),duration:0,exercises:[],notes:''};
   if(day.sessionTimer)startSessionTimer();
   renderStep(key);
 }
@@ -1182,6 +1281,7 @@ function saveCurrentSession(key){
   var notes=document.getElementById('workout-notes');
   if(notes)currentSession.notes=notes.value||'';
   currentSession.duration=stSeconds;
+  currentSession.completedAt=new Date().toISOString();
   DS.saveWorkout(JSON.parse(JSON.stringify(currentSession)));
   alert('Workout saved');currentSession=null;
   renderHistory();renderDayStart(key);
