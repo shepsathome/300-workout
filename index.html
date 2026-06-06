@@ -58,7 +58,8 @@ a{color:var(--a2)}
 .prog-pill.active{border-color:transparent;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 10px 18px rgba(232,89,12,.2)}
 /* === PANELS === */
 .panel{display:none;padding:var(--sp-3) var(--sp-3) var(--sp-4)}.panel.active{display:block}
-.main-section{display:none}.main-section.active{display:block}
+.main-section{display:none;padding-top:var(--sp-4)}.main-section.active{display:block}
+.page-title{font-size:1.25rem;font-weight:800;letter-spacing:-.02em;padding:0 var(--sp-4) var(--sp-3);color:var(--text)}
 /* === WORKOUT CARDS === */
 .now-card,.upcoming,.static,.settings-section,.nutrition-totals,.train-home .today-card,.complete-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-card);box-shadow:var(--sh)}
 .now-card{padding:1.15rem 1.05rem;margin-bottom:.85rem;position:relative;overflow:hidden}
@@ -363,7 +364,6 @@ a{color:var(--a2)}
 </style>
 </head>
 <body>
-<div class="hero" style="display:none"><h1>⚔️ 300</h1></div>
 <div id="app"></div>
 <div class="bottom-bar" id="bottom-bar"></div>
 <div class="bs-overlay" id="bs-overlay" onclick="hideBottomSheet()"></div>
@@ -820,7 +820,7 @@ function nutActiveDate(){return window._nutDate||new Date().toISOString().slice(
 function nutShiftDate(offset){var d=new Date(nutActiveDate()+'T12:00:00');d.setDate(d.getDate()+offset);window._nutDate=d.toISOString().slice(0,10);window._nutTab='today';renderNutrition()}
 function renderNutrition(){
   var panel=document.getElementById('sec-nutrition'),activeDate=nutActiveDate(),isToday=activeDate===new Date().toISOString().slice(0,10),entry=DS.dateNutrition(activeDate),d=DS.get(),targets=d.settings.nutritionTargets,totals=nutritionTotals(entry);
-  var h='';
+  var h='<div class="page-title">Eat</div>';
   var dayLabel=isToday?'Today':historyLabelDate(activeDate);
   h+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;padding:.5rem .2rem"><button class="settings-btn secondary" style="padding:.5rem .85rem;min-height:44px" onclick="nutShiftDate(-1)">◀</button><div style="text-align:center;flex:1"><div style="font-weight:800;font-size:1rem">'+esc(dayLabel)+'</div><div style="font-size:.82rem;color:var(--muted)">'+esc(activeDate)+'</div></div><button class="settings-btn secondary" style="padding:.5rem .85rem;min-height:44px" onclick="nutShiftDate(1)">▶</button></div>';
   if(!isToday){h+='<div style="text-align:center;margin-bottom:.6rem"><button style="background:none;border:none;color:var(--a2);font-size:.84rem;font-weight:700;cursor:pointer;padding:.3rem .7rem" onclick="window._nutDate=null;renderNutrition()">↩ Back to Today</button></div>';}
@@ -1282,7 +1282,6 @@ function renderHistoryRecovery(){
 
   /* Sleep section */
   h+='<div class="settings-section"><div class="spread"><div><h3>😴 Sleep</h3><p class="settings-copy" style="margin:0">Recovery signals — hours, quality, energy.</p></div><span class="tag">'+sleep.length+' nights</span></div>';
-  h+='<button class="settings-btn" style="margin-bottom:.75rem" onclick="showLogSheet(\'sleep\')">+ Log Sleep</button>';
   if(sa.avgHours!=null){
     h+='<div class="sleep-bar"><div class="spread"><strong>7-day average</strong><span class="hist-sub">'+sa.avgHours.toFixed(1)+'h'+(sa.avgQuality!=null?' · '+sa.avgQuality.toFixed(1)+'/10 quality':'')+(sa.avgEnergy!=null?' · '+sa.avgEnergy.toFixed(1)+'/10 energy':'')+'</span></div><div class="bar-track"><div class="bar-fill" style="width:'+sleepBarW+'%"></div></div></div>';
   }
@@ -1327,7 +1326,6 @@ function renderHistorySteps(){
   var h='<div class="history-view">';
   h+='<div class="section-header"><button class="sh-back" onclick="setHistoryView(\'overview\')">‹</button><h3>🚶 Steps</h3></div>';
   h+='<div class="settings-section"><div class="spread"><div><h3>🚶 Daily Movement</h3><p class="settings-copy" style="margin:0">NEAT and active recovery — every step counts.</p></div><span class="tag">'+steps.length+' days</span></div>';
-  h+='<button class="settings-btn" style="margin-bottom:.75rem" onclick="showLogSheet(\'steps\')">+ Log Steps</button>';
   if(stepsAvg.avgSteps!=null){
     h+='<div class="sleep-bar"><div class="spread"><strong>7-day average</strong><span class="hist-sub">'+stepsAvg.avgSteps.toLocaleString()+' steps</span></div><div class="bar-track"><div class="bar-fill" style="width:'+stepsBarW+'%;background:linear-gradient(90deg,var(--accent),var(--accent2))"></div></div></div>';
   }
@@ -1443,7 +1441,7 @@ function saveStepsFromForm(){
 function renderHistory(){
   destroyHistoryCharts();
   var panel=document.getElementById('sec-history');if(!panel)return;
-  var h='';
+  var h='<div class="page-title">History</div>';
   h+=renderHistoryNav();
   if(historyView==='training')h+=renderHistoryTraining();
   else if(historyView==='body')h+=renderHistoryBody();
@@ -1534,6 +1532,7 @@ function renderSettings(){
   var ifs=s.intermittentFasting||{};
   var patOpen=(!s.gistPat || !s.gistId)?' open':'';
   panel.innerHTML=
+    '<div class="page-title">Settings</div>'+
     '<div class="settings-group">'+
       '<div class="settings-group-title">🏋️ Training</div>'+
       '<div class="settings-section">'+
@@ -1619,7 +1618,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.06.12</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.06.13</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2088,7 +2087,7 @@ function renderTrainDashboard() {
   var days = getActiveDays();
   var todayDay = todayKey ? days[todayKey] : null;
 
-  var h = '';
+  var h = '<div class="page-title">Train</div>';
 
   /* === TODAY HERO CARD === */
   if (isRestDay) {
@@ -2125,6 +2124,13 @@ function renderTrainDashboard() {
   h += '<div style="flex:0 0 auto;padding:var(--sp-3) var(--sp-4);border-radius:var(--radius-card);background:rgba(255,255,255,.03);border:1px solid var(--border)"><div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;font-weight:700">Last</div><div style="font-size:.92rem;font-weight:800;margin-top:2px">' + (lastW ? esc(historyLabelDate(lastW.date)) : '—') + '</div></div>';
   h += '<div style="flex:0 0 auto;padding:var(--sp-3) var(--sp-4);border-radius:var(--radius-card);background:rgba(255,255,255,.03);border:1px solid var(--border)"><div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;font-weight:700">This week</div><div style="font-size:.92rem;font-weight:800;margin-top:2px">' + workouts.filter(function(w) { var dt = historyParseDate(w.date); if (!dt) return false; var c = new Date(); c.setDate(c.getDate() - 6); c.setHours(0,0,0,0); return dt >= c; }).length + ' sessions</div></div>';
   if (sa.avgHours != null) h += '<div style="flex:0 0 auto;padding:var(--sp-3) var(--sp-4);border-radius:var(--radius-card);background:rgba(255,255,255,.03);border:1px solid var(--border)"><div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;font-weight:700">Sleep</div><div style="font-size:.92rem;font-weight:800;margin-top:2px">' + sa.avgHours.toFixed(1) + 'h avg</div></div>';
+  h += '</div>';
+
+  /* === QUICK LOG === */
+  h += '<div style="display:flex;gap:var(--sp-2);margin-bottom:var(--sp-4);flex-wrap:wrap">';
+  h += '<button class="settings-btn secondary" style="flex:1;min-width:0;padding:.6rem .5rem;font-size:.78rem" onclick="showLogSheet(\'steps\')">🚶 Log Steps</button>';
+  h += '<button class="settings-btn secondary" style="flex:1;min-width:0;padding:.6rem .5rem;font-size:.78rem" onclick="showLogSheet(\'body\')">📏 Weigh In</button>';
+  h += '<button class="settings-btn secondary" style="flex:1;min-width:0;padding:.6rem .5rem;font-size:.78rem" onclick="showLogSheet(\'sleep\')">😴 Log Sleep</button>';
   h += '</div>';
 
   /* === DAY NAV + PANELS === */
@@ -2209,7 +2215,7 @@ function showPanel(key) {
 showMainSection('train');
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.06.12').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.06.13').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
