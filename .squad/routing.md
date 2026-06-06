@@ -6,12 +6,14 @@ How to decide who handles what.
 
 | Work Type | Route To | Examples |
 |-----------|----------|----------|
-| {domain 1} | {Name} | {example tasks} |
-| {domain 2} | {Name} | {example tasks} |
-| {domain 3} | {Name} | {example tasks} |
-| Code review | {Name} | Review PRs, check quality, suggest improvements |
-| Testing | {Name} | Write tests, find edge cases, verify fixes |
-| Scope & priorities | {Name} | What to build next, trade-offs, decisions |
+| Architecture & scope | Dallas | Design decisions, file structure, feature planning |
+| UI, UX, components | Ripley | HTML/CSS/JS, layout, styling, Chart.js, bottom sheets |
+| Data layer & sync | Kane | localStorage, service worker, Gist sync, data migration |
+| HTML structure & rendering | Ripley | Render functions, history views, nav, FAB menus |
+| Food database | Kane | Adding/editing foods-db.js entries, nutrition data |
+| Testing & QA | Lambert | Edge cases, cross-browser, PWA install testing |
+| Code review | Dallas | Review PRs, check quality, suggest improvements |
+| Scope & priorities | Dallas | What to build next, trade-offs, decisions |
 | Session logging | Scribe | Automatic — never needs routing |
 
 ## Issue Routing
