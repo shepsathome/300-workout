@@ -14,9 +14,19 @@
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <style>
 :root{
-  --bg:#0d0d0f;--card:#1c1c1e;--card2:#2c2c2e;--border:rgba(255,255,255,.08);--text:rgba(255,255,255,.92);--muted:#98989d;--accent:#e8590c;--accent2:#ff7a33;--a2:#3b9aff;--green:#30d158;--red:#ff453a;--yellow:#ffd60a;
+  /* Surface system (6-tier depth scale) */
+  --surface-0:#000000;--surface-1:#0f0f0f;--surface-2:#1a1a1a;--surface-3:#242424;--surface-4:#2e2e2e;--surface-5:#383838;
+  /* Legacy aliases — map to surface tiers */
+  --bg:#0d0d0f;--card:var(--surface-2);--card2:var(--surface-4);
+  --border:rgba(255,255,255,.08);--border-medium:rgba(255,255,255,.12);
+  --text:rgba(255,255,255,.92);--muted:#98989d;
+  --accent:#e8590c;--accent2:#ff7a33;--a2:#3b9aff;--green:#30d158;--red:#ff453a;--yellow:#ffd60a;
   --sh:0 1px 3px rgba(0,0,0,.3),0 2px 8px rgba(0,0,0,.2);--sh2:0 2px 12px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.2);
-  --safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px)
+  --safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px);
+  /* Radii */
+  --radius-card:20px;--radius-sm:12px;--radius-pill:999px;
+  /* Motion */
+  --spring:cubic-bezier(.34,1.56,.64,1);--ease-out:cubic-bezier(.16,1,.3,1)
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{background:var(--bg);color-scheme:dark}
@@ -48,7 +58,7 @@ a{color:var(--a2)}
 .panel{display:none;padding:.75rem .75rem .9rem}.panel.active{display:block}
 .main-section{display:none}.main-section.active{display:block}
 /* === WORKOUT CARDS === */
-.now-card,.upcoming,.static,.settings-section,.nutrition-totals,.train-home .today-card,.complete-card{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:var(--sh)}
+.now-card,.upcoming,.static,.settings-section,.nutrition-totals,.train-home .today-card,.complete-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-card);box-shadow:var(--sh)}
 .now-card{padding:1.15rem 1.05rem;margin-bottom:.85rem;position:relative;overflow:hidden}
 .now-card::before{content:'';position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--accent),rgba(232,89,12,.12))}
 .now-block{font-size:.84rem;color:var(--a2);font-weight:700;text-transform:uppercase;margin-bottom:.22rem;letter-spacing:.08em}
@@ -65,7 +75,7 @@ a{color:var(--a2)}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .now-timer button,.btn-done,.btn-back,.start-btn,.settings-btn,.session-timer button,.rest-card-auto .skip-btn{border:none;padding:.82rem 1.3rem;border-radius:14px;font-size:.9rem;font-weight:700;cursor:pointer;transition:transform .12s ease,box-shadow .2s ease,background .2s ease;color:#fff;min-height:48px}
 .now-timer button:active,.btn-done:active,.btn-back:active,.start-btn:active,.settings-btn:active,.session-timer button:active,.rest-card-auto .skip-btn:active,.train-home .today-card:active{transform:scale(.98)}
-.now-timer .btn-start,.btn-done{background:linear-gradient(135deg,var(--green),#4cd964);box-shadow:0 10px 18px rgba(52,199,89,.18)}
+.btn-done{background:linear-gradient(135deg,var(--green),#4cd964);box-shadow:0 10px 18px rgba(52,199,89,.18);transition:transform .2s var(--spring),box-shadow .2s}
 .now-timer .btn-pause,.settings-btn.danger,.session-timer button.st-stop{background:linear-gradient(135deg,var(--red),#ff6b63);box-shadow:0 10px 18px rgba(255,59,48,.16)}
 .now-details{margin-top:.55rem}
 .now-howto{font-size:.9rem;color:var(--muted);line-height:1.65;padding:.55rem 0}
@@ -209,7 +219,7 @@ a{color:var(--a2)}
 .trends-range button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 /* === TRAIN DASHBOARD === */
 .train-home{padding:.25rem 0}
-.train-home .today-card{padding:1.2rem 1rem .95rem;margin-bottom:.7rem;cursor:pointer;transition:transform .15s,box-shadow .2s;border-radius:18px}
+.train-home .today-card{padding:1.2rem 1rem .95rem;margin-bottom:.7rem;cursor:pointer;transition:transform .2s var(--spring),box-shadow .2s;border-radius:var(--radius-card)}
 .train-home .today-card .tc-icon{font-size:1.85rem;float:left;margin-right:.7rem;line-height:1}
 .train-home .today-card .tc-title{font-size:.96rem;font-weight:700;color:var(--text);letter-spacing:-.02em}
 .train-home .today-card .tc-time{font-size:.75rem;color:var(--muted);margin-top:.18rem}
@@ -245,7 +255,7 @@ a{color:var(--a2)}
 .stat-pill .stat-value{font-size:1.8rem;font-weight:800;letter-spacing:-.02em;line-height:1}
 .stat-pill .stat-label{margin-top:.35rem;color:var(--muted);font-size:.82rem;letter-spacing:.08em;text-transform:uppercase}
 .stat-pill .stat-meta{margin-top:.35rem;font-size:.82rem;color:var(--muted)}
-.hist-card{position:relative;padding:14px 16px 14px 18px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.015));border:1px solid var(--border);box-shadow:var(--sh);margin-top:10px;overflow:hidden}
+.hist-card{position:relative;padding:14px 16px 14px 18px;border-radius:var(--radius-card);background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.015));border:1px solid var(--border);box-shadow:var(--sh);margin-top:10px;overflow:hidden}
 .hist-card::before{content:'';position:absolute;left:0;top:14px;bottom:14px;width:4px;border-radius:999px;background:rgba(255,255,255,.1)}
 .hist-card.workout-card::before{background:linear-gradient(180deg,var(--accent),var(--accent2))}
 .hist-card.measure-card::before{background:linear-gradient(180deg,var(--a2),#7cc3ff)}
@@ -271,7 +281,7 @@ a{color:var(--a2)}
 .details-form summary::after{content:'▾';color:var(--muted);transition:transform .2s ease}
 .details-form[open] summary::after{transform:rotate(180deg)}
 .details-form .details-body{padding:0 16px 16px;border-top:1px solid var(--border)}
-.coach-card{padding:14px 16px;border-radius:18px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-left:4px solid var(--accent);margin-top:10px}
+.coach-card{padding:14px 16px;border-radius:var(--radius-card);background:rgba(255,255,255,.03);border:1px solid var(--border);border-left:4px solid var(--accent);margin-top:10px}
 .coach-card.training{border-left-color:var(--accent)}
 .coach-card.nutrition{border-left-color:var(--green)}
 .coach-card.recovery{border-left-color:#8b5cf6}
@@ -297,7 +307,7 @@ a{color:var(--a2)}
 
 /* === DOMAIN CARDS (Overview hub) === */
 .domain-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:.75rem}
-.domain-card{position:relative;padding:18px 16px;border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015));border:1px solid var(--border);box-shadow:var(--sh);cursor:pointer;transition:transform .18s,box-shadow .18s;overflow:hidden}
+.domain-card{position:relative;padding:18px 16px;border-radius:var(--radius-card);background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015));border:1px solid var(--border);box-shadow:var(--sh);cursor:pointer;transition:transform .2s var(--spring),box-shadow .18s;overflow:hidden}
 .domain-card:active{transform:scale(.97);box-shadow:var(--sh2)}
 .domain-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:0 999px 999px 0}
 .domain-card.dc-training::before{background:linear-gradient(180deg,var(--accent),var(--accent2))}
@@ -325,8 +335,8 @@ a{color:var(--a2)}
 .section-header h3{font-size:1.05rem;font-weight:800;letter-spacing:-.01em}
 
 /* === FLOATING ACTION BUTTON (Log) === */
-.fab-log{position:fixed;bottom:calc(86px + var(--safe-b));right:18px;z-index:150;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;font-size:1.4rem;font-weight:700;cursor:pointer;box-shadow:0 4px 18px rgba(232,89,12,.35);transition:transform .18s,box-shadow .18s;display:flex;align-items:center;justify-content:center}
-.fab-log:active{transform:scale(.92);box-shadow:0 2px 10px rgba(232,89,12,.25)}
+.fab-log{position:fixed;bottom:calc(86px + var(--safe-b));right:18px;z-index:150;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;font-size:1.4rem;font-weight:700;cursor:pointer;box-shadow:0 4px 18px rgba(232,89,12,.35);transition:transform .2s var(--spring),box-shadow .18s;display:flex;align-items:center;justify-content:center}
+.fab-log:active{transform:scale(.88);box-shadow:0 2px 10px rgba(232,89,12,.25)}
 .fab-menu{position:fixed;bottom:calc(148px + var(--safe-b));right:18px;z-index:149;display:flex;flex-direction:column;gap:10px;align-items:flex-end;animation:fabMenuIn .2s ease}
 @keyframes fabMenuIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .fab-menu button{display:flex;align-items:center;gap:8px;padding:.55rem 1rem .55rem .75rem;border-radius:999px;border:1px solid var(--border);background:rgba(28,28,30,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--text);font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:var(--sh2);transition:transform .15s;white-space:nowrap}
@@ -336,7 +346,7 @@ a{color:var(--a2)}
 /* === BOTTOM SHEET === */
 .bs-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:0;transition:opacity .22s;pointer-events:none}
 .bs-overlay.active{opacity:1;pointer-events:auto}
-.bs-panel{position:fixed;left:0;right:0;bottom:0;z-index:501;background:var(--card);border-radius:20px 20px 0 0;padding:0 1rem calc(1rem + var(--safe-b)) 1rem;max-height:85vh;overflow-y:auto;transform:translateY(100%);transition:transform .28s cubic-bezier(.32,.72,.24,1);box-shadow:0 -8px 40px rgba(0,0,0,.4)}
+.bs-panel{position:fixed;left:0;right:0;bottom:0;z-index:501;background:var(--card);border-radius:var(--radius-card) var(--radius-card) 0 0;padding:0 1rem calc(1rem + var(--safe-b)) 1rem;max-height:85vh;overflow-y:auto;transform:translateY(100%);transition:transform .28s var(--ease-out);box-shadow:0 -8px 40px rgba(0,0,0,.4)}
 .bs-panel.active{transform:translateY(0)}
 .bs-handle{width:36px;height:4px;border-radius:999px;background:rgba(255,255,255,.2);margin:10px auto 16px}
 .bs-title{font-size:1.05rem;font-weight:800;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between}
@@ -345,7 +355,7 @@ a{color:var(--a2)}
 /* === LATEST ACTIVITY CARDS (Overview) === */
 .latest-strip{display:flex;gap:10px;overflow-x:auto;padding:2px 0 6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .latest-strip::-webkit-scrollbar{display:none}
-.latest-strip .latest-item{flex:0 0 220px;padding:14px 16px;border-radius:18px;background:rgba(255,255,255,.03);border:1px solid var(--border);box-shadow:var(--sh)}
+.latest-strip .latest-item{flex:0 0 220px;padding:14px 16px;border-radius:var(--radius-card);background:rgba(255,255,255,.03);border:1px solid var(--border);box-shadow:var(--sh)}
 .latest-strip .li-label{font-size:.72rem;color:var(--muted);text-transform:uppercase;font-weight:700;letter-spacing:.06em;margin-bottom:6px}
 .latest-strip .li-value{font-size:1.2rem;font-weight:800;line-height:1.2}
 .latest-strip .li-sub{font-size:.78rem;color:var(--muted);margin-top:4px}
@@ -1614,7 +1624,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.06.7</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.06.8</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2146,7 +2156,7 @@ function showPanel(key) {
 showMainSection('train');
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.06.7').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.06.8').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
