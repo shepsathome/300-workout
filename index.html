@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <title>300 Workout</title>
 <!-- PWA -->
 <link rel="manifest" href="manifest.json">
@@ -14,13 +14,13 @@
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <style>
 :root{
-  --bg:#0d0d0f;--card:#1c1c1e;--card2:#2c2c2e;--border:rgba(255,255,255,.08);--text:#f5f5f7;--muted:#98989d;--accent:#e8590c;--accent2:#ff7a33;--a2:#3b9aff;--green:#30d158;--red:#ff453a;--yellow:#ffd60a;
+  --bg:#0d0d0f;--card:#1c1c1e;--card2:#2c2c2e;--border:rgba(255,255,255,.08);--text:rgba(255,255,255,.92);--muted:#98989d;--accent:#e8590c;--accent2:#ff7a33;--a2:#3b9aff;--green:#30d158;--red:#ff453a;--yellow:#ffd60a;
   --sh:0 1px 3px rgba(0,0,0,.3),0 2px 8px rgba(0,0,0,.2);--sh2:0 2px 12px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.2);
   --safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px)
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{background:var(--bg)}
-body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,sans-serif;background:linear-gradient(180deg,#111113 0%,var(--bg) 16%,var(--bg) 100%);color:var(--text);font-size:16px;line-height:1.5;-webkit-tap-highlight-color:transparent;padding-top:var(--safe-t);padding-bottom:calc(78px + var(--safe-b));overflow-x:hidden}
+html{background:var(--bg);color-scheme:dark}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,sans-serif;background:linear-gradient(180deg,#111113 0%,var(--bg) 16%,var(--bg) 100%);color:var(--text);font-size:16px;line-height:1.5;-webkit-tap-highlight-color:transparent;overscroll-behavior-y:contain;padding-top:var(--safe-t);padding-bottom:calc(78px + var(--safe-b));overflow-x:hidden}
 button,input,select,textarea{font:inherit}
 button,input,select,textarea{-webkit-appearance:none;appearance:none}
 a{color:var(--a2)}
@@ -287,7 +287,7 @@ a{color:var(--a2)}
 /* === HISTORY SUB-NAV === */
 .history-nav{display:flex;gap:6px;overflow-x:auto;padding:.5rem .75rem .25rem;position:sticky;top:42px;z-index:80;background:linear-gradient(180deg,var(--bg) 70%,transparent);scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .history-nav::-webkit-scrollbar{display:none}
-.history-nav button{flex:0 0 auto;background:rgba(44,44,46,.75);border:1px solid var(--border);color:var(--muted);padding:.5rem .9rem;border-radius:999px;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .22s;white-space:nowrap;min-height:40px;letter-spacing:.02em}
+.history-nav button{flex:0 0 auto;background:rgba(44,44,46,.75);border:1px solid var(--border);color:var(--muted);padding:.5rem .9rem;border-radius:999px;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .22s;white-space:nowrap;min-height:44px;letter-spacing:.02em}
 .history-nav button.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:transparent;box-shadow:0 4px 14px rgba(232,89,12,.28)}
 .history-nav button:not(.active):active{transform:scale(.96)}
 
@@ -304,6 +304,7 @@ a{color:var(--a2)}
 .domain-card.dc-body::before{background:linear-gradient(180deg,var(--a2),#7cc3ff)}
 .domain-card.dc-recovery::before{background:linear-gradient(180deg,#8b5cf6,#c084fc)}
 .domain-card.dc-nutrition::before{background:linear-gradient(180deg,var(--green),#8ee6ac)}
+.domain-card.dc-steps::before{background:linear-gradient(180deg,#64d2ff,#0a84ff)}
 .domain-card .dc-icon{font-size:1.3rem;margin-bottom:.5rem}
 .domain-card .dc-title{font-weight:800;font-size:.88rem;margin-bottom:4px}
 .domain-card .dc-stat{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;line-height:1.1}
@@ -350,6 +351,11 @@ a{color:var(--a2)}
 .latest-strip .li-sub{font-size:.78rem;color:var(--muted);margin-top:4px}
 
 @media (max-width:760px){.hero-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.phase-grid{grid-template-columns:1fr}.trend-mini canvas{height:180px!important}.domain-grid{grid-template-columns:1fr}}
+
+/* === POLISH: Accessibility & Refinement === */
+.stat-pill .stat-value,.hist-hero,.big-time,.st-time,.rest-time{font-variant-numeric:tabular-nums}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
@@ -1608,7 +1614,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.06.6</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.06.7</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2140,7 +2146,7 @@ function showPanel(key) {
 showMainSection('train');
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.06.6').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.06.7').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
