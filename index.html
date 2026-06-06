@@ -211,14 +211,6 @@ a{color:var(--a2)}
 .food-details-inner{display:flex;justify-content:space-between;align-items:center;padding:.35rem .15rem .45rem;font-size:.78rem;color:var(--muted)}
 .food-details-inner .fd-macros span{margin-right:.6rem}
 .food-details-inner .fd-delete{background:none;border:none;color:var(--red);cursor:pointer;font-size:.82rem;padding:.2rem .4rem}
-/* === NUTRITION TOGGLE === */
-.nut-toggle{display:flex;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:.75rem}
-.nut-toggle button{flex:1;padding:.45rem 0;font-size:.82rem;font-weight:600;border:none;background:transparent;color:var(--muted);cursor:pointer;transition:all .2s}
-.nut-toggle button.active{background:var(--accent);color:#fff}
-/* === TREND CHARTS === */
-.trends-range{display:flex;gap:.35rem;margin-bottom:.75rem}
-.trends-range button{padding:.3rem .7rem;font-size:.75rem;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--text);cursor:pointer;font-weight:600}
-.trends-range button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
 /* === TRAIN DASHBOARD === */
 .train-home{padding:.25rem 0}
 .train-home .today-card{padding:1.2rem 1rem .95rem;margin-bottom:.7rem;cursor:pointer;transition:transform .2s var(--spring),box-shadow .2s;border-radius:var(--radius-card)}
@@ -830,7 +822,7 @@ function renderNutrition(){
   var panel=document.getElementById('sec-nutrition'),activeDate=nutActiveDate(),isToday=activeDate===new Date().toISOString().slice(0,10),entry=DS.dateNutrition(activeDate),d=DS.get(),targets=d.settings.nutritionTargets,totals=nutritionTotals(entry);
   var h='';
   var dayLabel=isToday?'Today':historyLabelDate(activeDate);
-  h+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;padding:.5rem .2rem"><button class="settings-btn secondary" style="padding:.5rem .85rem;min-height:40px" onclick="nutShiftDate(-1)">◀</button><div style="text-align:center;flex:1"><div style="font-weight:800;font-size:1rem">'+esc(dayLabel)+'</div><div style="font-size:.82rem;color:var(--muted)">'+esc(activeDate)+'</div></div><button class="settings-btn secondary" style="padding:.5rem .85rem;min-height:40px" onclick="nutShiftDate(1)">▶</button></div>';
+  h+='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;padding:.5rem .2rem"><button class="settings-btn secondary" style="padding:.5rem .85rem;min-height:44px" onclick="nutShiftDate(-1)">◀</button><div style="text-align:center;flex:1"><div style="font-weight:800;font-size:1rem">'+esc(dayLabel)+'</div><div style="font-size:.82rem;color:var(--muted)">'+esc(activeDate)+'</div></div><button class="settings-btn secondary" style="padding:.5rem .85rem;min-height:44px" onclick="nutShiftDate(1)">▶</button></div>';
   if(!isToday){h+='<div style="text-align:center;margin-bottom:.6rem"><button style="background:none;border:none;color:var(--a2);font-size:.84rem;font-weight:700;cursor:pointer;padding:.3rem .7rem" onclick="window._nutDate=null;renderNutrition()">↩ Back to Today</button></div>';}
   h+='<div class="nutrition-totals"><h3>'+dayLabel+'</h3>';
   var macros=[{label:'Calories',val:totals.calories,target:targets.calories,unit:'kcal',cls:'cal'},{label:'Protein',val:totals.protein,target:targets.protein,unit:'g',cls:'pro'},{label:'Carbs',val:totals.carbs,target:targets.carbs,unit:'g',cls:'carb'},{label:'Fat',val:totals.fat,target:targets.fat,unit:'g',cls:'fat'}];
@@ -1542,8 +1534,6 @@ function renderSettings(){
   var ifs=s.intermittentFasting||{};
   var patOpen=(!s.gistPat || !s.gistId)?' open':'';
   panel.innerHTML=
-    '<div class="static"><h2>⚙️ Settings</h2><p>Fine-tune your training defaults, nutrition setup, sync, and app behaviour.</p></div>'+
-
     '<div class="settings-group">'+
       '<div class="settings-group-title">🏋️ Training</div>'+
       '<div class="settings-section">'+
@@ -1624,7 +1614,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.06.10</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.06.11</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -1895,7 +1885,7 @@ function renderDayStart(key, days){
     }
     preview+='</ul></div>';
   }
-  panel.innerHTML='<div class="static" style="text-align:center"><h2>'+day.icon+' '+day.title+'</h2><p style="margin:.5rem 0">'+day.time+' \u00B7 '+totalEx+' exercises</p><div class="warmup-card"><strong>\uD83D\uDD25 Warm-up first</strong> '+day.warmup+'</div><button class="start-btn" onclick="startWorkout(\''+key+'\')">&#9654; START WORKOUT</button><div style="margin-top:1rem;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.75rem;box-shadow:var(--sh)"><h3 style="font-size:.88rem;color:var(--accent);margin-bottom:.25rem">\uD83D\uDCCB Today\'s Exercises</h3><p style="font-size:.72rem;color:var(--muted);margin-bottom:.4rem">Equipment & exercises at a glance</p>'+preview+'</div></div>';
+  panel.innerHTML='<div class="static" style="text-align:center"><h2>'+day.icon+' '+day.title+'</h2><p style="margin:.5rem 0">'+day.time+' \u00B7 '+totalEx+' exercises</p><div class="warmup-card"><strong>\uD83D\uDD25 Warm-up first</strong> '+day.warmup+'</div><button class="start-btn" onclick="startWorkout(\''+key+'\')">&#9654; START WORKOUT</button><div style="margin-top:1rem;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-card);padding:.75rem;box-shadow:var(--sh)"><h3 style="font-size:.88rem;color:var(--accent);margin-bottom:.25rem">\uD83D\uDCCB Today\'s Exercises</h3><p style="font-size:.72rem;color:var(--muted);margin-bottom:.4rem">Equipment & exercises at a glance</p>'+preview+'</div></div>';
 }
 function startWorkout(key){
   requestWakeLock();
@@ -2023,7 +2013,7 @@ function setActiveProgramme(n) {
 
 // === BOTTOM TAB BAR ===
 var mainSections = ['train','nutrition','history','settings'];
-var mainLabels = ['Train','Nutrition','History','Settings'];
+var mainLabels = ['Train','Eat','History','Settings'];
 var mainIcons = ['🏋️','🍽️','📈','⚙️'];
 var bottomBar = document.getElementById('bottom-bar');
 for (var i = 0; i < mainSections.length; i++) {
@@ -2156,7 +2146,7 @@ function showPanel(key) {
 showMainSection('train');
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.06.10').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.06.11').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
