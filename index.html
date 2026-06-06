@@ -1537,6 +1537,11 @@ function renderSettings(){
     '<div class="settings-group">'+
       '<div class="settings-group-title">🏋️ Training</div>'+
       '<div class="settings-section">'+
+        '<h3>Programme</h3>'+
+        '<p class="settings-copy">Choose your training split. The Train tab will schedule your days accordingly.</p>'+
+        '<div class="prog-select" style="justify-content:flex-start;padding:0;margin-bottom:.75rem">'+
+        (function(){var prog=getActiveProgramme();var ph='';[5,4,3,'travel'].forEach(function(n){var label=n==='travel'?'✈️ Travel':n+'-Day';ph+='<button class="prog-pill'+(n===prog?' active':'')+'" onclick="switchProgramme('+( typeof n==='string'?"'"+n+"'":n)+')">'+label+'</button>'});return ph})()+
+        '</div>'+
         '<h3>Default Weights</h3>'+
         '<div class="settings-row"><label>Dumbbell (kg)</label><input id="dw-db" type="number" step="1" value="'+(s.defaultWeights&&s.defaultWeights.db||12)+'" onchange="updateSettingsFromForm()"></div>'+
         '<div class="settings-row"><label>Kettlebell (kg)</label><input id="dw-kb" type="number" step="1" value="'+(s.defaultWeights&&s.defaultWeights.kb||16)+'" onchange="updateSettingsFromForm()"></div>'+
@@ -1614,7 +1619,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.06.11</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.06.12</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2061,14 +2066,68 @@ function renderTrainDashboard() {
   var sec = document.getElementById('sec-train');
   var prog = getActiveProgramme();
   var conf = PROGRAMMES[prog];
-  
-  var h = '<div class="prog-select">';
-  [5, 4, 3, 'travel'].forEach(function(n) {
-    var label = n === 'travel' ? '✈️ Travel' : n + '-Day';
-    h += '<button class="prog-pill' + (n === prog ? ' active' : '') + '" onclick="switchProgramme(' + (typeof n === 'string' ? "'" + n + "'" : n) + ')">' + label + '</button>';
-  });
+  var d = DS.get();
+  var workouts = (d.workouts || []).slice().reverse();
+  var streak = historyWorkoutStreak(workouts);
+  var sleep = (d.sleepLog || []).slice();
+  var sa = historySleepAverage(sleep);
+  var steps = (d.stepsLog || []).slice();
+  var stepsAvg = historyStepsAverage(steps);
+
+  /* Today's scheduled day */
+  var todayMap5 = {1:'mon',2:'tue',3:'wed',4:'thu',5:'fri'};
+  var todayMap4 = {1:'d4_1',2:'d4_2',3:'d4_3',4:'d4_4'};
+  var todayMap3 = {1:'d3_1',2:'d3_2',3:'d3_3'};
+  var dow = new Date().getDay();
+  var todayKey;
+  if (prog === 'travel') todayKey = 'hotel';
+  else if (prog === 5) todayKey = todayMap5[dow];
+  else if (prog === 4) todayKey = todayMap4[dow <= 4 ? dow : undefined];
+  else todayKey = todayMap3[dow <= 3 ? dow : undefined];
+  var isRestDay = !todayKey;
+  var days = getActiveDays();
+  var todayDay = todayKey ? days[todayKey] : null;
+
+  var h = '';
+
+  /* === TODAY HERO CARD === */
+  if (isRestDay) {
+    h += '<div class="train-home"><div class="now-card rest-card-home" style="text-align:center;padding:1.5rem 1rem;background:rgba(52,199,89,.06);border-color:rgba(52,199,89,.16)">';
+    h += '<div style="font-size:2.2rem;margin-bottom:.5rem">😴</div>';
+    h += '<div style="font-size:1.1rem;font-weight:800;color:var(--green)">Rest Day</div>';
+    h += '<div style="font-size:.88rem;color:var(--muted);margin-top:.4rem">Recovery is where gains happen. Walk, stretch, live your life.</div>';
+    if (sa.avgHours != null || stepsAvg.avgSteps != null) {
+      h += '<div style="display:flex;justify-content:center;gap:1.2rem;margin-top:.85rem">';
+      if (sa.avgHours != null) h += '<div><div style="font-size:1.3rem;font-weight:800;font-variant-numeric:tabular-nums">' + sa.avgHours.toFixed(1) + 'h</div><div style="font-size:.72rem;color:var(--muted)">sleep avg</div></div>';
+      if (stepsAvg.avgSteps != null) h += '<div><div style="font-size:1.3rem;font-weight:800;font-variant-numeric:tabular-nums">' + stepsAvg.avgSteps.toLocaleString() + '</div><div style="font-size:.72rem;color:var(--muted)">steps avg</div></div>';
+      h += '</div>';
+    }
+    h += '</div></div>';
+  } else {
+    var totalEx = expand(todayDay).filter(function(s) { return s.type === 'ex'; }).length;
+    h += '<div class="train-home"><div class="now-card" onclick="showDayPanel(\'' + todayKey + '\')" style="cursor:pointer">';
+    h += '<div style="display:flex;justify-content:space-between;align-items:flex-start">';
+    h += '<div>';
+    h += '<div style="font-size:.72rem;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.25rem">Today\'s Workout</div>';
+    h += '<div style="font-size:1.15rem;font-weight:800;letter-spacing:-.02em">' + todayDay.icon + ' ' + todayDay.title + '</div>';
+    h += '<div style="font-size:.82rem;color:var(--muted);margin-top:.2rem">' + todayDay.time + ' · ' + totalEx + ' exercises</div>';
+    h += '</div>';
+    h += '<div style="text-align:right">';
+    if (streak > 0) h += '<div style="font-size:1.5rem;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums">🔥 ' + streak + '</div><div style="font-size:.72rem;color:var(--muted)">day streak</div>';
+    h += '</div></div>';
+    h += '<button class="start-btn" style="margin-top:.85rem;margin-bottom:0" onclick="event.stopPropagation();showDayPanel(\'' + todayKey + '\')">▶ START WORKOUT</button>';
+    h += '</div></div>';
+  }
+
+  /* === QUICK STATS ROW === */
+  var lastW = workouts[0];
+  h += '<div style="display:flex;gap:var(--sp-2);margin:.75rem 0;overflow-x:auto;scrollbar-width:none">';
+  h += '<div style="flex:0 0 auto;padding:var(--sp-3) var(--sp-4);border-radius:var(--radius-card);background:rgba(255,255,255,.03);border:1px solid var(--border)"><div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;font-weight:700">Last</div><div style="font-size:.92rem;font-weight:800;margin-top:2px">' + (lastW ? esc(historyLabelDate(lastW.date)) : '—') + '</div></div>';
+  h += '<div style="flex:0 0 auto;padding:var(--sp-3) var(--sp-4);border-radius:var(--radius-card);background:rgba(255,255,255,.03);border:1px solid var(--border)"><div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;font-weight:700">This week</div><div style="font-size:.92rem;font-weight:800;margin-top:2px">' + workouts.filter(function(w) { var dt = historyParseDate(w.date); if (!dt) return false; var c = new Date(); c.setDate(c.getDate() - 6); c.setHours(0,0,0,0); return dt >= c; }).length + ' sessions</div></div>';
+  if (sa.avgHours != null) h += '<div style="flex:0 0 auto;padding:var(--sp-3) var(--sp-4);border-radius:var(--radius-card);background:rgba(255,255,255,.03);border:1px solid var(--border)"><div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;font-weight:700">Sleep</div><div style="font-size:.92rem;font-weight:800;margin-top:2px">' + sa.avgHours.toFixed(1) + 'h avg</div></div>';
   h += '</div>';
-  
+
+  /* === DAY NAV + PANELS === */
   h += '<div class="day-nav" id="day-nav">';
   for (var i = 0; i < conf.keys.length; i++) {
     h += '<button data-day="' + conf.keys[i] + '" onclick="showDayPanel(\'' + conf.keys[i] + '\')">' + conf.labels[i] + '</button>';
@@ -2084,22 +2143,26 @@ function renderTrainDashboard() {
   h += '</div>';
   
   sec.innerHTML = h;
-  document.getElementById('p-rest').innerHTML = '<div class="static rest-day"><div class="emoji">😴</div><h2>Rest Days</h2><p style="margin-top:1rem;color:var(--muted)">Walk, stretch, live your life. Active recovery keeps you moving without taxing the system.</p></div>';
-  
-  var todayMap5 = {1:'mon',2:'tue',3:'wed',4:'thu',5:'fri'};
-  var todayMap4 = {1:'d4_1',2:'d4_2',3:'d4_3',4:'d4_4'};
-  var todayMap3 = {1:'d3_1',2:'d3_2',3:'d3_3'};
-  var dow = new Date().getDay();
-  var autoDay;
-  if (prog === 'travel') autoDay = 'hotel';
-  else if (prog === 5) autoDay = todayMap5[dow];
-  else if (prog === 4) autoDay = todayMap4[dow <= 4 ? dow : undefined];
-  else autoDay = todayMap3[dow <= 3 ? dow : undefined];
-  showDayPanel(autoDay || conf.keys[0]);
+
+  /* Rest day panel with recovery stats */
+  var restHtml = '<div class="static rest-day"><div class="emoji">😴</div><h2>Rest Day</h2>';
+  restHtml += '<p style="margin-top:.75rem;color:var(--muted)">Active recovery keeps you moving without taxing the system.</p>';
+  if (sa.avgHours != null || stepsAvg.avgSteps != null) {
+    restHtml += '<div style="display:flex;justify-content:center;gap:1.5rem;margin-top:1rem">';
+    if (sa.avgHours != null) restHtml += '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:800;font-variant-numeric:tabular-nums">' + sa.avgHours.toFixed(1) + 'h</div><div style="font-size:.75rem;color:var(--muted)">7-day sleep</div></div>';
+    if (stepsAvg.avgSteps != null) restHtml += '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:800;font-variant-numeric:tabular-nums">' + stepsAvg.avgSteps.toLocaleString() + '</div><div style="font-size:.75rem;color:var(--muted)">steps/day</div></div>';
+    if (streak > 0) restHtml += '<div style="text-align:center"><div style="font-size:1.5rem;font-weight:800;font-variant-numeric:tabular-nums">🔥 ' + streak + '</div><div style="font-size:.75rem;color:var(--muted)">streak</div></div>';
+    restHtml += '</div>';
+  }
+  restHtml += '</div>';
+  document.getElementById('p-rest').innerHTML = restHtml;
+
+  /* Don't auto-select a day panel — the hero card IS the today entry point */
 }
 
 function switchProgramme(n) {
   setActiveProgramme(n);
+  if (currentMainSection === 'settings') renderSettings();
   renderTrainDashboard();
 }
 
@@ -2146,7 +2209,7 @@ function showPanel(key) {
 showMainSection('train');
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.06.11').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.06.12').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
