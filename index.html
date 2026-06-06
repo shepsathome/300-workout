@@ -1041,7 +1041,7 @@ var historyView='overview';
 function setHistoryView(view){historyView=view;renderHistory();}
 
 function renderHistoryNav(){
-  var views=[{id:'overview',label:'Overview',icon:'🏠'},{id:'training',label:'Training',icon:'🏋️'},{id:'body',label:'Body',icon:'📏'},{id:'recovery',label:'Recovery',icon:'😴'},{id:'nutrition',label:'Nutrition',icon:'🍽️'}];
+  var views=[{id:'overview',label:'Overview',icon:'🏠'},{id:'training',label:'Training',icon:'🏋️'},{id:'body',label:'Body',icon:'📏'},{id:'recovery',label:'Recovery',icon:'😴'},{id:'steps',label:'Steps',icon:'🚶'},{id:'nutrition',label:'Nutrition',icon:'🍽️'}];
   var h='<div class="history-nav">';
   for(var i=0;i<views.length;i++){
     var v=views[i];
@@ -1089,7 +1089,8 @@ function renderHistoryOverview(){
   h+='<div class="domain-grid">';
   h+='<div class="domain-card dc-training" onclick="setHistoryView(\'training\')"><div class="dc-icon">🏋️</div><div class="dc-title">Training</div><div class="dc-stat">'+weekWorkouts+'<small>this week</small></div><div class="dc-meta">'+(lastW?esc(historyLabelDate(lastW.date))+' · '+fmt(lastW.duration||0):'No workouts yet')+'</div><div class="dc-arrow">›</div></div>';
   h+='<div class="domain-card dc-body" onclick="setHistoryView(\'body\')"><div class="dc-icon">📏</div><div class="dc-title">Body</div><div class="dc-stat">'+(ws.current!=null?ws.current.toFixed(1):'—')+'<small>kg</small></div><div class="dc-meta">'+(lastM?esc(historyLabelDate(lastM.date))+(lastM.waist!=null?' · waist '+lastM.waist+'cm':''):'No measurements')+'</div><div class="dc-arrow">›</div></div>';
-  h+='<div class="domain-card dc-recovery" onclick="setHistoryView(\'recovery\')"><div class="dc-icon">😴</div><div class="dc-title">Recovery</div><div class="dc-stat">'+(sa.avgHours!=null?sa.avgHours.toFixed(1):'—')+'<small>h avg</small></div><div class="dc-meta">'+(stepsAvg.avgSteps!=null?stepsAvg.avgSteps.toLocaleString()+' steps/day':'Log sleep & steps')+'</div><div class="dc-arrow">›</div></div>';
+  h+='<div class="domain-card dc-recovery" onclick="setHistoryView(\'recovery\')"><div class="dc-icon">😴</div><div class="dc-title">Recovery</div><div class="dc-stat">'+(sa.avgHours!=null?sa.avgHours.toFixed(1):'—')+'<small>h avg</small></div><div class="dc-meta">'+(sa.avgQuality!=null?'Quality '+sa.avgQuality.toFixed(1)+'/10':'Log sleep')+'</div><div class="dc-arrow">›</div></div>';
+  h+='<div class="domain-card dc-steps" onclick="setHistoryView(\'steps\')"><div class="dc-icon">🚶</div><div class="dc-title">Steps</div><div class="dc-stat">'+(stepsAvg.avgSteps!=null?stepsAvg.avgSteps.toLocaleString():'—')+'<small>avg/day</small></div><div class="dc-meta">'+(steps.length?steps.length+' days logged':'Log daily steps')+'</div><div class="dc-arrow">›</div></div>';
   h+='<div class="domain-card dc-nutrition" onclick="setHistoryView(\'nutrition\')"><div class="dc-icon">🍽️</div><div class="dc-title">Nutrition</div><div class="dc-stat">'+(proteinAvg?proteinAvg:'—')+'<small>g protein avg</small></div><div class="dc-meta">'+(lastNutTotals?Math.round(lastNutTotals.calories)+' kcal · '+esc(historyLabelDate(lastNut.date)):'No nutrition logged')+'</div><div class="dc-arrow">›</div></div>';
   h+='</div>';
 
@@ -1265,11 +1266,9 @@ function renderBodyCharts(){
 
 /* === RECOVERY SUB-PAGE === */
 function renderHistoryRecovery(){
-  var d=DS.get(),sleep=(d.sleepLog||[]).slice(),steps=(d.stepsLog||[]).slice(),sa=historySleepAverage(sleep),stepsAvg=historyStepsAverage(steps);
+  var d=DS.get(),sleep=(d.sleepLog||[]).slice(),sa=historySleepAverage(sleep);
   var sleepWithHours=sleep.filter(function(s){return s.hours!=null});
-  var stepsEntries=steps.filter(function(s){return s.steps!=null});
   var sleepBarW=sa.avgHours!=null?Math.max(8,Math.min(100,(sa.avgHours/8.5)*100)):0;
-  var stepsBarW=stepsAvg.avgSteps!=null?Math.max(8,Math.min(100,(stepsAvg.avgSteps/12000)*100)):0;
   var h='<div class="history-view">';
   h+='<div class="section-header"><button class="sh-back" onclick="setHistoryView(\'overview\')">‹</button><h3>😴 Recovery</h3></div>';
 
@@ -1293,8 +1292,33 @@ function renderHistoryRecovery(){
   }else h+='<p style="font-size:.82rem;color:var(--muted);margin-top:.75rem">No sleep logged yet.</p>';
   h+='</div>';
 
-  /* Steps section */
-  h+='<div class="settings-section"><div class="spread"><div><h3>🚶 Steps</h3><p class="settings-copy" style="margin:0">Daily movement — NEAT and active recovery.</p></div><span class="tag">'+steps.length+' days</span></div>';
+  h+='</div>';
+  return h;
+}
+function renderRecoveryCharts(){
+  if(typeof Chart==='undefined')return;
+  var d=DS.get(),sleep=(d.sleepLog||[]).slice(),opts=historyChartOpts;
+  var cM='rgba(152,152,157,.92)',cG='rgba(255,255,255,.08)',cT='rgba(245,245,247,.88)',tBg='#161619';
+  var sleepWithHours=sleep.filter(function(s){return s.hours!=null}).slice(0,21).reverse();
+  if(sleepWithHours.length>=3){
+    var sqDs=[{label:'Hours',data:sleepWithHours.map(function(s){return s.hours}),type:'bar',backgroundColor:sleepWithHours.map(function(s){return s.hours>=7.5?'rgba(79,191,117,.7)':s.hours>=6.5?'rgba(217,164,65,.7)':'rgba(255,107,99,.7)'}),borderRadius:6,maxBarThickness:22,yAxisID:'y',order:2}];
+    if(sleepWithHours.some(function(s){return s.quality!=null}))sqDs.push({label:'Quality',data:sleepWithHours.map(function(s){return s.quality}),type:'line',borderColor:'#8b5cf6',backgroundColor:'rgba(139,92,246,.15)',fill:false,tension:.35,borderWidth:2.5,pointRadius:3,pointHoverRadius:5,yAxisID:'y1',order:1});
+    if(sleepWithHours.some(function(s){return s.energy!=null}))sqDs.push({label:'Energy',data:sleepWithHours.map(function(s){return s.energy}),type:'line',borderColor:'#ffd60a',backgroundColor:'rgba(255,214,10,.15)',fill:false,tension:.35,borderWidth:2.5,pointRadius:3,pointHoverRadius:5,yAxisID:'y1',order:1});
+    var sqOpts=opts(true);
+    sqOpts.scales.y={position:'left',beginAtZero:true,suggestedMax:9,ticks:{color:cT,font:{size:10}},grid:{color:cG},title:{display:true,text:'hours',color:cM,font:{size:10}}};
+    sqOpts.scales.y1={position:'right',min:0,max:10,ticks:{color:'#8b5cf6',font:{size:10}},grid:{display:false},title:{display:true,text:'/10',color:cM,font:{size:10}}};
+    historyPushChart('trend-sleep-qe',{type:'bar',data:{labels:sleepWithHours.map(function(s){return historyLabelDate(s.date)}),datasets:sqDs},options:sqOpts});
+  }
+}
+
+/* === STEPS SUB-PAGE === */
+function renderHistorySteps(){
+  var d=DS.get(),steps=(d.stepsLog||[]).slice(),stepsAvg=historyStepsAverage(steps);
+  var stepsEntries=steps.filter(function(s){return s.steps!=null});
+  var stepsBarW=stepsAvg.avgSteps!=null?Math.max(8,Math.min(100,(stepsAvg.avgSteps/12000)*100)):0;
+  var h='<div class="history-view">';
+  h+='<div class="section-header"><button class="sh-back" onclick="setHistoryView(\'overview\')">‹</button><h3>🚶 Steps</h3></div>';
+  h+='<div class="settings-section"><div class="spread"><div><h3>🚶 Daily Movement</h3><p class="settings-copy" style="margin:0">NEAT and active recovery — every step counts.</p></div><span class="tag">'+steps.length+' days</span></div>';
   h+='<button class="settings-btn" style="margin-bottom:.75rem" onclick="showLogSheet(\'steps\')">+ Log Steps</button>';
   if(stepsAvg.avgSteps!=null){
     h+='<div class="sleep-bar"><div class="spread"><strong>7-day average</strong><span class="hist-sub">'+stepsAvg.avgSteps.toLocaleString()+' steps</span></div><div class="bar-track"><div class="bar-fill" style="width:'+stepsBarW+'%;background:linear-gradient(90deg,var(--accent),var(--accent2))"></div></div></div>';
@@ -1310,20 +1334,10 @@ function renderHistoryRecovery(){
   h+='</div></div>';
   return h;
 }
-function renderRecoveryCharts(){
+function renderStepsCharts(){
   if(typeof Chart==='undefined')return;
-  var d=DS.get(),sleep=(d.sleepLog||[]).slice(),steps=(d.stepsLog||[]).slice(),opts=historyChartOpts;
-  var cM='rgba(152,152,157,.92)',cG='rgba(255,255,255,.08)',cT='rgba(245,245,247,.88)',tBg='#161619';
-  var sleepWithHours=sleep.filter(function(s){return s.hours!=null}).slice(0,21).reverse();
-  if(sleepWithHours.length>=3){
-    var sqDs=[{label:'Hours',data:sleepWithHours.map(function(s){return s.hours}),type:'bar',backgroundColor:sleepWithHours.map(function(s){return s.hours>=7.5?'rgba(79,191,117,.7)':s.hours>=6.5?'rgba(217,164,65,.7)':'rgba(255,107,99,.7)'}),borderRadius:6,maxBarThickness:22,yAxisID:'y',order:2}];
-    if(sleepWithHours.some(function(s){return s.quality!=null}))sqDs.push({label:'Quality',data:sleepWithHours.map(function(s){return s.quality}),type:'line',borderColor:'#8b5cf6',backgroundColor:'rgba(139,92,246,.15)',fill:false,tension:.35,borderWidth:2.5,pointRadius:3,pointHoverRadius:5,yAxisID:'y1',order:1});
-    if(sleepWithHours.some(function(s){return s.energy!=null}))sqDs.push({label:'Energy',data:sleepWithHours.map(function(s){return s.energy}),type:'line',borderColor:'#ffd60a',backgroundColor:'rgba(255,214,10,.15)',fill:false,tension:.35,borderWidth:2.5,pointRadius:3,pointHoverRadius:5,yAxisID:'y1',order:1});
-    var sqOpts=opts(true);
-    sqOpts.scales.y={position:'left',beginAtZero:true,suggestedMax:9,ticks:{color:cT,font:{size:10}},grid:{color:cG},title:{display:true,text:'hours',color:cM,font:{size:10}}};
-    sqOpts.scales.y1={position:'right',min:0,max:10,ticks:{color:'#8b5cf6',font:{size:10}},grid:{display:false},title:{display:true,text:'/10',color:cM,font:{size:10}}};
-    historyPushChart('trend-sleep-qe',{type:'bar',data:{labels:sleepWithHours.map(function(s){return historyLabelDate(s.date)}),datasets:sqDs},options:sqOpts});
-  }
+  var d=DS.get(),steps=(d.stepsLog||[]).slice(),opts=historyChartOpts;
+  var cT='rgba(245,245,247,.88)',cG='rgba(255,255,255,.08)';
   var stepsSeries=steps.filter(function(s){return s.steps!=null}).slice(0,14).reverse();
   if(stepsSeries.length>=3){
     historyPushChart('trend-steps',{type:'bar',
@@ -1426,6 +1440,7 @@ function renderHistory(){
   if(historyView==='training')h+=renderHistoryTraining();
   else if(historyView==='body')h+=renderHistoryBody();
   else if(historyView==='recovery')h+=renderHistoryRecovery();
+  else if(historyView==='steps')h+=renderHistorySteps();
   else if(historyView==='nutrition')h+=renderHistoryNutrition();
   else h+=renderHistoryOverview();
 
@@ -1446,6 +1461,7 @@ function renderHistory(){
     if(historyView==='training')renderTrainingCharts();
     else if(historyView==='body')renderBodyCharts();
     else if(historyView==='recovery')renderRecoveryCharts();
+    else if(historyView==='steps')renderStepsCharts();
     else if(historyView==='nutrition')renderNutritionCharts();
   }
 }
@@ -1592,7 +1608,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.06.3</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.06.4</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2124,7 +2140,7 @@ function showPanel(key) {
 showMainSection('train');
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.06.3').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.06.4').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
