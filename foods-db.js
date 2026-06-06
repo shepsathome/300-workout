@@ -162,5 +162,10 @@ var FOODS = [
   { name: 'Gail\'s Porridge (plain, oat milk)', cal: 98, protein: 3, carbs: 16, fat: 2.1, serving: 300, unit: 'g' },
   { name: 'Gail\'s Sourdough Toast (2 slices)', cal: 224, protein: 7.4, carbs: 49, fat: 0.9, serving: 90, unit: 'g' },
   { name: 'Tortilla Beef Burrito (rice, beans, lettuce, cheese, sour cream)', cal: 163, protein: 8.3, carbs: 17.7, fat: 6.6, serving: 575, unit: 'g' },
-  { name: 'Santa Maria Margherita Pizza', cal: 240, protein: 10, carbs: 32, fat: 8.4, serving: 300, unit: 'g' }
+  { name: 'Santa Maria Margherita Pizza', cal: 240, protein: 10, carbs: 32, fat: 8.4, serving: 300, unit: 'g' },
+
+  // Kings Head, Teddington
+  { name: 'Kings Head Bread, Olives & Oil', cal: 160, protein: 2.5, carbs: 16, fat: 8, serving: 200, unit: 'g' },
+  { name: 'Kings Head Burger & Fries', cal: 230, protein: 9, carbs: 17, fat: 11.6, serving: 500, unit: 'g' },
+  { name: 'Kings Head Sticky Toffee Pudding & Ice Cream', cal: 288, protein: 3, carbs: 34.4, fat: 14.8, serving: 250, unit: 'g' }
 ];
