@@ -25,6 +25,8 @@
   --safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px);
   /* Radii */
   --radius-card:20px;--radius-sm:12px;--radius-pill:999px;
+  /* Spacing (8px grid) */
+  --sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:20px;--sp-6:24px;--sp-8:32px;--sp-10:40px;
   /* Motion */
   --spring:cubic-bezier(.34,1.56,.64,1);--ease-out:cubic-bezier(.16,1,.3,1)
 }
@@ -55,7 +57,7 @@ a{color:var(--a2)}
 .prog-pill{border:1px solid var(--border);background:rgba(44,44,46,.75);color:var(--muted);padding:.45rem 1rem;border-radius:999px;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .2s;min-height:48px;box-shadow:var(--sh)}
 .prog-pill.active{border-color:transparent;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 10px 18px rgba(232,89,12,.2)}
 /* === PANELS === */
-.panel{display:none;padding:.75rem .75rem .9rem}.panel.active{display:block}
+.panel{display:none;padding:var(--sp-3) var(--sp-3) var(--sp-4)}.panel.active{display:block}
 .main-section{display:none}.main-section.active{display:block}
 /* === WORKOUT CARDS === */
 .now-card,.upcoming,.static,.settings-section,.nutrition-totals,.train-home .today-card,.complete-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-card);box-shadow:var(--sh)}
@@ -137,7 +139,7 @@ a{color:var(--a2)}
 .info-table .total td{font-weight:700;color:var(--accent)}
 .rest-day{text-align:center;padding:2rem 1rem}.rest-day .emoji{font-size:3rem}.rest-day h2{color:#248a3d}
 /* === SETTINGS === */
-.settings-section{padding:1rem;margin-bottom:1rem}
+.settings-section{padding:var(--sp-4);margin-bottom:var(--sp-4)}
 .settings-section h3{font-size:1rem;color:var(--accent);margin-bottom:.65rem;font-weight:700;letter-spacing:-.01em}
 .settings-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem;flex-wrap:wrap;gap:.45rem}
 .settings-row label{font-size:.88rem;color:var(--text);font-weight:600;min-width:100px}
@@ -249,13 +251,13 @@ a{color:var(--a2)}
 .settings-note{font-size:.78rem;color:var(--muted);margin-top:.55rem}
 
 /* === HISTORY DASHBOARD === */
-.hero-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 1rem}
-.stat-pill{padding:16px 18px;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.018));border:1px solid var(--border);box-shadow:var(--sh);min-width:0}
+.hero-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--sp-3);margin:0 0 var(--sp-4)}
+.stat-pill{padding:var(--sp-4) var(--sp-5);border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.018));border:1px solid var(--border);box-shadow:var(--sh);min-width:0}
 .stat-pill .stat-icon{font-size:1rem;display:block;margin-bottom:.45rem}
 .stat-pill .stat-value{font-size:1.8rem;font-weight:800;letter-spacing:-.02em;line-height:1}
 .stat-pill .stat-label{margin-top:.35rem;color:var(--muted);font-size:.82rem;letter-spacing:.08em;text-transform:uppercase}
 .stat-pill .stat-meta{margin-top:.35rem;font-size:.82rem;color:var(--muted)}
-.hist-card{position:relative;padding:14px 16px 14px 18px;border-radius:var(--radius-card);background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.015));border:1px solid var(--border);box-shadow:var(--sh);margin-top:10px;overflow:hidden}
+.hist-card{position:relative;padding:var(--sp-4) var(--sp-4) var(--sp-4) var(--sp-5);border-radius:var(--radius-card);background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.015));border:1px solid var(--border);box-shadow:var(--sh);margin-top:var(--sp-3);overflow:hidden}
 .hist-card::before{content:'';position:absolute;left:0;top:14px;bottom:14px;width:4px;border-radius:999px;background:rgba(255,255,255,.1)}
 .hist-card.workout-card::before{background:linear-gradient(180deg,var(--accent),var(--accent2))}
 .hist-card.measure-card::before{background:linear-gradient(180deg,var(--a2),#7cc3ff)}
@@ -266,7 +268,7 @@ a{color:var(--a2)}
 .hist-sub{color:var(--muted);font-size:.84rem;margin-top:2px}
 .hist-hero{font-size:1.55rem;font-weight:800;letter-spacing:-.02em;line-height:1}
 .hist-hero small{font-size:.78rem;color:var(--muted);font-weight:700;margin-left:4px}
-.hist-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.hist-meta{display:flex;flex-wrap:wrap;gap:var(--sp-2);margin-top:var(--sp-3)}
 .hist-chip,.macro-badge,.delta-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.04);font-size:.82rem;font-weight:700}
 .macro-badge.protein{color:var(--green)}
 .macro-badge.carbs{color:var(--yellow)}
@@ -306,8 +308,8 @@ a{color:var(--a2)}
 @keyframes hvFadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
 /* === DOMAIN CARDS (Overview hub) === */
-.domain-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:.75rem}
-.domain-card{position:relative;padding:18px 16px;border-radius:var(--radius-card);background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015));border:1px solid var(--border);box-shadow:var(--sh);cursor:pointer;transition:transform .2s var(--spring),box-shadow .18s;overflow:hidden}
+.domain-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--sp-3);margin-top:var(--sp-3)}
+.domain-card{position:relative;padding:var(--sp-5) var(--sp-4);border-radius:var(--radius-card);background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015));border:1px solid var(--border);box-shadow:var(--sh);cursor:pointer;transition:transform .2s var(--spring),box-shadow .18s;overflow:hidden}
 .domain-card:active{transform:scale(.97);box-shadow:var(--sh2)}
 .domain-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:0 999px 999px 0}
 .domain-card.dc-training::before{background:linear-gradient(180deg,var(--accent),var(--accent2))}
@@ -323,7 +325,7 @@ a{color:var(--a2)}
 .domain-card .dc-arrow{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.9rem;opacity:.5}
 
 /* === INSIGHT CARD === */
-.insight-card{padding:16px 18px;border-radius:20px;background:linear-gradient(135deg,rgba(59,154,255,.08),rgba(139,92,246,.06));border:1px solid rgba(59,154,255,.18);margin-bottom:1rem}
+.insight-card{padding:var(--sp-4) var(--sp-5);border-radius:var(--radius-card);background:linear-gradient(135deg,rgba(59,154,255,.08),rgba(139,92,246,.06));border:1px solid rgba(59,154,255,.18);margin-bottom:var(--sp-4)}
 .insight-card .insight-icon{font-size:1.1rem;margin-bottom:6px}
 .insight-card .insight-text{font-size:.88rem;line-height:1.55;color:var(--text)}
 .insight-card .insight-text strong{color:var(--a2)}
@@ -973,6 +975,7 @@ function historySleepAverage(logs){
   };
 }
 function historyPushChart(id,config){var canvas=document.getElementById(id);if(!canvas||typeof Chart==='undefined')return;_historyCharts.push(new Chart(canvas.getContext('2d'),config));}
+function chartGradientFill(color){return function(ctx){var c=ctx.chart,a=c.chartArea;if(!a)return'transparent';var g=c.ctx.createLinearGradient(0,a.top,0,a.bottom);g.addColorStop(0,color.replace('rgb','rgba').replace(')',',0.35)'));g.addColorStop(0.6,color.replace('rgb','rgba').replace(')',',0.08)'));g.addColorStop(1,color.replace('rgb','rgba').replace(')',',0)'));return g}}
 function historyStepsAverage(logs){
   var cutoff=new Date();cutoff.setHours(0,0,0,0);cutoff.setDate(cutoff.getDate()-6);
   var total=0,count=0;
@@ -1194,7 +1197,7 @@ function renderTrainingCharts(){
   var fri300=workouts.filter(function(w){return w.day==='fri'&&w.duration>0}).slice(0,15).reverse();
   if(fri300.length>=2){
     historyPushChart('trend-300-times',{type:'line',
-      data:{labels:fri300.map(function(w){return historyLabelDate(w.date)}),datasets:[{label:'Time',data:fri300.map(function(w){return Math.round(w.duration/60*10)/10}),borderColor:'var(--accent)',backgroundColor:'rgba(232,89,12,.15)',fill:true,tension:.35,borderWidth:2.5,pointRadius:4,pointHoverRadius:6}]},
+      data:{labels:fri300.map(function(w){return historyLabelDate(w.date)}),datasets:[{label:'Time',data:fri300.map(function(w){return Math.round(w.duration/60*10)/10}),borderColor:'var(--accent)',backgroundColor:chartGradientFill('rgb(232,89,12)'),fill:true,tension:.35,borderWidth:2.5,pointRadius:4,pointHoverRadius:6}]},
       options:function(){var o=opts(false);o.scales.y.title={display:true,text:'minutes',color:cM,font:{size:10}};return o}()
     });
   }
@@ -1256,8 +1259,8 @@ function renderBodyCharts(){
     var cL=[],cW=[],cWa=[];
     Object.keys(allDates).sort().forEach(function(d){cL.push(historyLabelDate(d));cW.push(allDates[d].w||null);cWa.push(allDates[d].waist||null)});
     var ds=[],hasW=cW.some(function(v){return v!=null}),hasWa=cWa.some(function(v){return v!=null});
-    if(hasW)ds.push({label:'Weight (kg)',data:cW,borderColor:'#4da3ff',backgroundColor:'rgba(77,163,255,.15)',fill:false,tension:.35,borderWidth:2.5,pointRadius:4,pointHoverRadius:6,yAxisID:'y'});
-    if(hasWa)ds.push({label:'Waist (cm)',data:cWa,borderColor:'#ff6b63',backgroundColor:'rgba(255,107,99,.15)',fill:false,tension:.35,borderWidth:2.5,pointRadius:4,pointHoverRadius:6,yAxisID:hasW?'y1':'y',borderDash:[6,4]});
+    if(hasW)ds.push({label:'Weight (kg)',data:cW,borderColor:'#4da3ff',backgroundColor:chartGradientFill('rgb(77,163,255)'),fill:true,tension:.35,borderWidth:2.5,pointRadius:4,pointHoverRadius:6,yAxisID:'y'});
+    if(hasWa)ds.push({label:'Waist (cm)',data:cWa,borderColor:'#ff6b63',backgroundColor:chartGradientFill('rgb(255,107,99)'),fill:true,tension:.35,borderWidth:2.5,pointRadius:4,pointHoverRadius:6,yAxisID:hasW?'y1':'y',borderDash:[6,4]});
     var o=opts(true);
     if(hasW&&hasWa){o.scales.y={position:'left',ticks:{color:'#4da3ff',font:{size:10}},grid:{color:cG},title:{display:true,text:'kg',color:cM,font:{size:10}}};o.scales.y1={position:'right',ticks:{color:'#ff6b63',font:{size:10}},grid:{display:false},title:{display:true,text:'cm',color:cM,font:{size:10}}};}
     historyPushChart('trend-weight-waist',{type:'line',data:{labels:cL,datasets:ds},options:o});
@@ -1271,8 +1274,8 @@ function renderBodyCharts(){
     var mL=[],mC=[],mA=[];
     Object.keys(mD).sort().forEach(function(d){mL.push(historyLabelDate(d));mC.push(mD[d].chest||null);mA.push(mD[d].arms||null)});
     var mDs=[];
-    if(mC.some(function(v){return v!=null}))mDs.push({label:'Chest',data:mC,borderColor:'#30d158',backgroundColor:'rgba(48,209,88,.15)',fill:false,tension:.35,borderWidth:2.5,pointRadius:4,pointHoverRadius:6});
-    if(mA.some(function(v){return v!=null}))mDs.push({label:'Arms',data:mA,borderColor:'#3b9aff',backgroundColor:'rgba(59,154,255,.15)',fill:false,tension:.35,borderWidth:2.5,pointRadius:4,pointHoverRadius:6,yAxisID:mC.some(function(v){return v!=null})?'y1':'y'});
+    if(mC.some(function(v){return v!=null}))mDs.push({label:'Chest',data:mC,borderColor:'#30d158',backgroundColor:chartGradientFill('rgb(48,209,88)'),fill:true,tension:.35,borderWidth:2.5,pointRadius:4,pointHoverRadius:6});
+    if(mA.some(function(v){return v!=null}))mDs.push({label:'Arms',data:mA,borderColor:'#3b9aff',backgroundColor:chartGradientFill('rgb(59,154,255)'),fill:true,tension:.35,borderWidth:2.5,pointRadius:4,pointHoverRadius:6,yAxisID:mC.some(function(v){return v!=null})?'y1':'y'});
     var mOpts=opts(true);
     if(mDs.length===2){mOpts.scales.y={position:'left',ticks:{color:'#30d158',font:{size:10}},grid:{color:cG},title:{display:true,text:'chest cm',color:cM,font:{size:10}}};mOpts.scales.y1={position:'right',ticks:{color:'#3b9aff',font:{size:10}},grid:{display:false},title:{display:true,text:'arms cm',color:cM,font:{size:10}}};}
     else{mOpts.scales.y.title={display:true,text:'cm',color:cM,font:{size:10}};}
@@ -1624,7 +1627,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.06.8</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.06.9</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2156,7 +2159,7 @@ function showPanel(key) {
 showMainSection('train');
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.06.8').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.06.9').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
