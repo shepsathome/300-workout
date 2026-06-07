@@ -49,6 +49,14 @@ a{color:var(--a2)}
 .hero h1{font-size:1.08rem;font-weight:700;color:var(--accent);letter-spacing:.08em}
 .hero p{display:none}
 /* === BOTTOM TAB BAR === */
+/* Hero stats — horizontal scroll chips */
+.hero-stats-scroll{display:flex;gap:var(--sp-2);overflow-x:auto;padding:0 0 var(--sp-3);scrollbar-width:none;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory}
+.hero-stats-scroll::-webkit-scrollbar{display:none}
+.stat-chip{flex:0 0 auto;display:flex;align-items:center;gap:6px;padding:.5rem .75rem;border-radius:var(--radius-pill);background:var(--surface-2);border:1px solid var(--border);scroll-snap-align:start;min-height:40px}
+.stat-chip.fire{background:linear-gradient(135deg,rgba(138,122,92,.12),rgba(138,122,92,.05));border-color:rgba(138,122,92,.25)}
+.stat-chip .sc-icon{font-size:.9rem}
+.stat-chip .sc-value{font-size:1rem;font-weight:800;letter-spacing:-.02em}
+.stat-chip .sc-label{font-size:.7rem;color:var(--muted);font-weight:600}
 .bottom-bar{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;align-items:center;padding:.45rem .35rem calc(.5rem + var(--safe-b));z-index:200;border-top:1px solid rgba(255,255,255,.15);background:rgba(245,242,235,.72);backdrop-filter:saturate(180%) blur(24px);-webkit-backdrop-filter:saturate(180%) blur(24px);box-shadow:0 -1px 0 rgba(255,255,255,.08),0 -4px 20px rgba(0,0,0,.08)}
 .bottom-bar button{flex:1;background:none;border:none;color:rgba(80,75,65,.7);display:flex;flex-direction:column;align-items:center;gap:2px;padding:.4rem 0;cursor:pointer;font-size:.72rem;font-weight:600;transition:color .2s,transform .2s;min-height:48px;justify-content:center;border-radius:14px;touch-action:manipulation;-webkit-tap-highlight-color:transparent;position:relative;z-index:1}
 .bottom-bar button .tab-icon{font-size:1.28rem;line-height:1}
@@ -370,7 +378,7 @@ a{color:var(--a2)}
 .latest-strip .li-value{font-size:1.4rem;font-weight:800;line-height:1.2;letter-spacing:-.02em}
 .latest-strip .li-sub{font-size:.78rem;color:var(--muted);margin-top:4px}
 
-@media (max-width:760px){.phase-grid{grid-template-columns:1fr}.trend-mini canvas{height:180px!important}.domain-grid{grid-template-columns:1fr}}
+@media (max-width:760px){.phase-grid{grid-template-columns:1fr}.trend-mini canvas{height:180px!important}.domain-grid{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}}
 
 /* === POLISH: Accessibility & Refinement === */
 .stat-pill .stat-value,.hist-hero,.big-time,.st-time,.rest-time{font-variant-numeric:tabular-nums}
@@ -940,17 +948,33 @@ function historyDayLabel(workout){if(workout.dayOfWeek)return workout.dayOfWeek;
 function historyWeightBadge(diff){if(diff==null||isNaN(diff))return '';return '<span class="delta-badge" style="color:'+(diff<=0?'var(--green)':'var(--red)')+'">'+(diff>0?'+':'')+diff.toFixed(1)+' kg</span>'}
 function historySleepColor(hours){return hours>=7.5?'var(--green)':hours>=6.5?'var(--yellow)':'var(--red)'}
 function historyWorkoutStreak(workouts){
+  /* Weekly consistency streak: count consecutive completed weeks (Mon–Sun)
+     where Adam trained at least 3 days. Current incomplete week is ignored. */
   var seen={},dates=[];
   workouts.forEach(function(w){if(w&&w.date&&!seen[w.date]){seen[w.date]=true;dates.push(w.date)}});
-  dates.sort(function(a,b){return b.localeCompare(a)});
-  if(!dates.length)return 0;
-  var streak=1;
-  for(var i=1;i<dates.length;i++){
-    var prev=historyParseDate(dates[i-1]),curr=historyParseDate(dates[i]);
-    if(!prev||!curr)break;
-    if(Math.round((prev-curr)/86400000)===1)streak++;else break;
+  if(!dates.length)return{weeks:0,thisWeek:0};
+  /* Build a map: weekKey -> count of training days */
+  var weekMap={};
+  dates.forEach(function(ds){
+    var d=historyParseDate(ds);if(!d)return;
+    var day=d.getDay(),mon=new Date(d);mon.setDate(mon.getDate()-((day+6)%7));
+    var key=mon.toISOString().slice(0,10);
+    weekMap[key]=(weekMap[key]||0)+1;
+  });
+  /* Current week key */
+  var now=new Date(),nowDay=now.getDay(),curMon=new Date(now);
+  curMon.setDate(curMon.getDate()-((nowDay+6)%7));curMon.setHours(0,0,0,0);
+  var curKey=curMon.toISOString().slice(0,10);
+  var thisWeek=weekMap[curKey]||0;
+  /* Count consecutive past weeks with >=3 sessions */
+  var streak=0,checkDate=new Date(curMon);
+  checkDate.setDate(checkDate.getDate()-7);
+  while(true){
+    var wk=checkDate.toISOString().slice(0,10);
+    if((weekMap[wk]||0)>=3)streak++;else break;
+    checkDate.setDate(checkDate.getDate()-7);
   }
-  return streak;
+  return{weeks:streak,thisWeek:thisWeek};
 }
 function historyLatestWeight(metrics){
   var latest=null,previous=null;
@@ -1061,7 +1085,7 @@ function historyChartOpts(legend){var cT='rgba(245,245,247,.88)',cM='rgba(152,15
 
 /* === HISTORY VIEW ROUTER === */
 var historyView='overview';
-function setHistoryView(view){historyView=view;renderHistory();}
+function setHistoryView(view){historyView=view;if(currentMainSection==='home')renderHome();else renderHistory();}
 
 function renderHistoryNav(){
   var views=[{id:'overview',label:'Overview',icon:'🏠'},{id:'training',label:'Training',icon:'🏋️'},{id:'body',label:'Body',icon:'📏'},{id:'recovery',label:'Recovery',icon:'😴'},{id:'steps',label:'Steps',icon:'🚶'},{id:'nutrition',label:'Nutrition',icon:'🍽️'}];
@@ -1081,18 +1105,21 @@ function renderHistoryOverview(){
 
   var h='<div class="history-view">';
 
-  /* Hero stats */
-  h+='<div class="hero-stats">';
-  h+='<div class="stat-pill"><span class="stat-icon">🔥</span><div class="stat-value">'+streak+'</div><div class="stat-label">Streak</div><div class="stat-meta">training days</div></div>';
-  h+='<div class="stat-pill"><span class="stat-icon">📏</span><div class="stat-value">'+(ws.current!=null?ws.current.toFixed(1):'—')+'</div><div class="stat-label">Weight</div><div class="stat-meta">'+(ws.diff!=null?historyWeightBadge(ws.diff):'latest')+'</div></div>';
-  h+='<div class="stat-pill"><span class="stat-icon">😴</span><div class="stat-value">'+(sa.avgHours!=null?sa.avgHours.toFixed(1):'—')+'</div><div class="stat-label">Sleep</div><div class="stat-meta">7-day avg</div></div>';
-  h+='<div class="stat-pill"><span class="stat-icon">🏋️</span><div class="stat-value">'+workouts.length+'</div><div class="stat-label">Sessions</div><div class="stat-meta">total logged</div></div>';
+  /* Hero stats — compact horizontal scroll */
+  h+='<div class="hero-stats-scroll">';
+  h+='<div class="stat-chip fire"><span class="sc-icon">🔥</span><span class="sc-value">'+streak.weeks+'</span><span class="sc-label">wk streak</span></div>';
+  h+='<div class="stat-chip"><span class="sc-icon">📅</span><span class="sc-value">'+streak.thisWeek+'/3</span><span class="sc-label">this wk</span></div>';
+  h+='<div class="stat-chip"><span class="sc-icon">📏</span><span class="sc-value">'+(ws.current!=null?ws.current.toFixed(1):'—')+'</span><span class="sc-label">kg</span></div>';
+  h+='<div class="stat-chip"><span class="sc-icon">😴</span><span class="sc-value">'+(sa.avgHours!=null?sa.avgHours.toFixed(1):'—')+'</span><span class="sc-label">hrs avg</span></div>';
+  h+='<div class="stat-chip"><span class="sc-icon">🏋️</span><span class="sc-value">'+workouts.length+'</span><span class="sc-label">total</span></div>';
   h+='</div>';
 
-  /* Insight card */
-  var insights=[];
-  if(streak>=3)insights.push('<strong>'+streak+'-day streak</strong> — momentum is building');
-  else if(streak===0&&workouts.length>0)insights.push('No recent streak — time to get back in');
+    /* Insight card */
+    var insights=[];
+    if(streak.weeks>=2)insights.push('<strong>'+streak.weeks+'-week streak</strong> — consistency pays off');
+    else if(streak.thisWeek>=3)insights.push('<strong>'+streak.thisWeek+' sessions this week</strong> — streak building');
+    else if(streak.thisWeek>0)insights.push(streak.thisWeek+' session'+(streak.thisWeek>1?'s':'')+' this week — keep going');
+    else if(workouts.length>0)insights.push('No sessions yet this week — time to train');
   if(ws.diff!=null){if(ws.diff<0)insights.push('Weight <strong>down '+Math.abs(ws.diff).toFixed(1)+'kg</strong> — recomp signal');else if(ws.diff>0.5)insights.push('Weight up '+ws.diff.toFixed(1)+'kg — check nutrition or water retention');}
   if(sa.avgHours!=null){if(sa.avgHours>=7.5)insights.push('Sleep averaging <strong>'+sa.avgHours.toFixed(1)+'h</strong> — recovery on point');else if(sa.avgHours<6.5)insights.push('Sleep only '+sa.avgHours.toFixed(1)+'h — recovery may be compromised');}
   if(stepsAvg.avgSteps!=null){if(stepsAvg.avgSteps>=10000)insights.push('Steps averaging <strong>'+stepsAvg.avgSteps.toLocaleString()+'</strong> — NEAT is solid');else if(stepsAvg.avgSteps<5000)insights.push('Only '+stepsAvg.avgSteps.toLocaleString()+' steps/day — try adding a walk');}
@@ -1633,7 +1660,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.07.5</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.07.6</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2102,6 +2129,7 @@ function renderHome() {
     h += '<button onclick="showLogSheet(\'body\')"><span class="fab-emoji">📏</span> Log Measurement</button>';
     h += '<button onclick="showLogSheet(\'sleep\')"><span class="fab-emoji">😴</span> Log Sleep</button>';
     h += '<button onclick="showLogSheet(\'steps\')"><span class="fab-emoji">🚶</span> Log Steps</button>';
+h += '<button onclick="showMainSection(\'log\')"><span class="fab-emoji">🍽️</span> Add Food</button>';
     h += '</div>';
   }
 
@@ -2328,7 +2356,7 @@ function showPanel(key) {
 showMainSection('home');
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.07.5').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.07.6').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);

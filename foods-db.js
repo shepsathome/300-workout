@@ -168,5 +168,8 @@ var FOODS = [
   // Kings Head, Teddington
   { name: 'Kings Head Bread, Olives & Oil', cal: 160, protein: 2.5, carbs: 16, fat: 8, serving: 200, unit: 'g' },
   { name: 'Kings Head Burger & Fries', cal: 230, protein: 9, carbs: 17, fat: 11.6, serving: 500, unit: 'g' },
-  { name: 'Kings Head Sticky Toffee Pudding & Ice Cream', cal: 288, protein: 3, carbs: 34.4, fat: 14.8, serving: 250, unit: 'g' }
+  { name: 'Kings Head Sticky Toffee Pudding & Ice Cream', cal: 288, protein: 3, carbs: 34.4, fat: 14.8, serving: 250, unit: 'g' },
+
+  // Snacks & Supplements
+  { name: 'MyProtein Brownie Chocolate Chip', cal: 383, protein: 30.7, carbs: 38.7, fat: 12.9, serving: 75, unit: 'g' }
 ];
