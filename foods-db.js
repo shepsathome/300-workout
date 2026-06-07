@@ -171,5 +171,6 @@ var FOODS = [
   { name: 'Kings Head Sticky Toffee Pudding & Ice Cream', cal: 288, protein: 3, carbs: 34.4, fat: 14.8, serving: 250, unit: 'g' },
 
   // Snacks & Supplements
-  { name: 'MyProtein Brownie Chocolate Chip', cal: 383, protein: 30.7, carbs: 38.7, fat: 12.9, serving: 75, unit: 'g' }
+  { name: 'MyProtein Brownie Chocolate Chip', cal: 383, protein: 30.7, carbs: 38.7, fat: 12.9, serving: 75, unit: 'g' },
+  { name: 'M&S Baked Potato with Cheese & Beans', cal: 100, protein: 4.1, carbs: 15, fat: 2.5, serving: 435, unit: 'g' }
 ];

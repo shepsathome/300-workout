@@ -1137,14 +1137,12 @@ function renderHistoryOverview(){
   if(proteinCount)proteinAvg=Math.round(proteinAvg/proteinCount);
 
   h+='<div class="domain-grid">';
-  h+='<div class="domain-card dc-training" onclick="setHistoryView(\'training\')"><div class="dc-icon">🏋️</div><div class="dc-title">Training</div><div class="dc-stat">'+weekWorkouts+'<small>this week</small></div><div class="dc-meta">'+(lastW?esc(historyLabelDate(lastW.date))+' · '+fmt(lastW.duration||0):'No workouts yet')+'</div><div class="dc-arrow">›</div></div>';
-  h+='<div class="domain-card dc-body" onclick="setHistoryView(\'body\')"><div class="dc-icon">📏</div><div class="dc-title">Body</div><div class="dc-stat">'+(ws.current!=null?ws.current.toFixed(1):'—')+'<small>kg</small></div><div class="dc-meta">'+(lastM?esc(historyLabelDate(lastM.date))+(lastM.waist!=null?' · waist '+lastM.waist+'cm':''):'No measurements')+'</div><div class="dc-arrow">›</div></div>';
-  h+='<div class="domain-card dc-recovery" onclick="setHistoryView(\'recovery\')"><div class="dc-icon">😴</div><div class="dc-title">Recovery</div><div class="dc-stat">'+(sa.avgHours!=null?sa.avgHours.toFixed(1):'—')+'<small>h avg</small></div><div class="dc-meta">'+(sa.avgQuality!=null?'Quality '+sa.avgQuality.toFixed(1)+'/10':'Log sleep')+'</div><div class="dc-arrow">›</div></div>';
-  h+='<div class="domain-card dc-steps" onclick="setHistoryView(\'steps\')"><div class="dc-icon">🚶</div><div class="dc-title">Steps</div><div class="dc-stat">'+(stepsAvg.avgSteps!=null?stepsAvg.avgSteps.toLocaleString():'—')+'<small>avg/day</small></div><div class="dc-meta">'+(steps.length?steps.length+' days logged':'Log daily steps')+'</div><div class="dc-arrow">›</div></div>';
-  h+='<div class="domain-card dc-nutrition" onclick="setHistoryView(\'nutrition\')"><div class="dc-icon">🍽️</div><div class="dc-title">Nutrition</div><div class="dc-stat">'+(proteinAvg?proteinAvg:'—')+'<small>g protein avg</small></div><div class="dc-meta">'+(lastNutTotals?Math.round(lastNutTotals.calories)+' kcal · '+esc(historyLabelDate(lastNut.date)):'No nutrition logged')+'</div><div class="dc-arrow">›</div></div>';
-  h+='</div>';
-
-  /* Coach suggestions */
+  h+='<div class="domain-card dc-training" onclick="setHistoryView(\'training\')"><div class="dc-icon">🏋️</div><div class="dc-title">Training</div><div class="dc-meta">'+(lastW?esc(historyLabelDate(lastW.date)):'View workouts')+'</div><div class="dc-arrow">›</div></div>';
+  h+='<div class="domain-card dc-body" onclick="setHistoryView(\'body\')"><div class="dc-icon">📏</div><div class="dc-title">Body</div><div class="dc-meta">'+(lastM?esc(historyLabelDate(lastM.date)):'Log measurements')+'</div><div class="dc-arrow">›</div></div>';
+  h+='<div class="domain-card dc-recovery" onclick="setHistoryView(\'recovery\')"><div class="dc-icon">😴</div><div class="dc-title">Recovery</div><div class="dc-meta">'+(sleep.length?sleep.length+' nights logged':'Log sleep')+'</div><div class="dc-arrow">›</div></div>';
+  h+='<div class="domain-card dc-steps" onclick="setHistoryView(\'steps\')"><div class="dc-icon">🚶</div><div class="dc-title">Steps</div><div class="dc-meta">'+(steps.length?steps.length+' days logged':'Log steps')+'</div><div class="dc-arrow">›</div></div>';
+  h+='<div class="domain-card dc-nutrition" onclick="setHistoryView(\'nutrition\')"><div class="dc-icon">🍽️</div><div class="dc-title">Nutrition</div><div class="dc-meta">'+(lastNut?Math.round(lastNutTotals.calories)+' kcal · '+esc(historyLabelDate(lastNut.date)):'Log food')+'</div><div class="dc-arrow">›</div></div>';
+  h+='</div>';    /* Coach suggestions */
   var suggestions=d.suggestions;
   if(suggestions){
     h+='<div class="settings-section" style="margin-top:1rem"><div class="spread"><h3>🎯 Coach Suggestions <span style="font-weight:400;font-size:.72rem;color:var(--muted)">Week of '+esc(suggestions.weekOf||'')+'</span></h3></div>';
@@ -1660,7 +1658,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.07.6</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.07.7</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2260,7 +2258,7 @@ function renderTrainDashboard() {
     h += '<div style="font-size:.82rem;color:var(--muted);margin-top:.2rem">' + todayDay.time + ' · ' + totalEx + ' exercises</div>';
     h += '</div>';
     h += '<div style="text-align:right">';
-    if (streak > 0) h += '<div style="font-size:1.5rem;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums">🔥 ' + streak + '</div><div style="font-size:.72rem;color:var(--muted)">day streak</div>';
+    if (streak.weeks > 0) h += '<div style="font-size:1.5rem;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums">🔥 ' + streak.weeks + '</div><div style="font-size:.72rem;color:var(--muted)">wk streakreak</div>';
     h += '</div></div>';
     h += '<button class="start-btn" style="margin-top:.85rem;margin-bottom:0" onclick="event.stopPropagation();showDayPanel(\'' + todayKey + '\')">▶ START WORKOUT</button>';
     h += '</div></div>';
@@ -2356,7 +2354,7 @@ function showPanel(key) {
 showMainSection('home');
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.07.6').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.07.7').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
