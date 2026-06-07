@@ -6,30 +6,30 @@
 <title>300 Workout</title>
 <!-- PWA -->
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0a0d0c">
+<meta name="theme-color" content="#f2efe8">
 <!-- iOS PWA -->
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="300">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <style>
 :root{
-  /* Surface system — wider steps for visible depth */
-  --surface-0:#000000;--surface-1:#0a0d0c;--surface-2:#161b19;--surface-3:#212825;--surface-4:#2d3532;--surface-5:#3a4340;
+  /* Surface system — light mode */
+  --surface-0:#f8f6f1;--surface-1:#f2efe8;--surface-2:#eae6dd;--surface-3:#e0dbd0;--surface-4:#d6d0c4;--surface-5:#ccc5b8;
   /* Legacy aliases */
-  --bg:#0a0d0c;--card:var(--surface-2);--card2:var(--surface-4);
-  --border:rgba(184,178,165,.12);--border-medium:rgba(184,178,165,.18);
-  --text:rgba(248,245,238,.93);--muted:rgba(200,195,182,.58);
+  --bg:#f2efe8;--card:var(--surface-2);--card2:var(--surface-4);
+  --border:rgba(120,110,90,.15);--border-medium:rgba(120,110,90,.22);
+  --text:rgba(35,30,25,.9);--muted:rgba(90,82,68,.55);
   /* Earth palette */
-  --accent:#c4b08c;--accent2:#d8caa8;--accent-glow:rgba(196,176,140,.10);
-  --grad:linear-gradient(135deg,#a89672,#c4b08c,#d8caa8);
-  --grad-text:linear-gradient(135deg,#d8caa8,#ece0c8);
+  --accent:#8a7a5c;--accent2:#a69478;--accent-glow:rgba(138,122,92,.10);
+  --grad:linear-gradient(135deg,#8a7a5c,#a69478,#bfb296);
+  --grad-text:linear-gradient(135deg,#8a7a5c,#6d5f45);
   /* Semantic */
-  --green:#7cae7a;--blue:#8ba4b8;--clay:#c49a6c;--red:#d4756a;--yellow:#d4c078;
+  --green:#5a9a58;--blue:#5d7f96;--clay:#a87e4f;--red:#c45a4a;--yellow:#b8a050;
   --a2:var(--blue);--streak:var(--clay);
   /* Shadows */
-  --sh:0 1px 4px rgba(0,0,0,.5),0 4px 12px rgba(0,0,0,.3);--sh2:0 4px 16px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.3);
-  --glow-accent:0 0 24px rgba(196,176,140,.08),0 0 48px rgba(196,176,140,.03);
+  --sh:0 1px 3px rgba(0,0,0,.08),0 2px 8px rgba(0,0,0,.05);--sh2:0 2px 8px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.06);
+  --glow-accent:0 0 24px rgba(138,122,92,.06),0 0 48px rgba(138,122,92,.02);
   --safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px);
   /* Radii */
   --radius-card:20px;--radius-sm:12px;--radius-pill:999px;
@@ -39,30 +39,30 @@
   --spring:cubic-bezier(.34,1.56,.64,1);--ease-out:cubic-bezier(.16,1,.3,1)
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{background:var(--bg);color-scheme:dark}
-body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,sans-serif;background:linear-gradient(168deg,#0e1210 0%,#0a0d0c 40%,#080a09 100%);color:var(--text);font-size:16px;line-height:1.5;-webkit-tap-highlight-color:transparent;overscroll-behavior-y:contain;padding-top:var(--safe-t);padding-bottom:calc(78px + var(--safe-b));overflow-x:hidden}
+html{background:var(--bg);color-scheme:light}
+body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',Roboto,sans-serif;background:linear-gradient(168deg,#f8f6f1 0%,#f2efe8 40%,#ede9e0 100%);color:var(--text);font-size:16px;line-height:1.5;-webkit-tap-highlight-color:transparent;overscroll-behavior-y:contain;padding-top:var(--safe-t);padding-bottom:calc(78px + var(--safe-b));overflow-x:hidden}
 button,input,select,textarea{font:inherit}
 button,input,select,textarea{-webkit-appearance:none;appearance:none}
 a{color:var(--a2)}
 /* === TOP HEADER === */
-.hero{background:rgba(28,28,30,.92);padding:.85rem 1rem .75rem;text-align:center;position:sticky;top:0;z-index:90;box-shadow:0 1px 0 rgba(0,0,0,.04),0 2px 10px rgba(0,0,0,.03)}
+.hero{background:rgba(242,239,232,.92);padding:.85rem 1rem .75rem;text-align:center;position:sticky;top:0;z-index:90;box-shadow:0 1px 0 rgba(0,0,0,.04),0 2px 10px rgba(0,0,0,.03)}
 .hero h1{font-size:1.08rem;font-weight:700;color:var(--accent);letter-spacing:.08em}
 .hero p{display:none}
 /* === BOTTOM TAB BAR === */
-.bottom-bar{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;align-items:center;padding:.45rem .35rem calc(.5rem + var(--safe-b));z-index:200;border-top:1px solid rgba(184,178,165,.10);background:rgba(14,17,16,.92);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);box-shadow:0 -4px 20px rgba(0,0,0,.25)}
-.bottom-bar button{flex:1;background:none;border:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;padding:.4rem 0;cursor:pointer;font-size:.72rem;font-weight:600;transition:color .2s,transform .2s;min-height:48px;justify-content:center;border-radius:14px}
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;align-items:center;padding:.45rem .35rem calc(.5rem + var(--safe-b));z-index:200;border-top:1px solid rgba(255,255,255,.15);background:rgba(245,242,235,.72);backdrop-filter:saturate(180%) blur(24px);-webkit-backdrop-filter:saturate(180%) blur(24px);box-shadow:0 -1px 0 rgba(255,255,255,.08),0 -4px 20px rgba(0,0,0,.08)}
+.bottom-bar button{flex:1;background:none;border:none;color:rgba(80,75,65,.7);display:flex;flex-direction:column;align-items:center;gap:2px;padding:.4rem 0;cursor:pointer;font-size:.72rem;font-weight:600;transition:color .2s,transform .2s;min-height:48px;justify-content:center;border-radius:14px;touch-action:manipulation;-webkit-tap-highlight-color:transparent;position:relative;z-index:1}
 .bottom-bar button .tab-icon{font-size:1.28rem;line-height:1}
-.bottom-bar button.active{color:var(--accent)}
+.bottom-bar button.active{color:#8a7a5c}
 .bottom-bar button.active .tab-icon{transform:scale(1.08)}
 /* === OLD TOP NAV (repurposed for day sub-nav inside Train) === */
 .nav{display:none}
-.day-nav{display:flex;overflow-x:auto;background:rgba(19,24,22,.7);border:1px solid var(--border);border-radius:16px;margin:.75rem .75rem .6rem;padding:.28rem;gap:.3rem;scrollbar-width:none;-webkit-overflow-scrolling:touch;box-shadow:var(--sh)}
+.day-nav{display:flex;overflow-x:auto;background:rgba(234,230,221,.7);border:1px solid var(--border);border-radius:16px;margin:.75rem .75rem .6rem;padding:.28rem;gap:.3rem;scrollbar-width:none;-webkit-overflow-scrolling:touch;box-shadow:var(--sh)}
 .day-nav::-webkit-scrollbar{display:none}
 .day-nav button{flex:1 0 auto;background:transparent;border:none;color:var(--muted);padding:.62rem .85rem;font-size:.82rem;font-weight:700;cursor:pointer;border-radius:999px;white-space:nowrap;transition:all .2s;min-width:44px;min-height:48px}
 .day-nav button.active{background:var(--grad);color:#1a1a1a;box-shadow:0 6px 14px rgba(184,168,138,.18),var(--glow-accent)}
 /* === PROGRAMME SELECTOR === */
 .prog-select{display:flex;justify-content:center;gap:.45rem;padding:.7rem .75rem 0}
-.prog-pill{border:1px solid var(--border);background:rgba(19,24,22,.75);color:var(--muted);padding:.45rem 1rem;border-radius:999px;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .2s;min-height:48px;box-shadow:var(--sh)}
+.prog-pill{border:1px solid var(--border);background:rgba(234,230,221,.75);color:var(--muted);padding:.45rem 1rem;border-radius:999px;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .2s;min-height:48px;box-shadow:var(--sh)}
 .prog-pill.active{border-color:transparent;background:var(--grad);color:#1a1a1a;box-shadow:0 10px 18px rgba(184,168,138,.15),var(--glow-accent)}
 /* === PANELS === */
 .panel{display:none;padding:var(--sp-3) var(--sp-3) var(--sp-4)}.panel.active{display:block}
@@ -349,7 +349,7 @@ a{color:var(--a2)}
 .fab-log:active{transform:scale(.88);box-shadow:0 2px 10px rgba(232,89,12,.25)}
 .fab-menu{position:fixed;bottom:calc(148px + var(--safe-b));right:18px;z-index:149;display:flex;flex-direction:column;gap:10px;align-items:flex-end;animation:fabMenuIn .2s ease}
 @keyframes fabMenuIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.fab-menu button{display:flex;align-items:center;gap:8px;padding:.55rem 1rem .55rem .75rem;border-radius:999px;border:1px solid var(--border);background:rgba(10,13,12,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--text);font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:var(--sh2);transition:transform .15s;white-space:nowrap}
+.fab-menu button{display:flex;align-items:center;gap:8px;padding:.55rem 1rem .55rem .75rem;border-radius:999px;border:1px solid var(--border);background:rgba(245,242,235,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--text);font-size:.82rem;font-weight:700;cursor:pointer;box-shadow:var(--sh2);transition:transform .15s;white-space:nowrap}
 .fab-menu button:active{transform:scale(.96)}
 .fab-menu button .fab-emoji{font-size:1.1rem}
 
@@ -1633,7 +1633,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.07.2</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.07.3</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2323,7 +2323,7 @@ function showPanel(key) {
 showMainSection('home');
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.07.2').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.07.3').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
