@@ -14,22 +14,22 @@
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <style>
 :root{
-  /* Surface system — forest floor */
-  --surface-0:#000000;--surface-1:#0a0d0c;--surface-2:#131816;--surface-3:#1c2220;--surface-4:#252c29;--surface-5:#303835;
+  /* Surface system — wider steps for visible depth */
+  --surface-0:#000000;--surface-1:#0a0d0c;--surface-2:#161b19;--surface-3:#212825;--surface-4:#2d3532;--surface-5:#3a4340;
   /* Legacy aliases */
   --bg:#0a0d0c;--card:var(--surface-2);--card2:var(--surface-4);
-  --border:rgba(160,155,140,.08);--border-medium:rgba(160,155,140,.14);
-  --text:rgba(245,242,235,.90);--muted:rgba(180,175,160,.50);
+  --border:rgba(184,178,165,.12);--border-medium:rgba(184,178,165,.18);
+  --text:rgba(248,245,238,.93);--muted:rgba(200,195,182,.58);
   /* Earth palette */
-  --accent:#b8a88a;--accent2:#d4c4a0;--accent-glow:rgba(184,168,138,.10);
-  --grad:linear-gradient(135deg,#9a8a6c,#b8a88a,#d4c4a0);
-  --grad-text:linear-gradient(135deg,#d4c4a0,#e8dcc0);
+  --accent:#c4b08c;--accent2:#d8caa8;--accent-glow:rgba(196,176,140,.10);
+  --grad:linear-gradient(135deg,#a89672,#c4b08c,#d8caa8);
+  --grad-text:linear-gradient(135deg,#d8caa8,#ece0c8);
   /* Semantic */
   --green:#7cae7a;--blue:#8ba4b8;--clay:#c49a6c;--red:#d4756a;--yellow:#d4c078;
   --a2:var(--blue);--streak:var(--clay);
   /* Shadows */
   --sh:0 1px 4px rgba(0,0,0,.5),0 4px 12px rgba(0,0,0,.3);--sh2:0 4px 16px rgba(0,0,0,.4),0 12px 32px rgba(0,0,0,.3);
-  --glow-accent:0 0 24px rgba(184,168,138,.08),0 0 48px rgba(184,168,138,.03);
+  --glow-accent:0 0 24px rgba(196,176,140,.08),0 0 48px rgba(196,176,140,.03);
   --safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px);
   /* Radii */
   --radius-card:20px;--radius-sm:12px;--radius-pill:999px;
@@ -49,7 +49,7 @@ a{color:var(--a2)}
 .hero h1{font-size:1.08rem;font-weight:700;color:var(--accent);letter-spacing:.08em}
 .hero p{display:none}
 /* === BOTTOM TAB BAR === */
-.bottom-bar{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;align-items:center;padding:.45rem .35rem calc(.5rem + var(--safe-b));z-index:200;border-top:1px solid rgba(160,155,140,.06);background:rgba(10,13,12,.90);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);box-shadow:0 -4px 20px rgba(0,0,0,.2)}
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;align-items:center;padding:.45rem .35rem calc(.5rem + var(--safe-b));z-index:200;border-top:1px solid rgba(184,178,165,.10);background:rgba(14,17,16,.92);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);box-shadow:0 -4px 20px rgba(0,0,0,.25)}
 .bottom-bar button{flex:1;background:none;border:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;padding:.4rem 0;cursor:pointer;font-size:.72rem;font-weight:600;transition:color .2s,transform .2s;min-height:48px;justify-content:center;border-radius:14px}
 .bottom-bar button .tab-icon{font-size:1.28rem;line-height:1}
 .bottom-bar button.active{color:var(--accent)}
@@ -117,7 +117,7 @@ a{color:var(--a2)}
 /* === PROGRESS === */
 .prog-bar,.macro-bar{background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden}
 .prog-bar{height:10px;margin:.65rem 0}
-.prog-bar .fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:999px;transition:width .3s;box-shadow:inset 0 0 0 1px rgba(255,255,255,.15)}
+.prog-bar .fill{height:100%;background:linear-gradient(90deg,var(--green),#a4cca3);border-radius:999px;transition:width .3s;box-shadow:inset 0 0 0 1px rgba(255,255,255,.15)}
 .prog-text{font-size:.78rem;color:var(--muted);text-align:center;margin-bottom:.65rem}
 /* === UPCOMING === */
 .upcoming{padding:.85rem .8rem}
@@ -254,9 +254,9 @@ a{color:var(--a2)}
 
 /* === HISTORY DASHBOARD === */
 .hero-stats{display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3);margin:0 0 var(--sp-4)}
-.stat-pill{padding:var(--sp-5);border-radius:var(--radius-card);background:linear-gradient(180deg,rgba(160,155,140,.04),rgba(160,155,140,.015));border:1px solid var(--border);box-shadow:var(--sh);min-width:0;position:relative;overflow:hidden}
+.stat-pill{padding:var(--sp-5);border-radius:var(--radius-card);background:linear-gradient(180deg,rgba(184,178,165,.07),rgba(184,178,165,.03));border:1px solid var(--border);box-shadow:var(--sh);min-width:0;position:relative;overflow:hidden}
 .stat-pill::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--border);transition:background .3s}
-.stat-pill:first-child{grid-column:1/-1;text-align:center;padding:var(--sp-6) var(--sp-5);background:linear-gradient(135deg,rgba(124,174,122,.06),rgba(184,168,138,.03));border-color:rgba(124,174,122,.12)}
+.stat-pill:first-child{grid-column:1/-1;text-align:center;padding:var(--sp-6) var(--sp-5);background:linear-gradient(135deg,rgba(124,174,122,.08),rgba(196,176,140,.05));border-color:rgba(124,174,122,.16)}
 .stat-pill:first-child::after{background:linear-gradient(90deg,var(--green),var(--accent));height:2px}
 .stat-pill:first-child .stat-value{font-size:3.5rem;background:var(--grad-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .stat-pill:first-child .stat-icon{font-size:1.5rem}
@@ -264,7 +264,7 @@ a{color:var(--a2)}
 .stat-pill .stat-value{font-size:1.8rem;font-weight:800;letter-spacing:-.03em;line-height:1}
 .stat-pill .stat-label{margin-top:.4rem;color:var(--muted);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700}
 .stat-pill .stat-meta{margin-top:.25rem;font-size:.78rem;color:var(--muted)}
-.hist-card{position:relative;padding:var(--sp-4) var(--sp-4) var(--sp-4) var(--sp-5);border-radius:var(--radius-card);background:linear-gradient(180deg,rgba(160,155,140,.03),rgba(160,155,140,.01));border:1px solid var(--border);box-shadow:var(--sh);margin-top:var(--sp-3);overflow:hidden}
+.hist-card{position:relative;padding:var(--sp-4) var(--sp-4) var(--sp-4) var(--sp-5);border-radius:var(--radius-card);background:linear-gradient(180deg,rgba(184,178,165,.06),rgba(184,178,165,.025));border:1px solid var(--border);box-shadow:var(--sh);margin-top:var(--sp-3);overflow:hidden}
 .hist-card::before{content:'';position:absolute;left:0;top:14px;bottom:14px;width:4px;border-radius:999px;background:rgba(255,255,255,.1)}
 .hist-card.workout-card::before{background:var(--grad)}
 .hist-card.measure-card::before{background:linear-gradient(180deg,var(--blue),#a8bfd0)}
@@ -316,10 +316,10 @@ a{color:var(--a2)}
 
 /* === DOMAIN CARDS (Overview hub) === */
 .domain-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--sp-3);margin-top:var(--sp-3)}
-.domain-card{position:relative;padding:var(--sp-5) var(--sp-4);border-radius:var(--radius-card);background:linear-gradient(180deg,rgba(160,155,140,.035),rgba(160,155,140,.012));border:1px solid var(--border);box-shadow:var(--sh);cursor:pointer;transition:transform .2s var(--spring),box-shadow .18s;overflow:hidden}
+.domain-card{position:relative;padding:var(--sp-5) var(--sp-4);border-radius:var(--radius-card);background:linear-gradient(180deg,rgba(184,178,165,.07),rgba(184,178,165,.03));border:1px solid var(--border);box-shadow:var(--sh);cursor:pointer;transition:transform .2s var(--spring),box-shadow .18s;overflow:hidden}
 .domain-card:active{transform:scale(.97);box-shadow:var(--sh2)}
 .domain-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:0 999px 999px 0}
-.domain-card.dc-training{background:linear-gradient(135deg,rgba(184,168,138,.06),rgba(212,196,160,.02));border-color:rgba(184,168,138,.12);box-shadow:var(--sh),var(--glow-accent)}
+.domain-card.dc-training{background:linear-gradient(135deg,rgba(196,176,140,.09),rgba(212,196,160,.04));border-color:rgba(196,176,140,.16);box-shadow:var(--sh),var(--glow-accent)}
 .domain-card.dc-training::before{background:var(--grad)}
 .domain-card.dc-body::before{background:linear-gradient(180deg,var(--blue),#a8bfd0)}
 .domain-card.dc-recovery::before{background:linear-gradient(180deg,#9b8ec4,#c4b8e0)}
@@ -365,7 +365,7 @@ a{color:var(--a2)}
 /* === LATEST ACTIVITY CARDS (Overview) === */
 .latest-strip{display:flex;gap:10px;overflow-x:auto;padding:2px 0 6px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .latest-strip::-webkit-scrollbar{display:none}
-.latest-strip .latest-item{flex:0 0 220px;padding:var(--sp-4) var(--sp-4);border-radius:var(--radius-card);background:linear-gradient(180deg,rgba(160,155,140,.04),rgba(160,155,140,.015));border:1px solid var(--border);box-shadow:var(--sh)}
+.latest-strip .latest-item{flex:0 0 220px;padding:var(--sp-4) var(--sp-4);border-radius:var(--radius-card);background:linear-gradient(180deg,rgba(184,178,165,.07),rgba(184,178,165,.03));border:1px solid var(--border);box-shadow:var(--sh)}
 .latest-strip .li-label{font-size:.68rem;color:var(--muted);text-transform:uppercase;font-weight:700;letter-spacing:.08em;margin-bottom:6px}
 .latest-strip .li-value{font-size:1.4rem;font-weight:800;line-height:1.2;letter-spacing:-.02em}
 .latest-strip .li-sub{font-size:.78rem;color:var(--muted);margin-top:4px}
@@ -1633,7 +1633,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.07.1</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.07.2</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2323,7 +2323,7 @@ function showPanel(key) {
 showMainSection('home');
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.07.1').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.07.2').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
