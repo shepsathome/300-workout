@@ -172,5 +172,9 @@ var FOODS = [
 
   // Snacks & Supplements
   { name: 'MyProtein Brownie Chocolate Chip', cal: 383, protein: 30.7, carbs: 38.7, fat: 12.9, serving: 75, unit: 'g' },
-  { name: 'M&S Baked Potato with Cheese & Beans', cal: 100, protein: 4.1, carbs: 15, fat: 2.5, serving: 435, unit: 'g' }
+  { name: 'M&S Baked Potato with Cheese & Beans', cal: 100, protein: 4.1, carbs: 15, fat: 2.5, serving: 435, unit: 'g' },
+
+  // BA First Class Lounge (estimates)
+  { name: 'BA Lounge Caesar Salad', cal: 143, protein: 4.3, carbs: 6.4, fat: 10, serving: 280, unit: 'g' },
+  { name: 'BA Lounge Burger & Chunky Chips', cal: 220, protein: 8, carbs: 20, fat: 11, serving: 500, unit: 'g' }
 ];
