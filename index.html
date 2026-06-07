@@ -1633,7 +1633,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.07.4</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.07.5</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -1842,7 +1842,12 @@ function confirmAddFood() {
   d.recentFoods = d.recentFoods.slice(0, 12);
   DS.saveNutrition(entry);
   closeFoodModal();
-  renderNutrition();
+  refreshNutritionView();
+}
+
+function refreshNutritionView() {
+  if (currentMainSection === 'log') renderLog();
+  else renderNutrition();
 }
 
 function addCustomFood() {
@@ -1863,10 +1868,10 @@ function addCustomFood() {
   d.recentFoods = d.recentFoods.slice(0, 12);
   DS.saveNutrition(entry);
   closeFoodModal();
-  renderNutrition();
+  refreshNutritionView();
 }
-function quickAddRecent(mealIndex,recentIndex){var entry=DS.dateNutrition(nutActiveDate()),food=DS.get().recentFoods[recentIndex];if(!food)return;entry.meals[mealIndex].items.push({name:food.name,calories:food.calories,protein:food.protein,carbs:food.carbs,fat:food.fat});DS.saveNutrition(entry);renderNutrition()}
-function removeMealItem(mealIndex,itemIndex){var entry=DS.dateNutrition(nutActiveDate());entry.meals[mealIndex].items.splice(itemIndex,1);DS.saveNutrition(entry);renderNutrition()}
+function quickAddRecent(mealIndex,recentIndex){var entry=DS.dateNutrition(nutActiveDate()),food=DS.get().recentFoods[recentIndex];if(!food)return;entry.meals[mealIndex].items.push({name:food.name,calories:food.calories,protein:food.protein,carbs:food.carbs,fat:food.fat});DS.saveNutrition(entry);refreshNutritionView()}
+function removeMealItem(mealIndex,itemIndex){var entry=DS.dateNutrition(nutActiveDate());entry.meals[mealIndex].items.splice(itemIndex,1);DS.saveNutrition(entry);refreshNutritionView()}
 function addQuickMeal(qmIndex) {
   var qm = QUICK_MEALS[qmIndex];
   if (!qm) return;
@@ -1881,7 +1886,7 @@ function addQuickMeal(qmIndex) {
     });
   }
   DS.saveNutrition(entry);
-  renderNutrition();
+  refreshNutritionView();
 }
 function beep(freq,dur){try{if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();var o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.frequency.value=freq||880;o.type='sine';g.gain.value=.3;o.start();o.stop(audioCtx.currentTime+(dur||.12))}catch(e){}}
 function tickBeep(){beep(660,.08)}
@@ -2323,7 +2328,7 @@ function showPanel(key) {
 showMainSection('home');
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.07.4').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.07.5').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
