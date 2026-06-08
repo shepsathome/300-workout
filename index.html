@@ -1790,7 +1790,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.08</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.08.2</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2337,7 +2337,7 @@ function renderNutritionInline(activeDate) {
     if (meal.items && meal.items.length) {
       for (var j = 0; j < meal.items.length; j++) {
         var item = meal.items[j];
-        h += '<div class="food-item" onclick="toggleFoodExpand(this)"><span class="fi-name">' + esc(item.name) + '</span><span class="fi-kcal">' + Math.round(item.calories) + '</span><span class="fi-chev">›</span></div>';
+        h += '<div class="food-item" onclick="this.classList.toggle(\'expanded\')"><span class="fi-name">' + esc(item.name) + '</span><span class="fi-kcal">' + Math.round(item.calories) + '</span><span class="fi-chev">›</span></div>';
         h += '<div class="food-details"><div class="food-details-inner"><div class="fd-macros"><span>P ' + Math.round(item.protein) + 'g</span><span>C ' + Math.round(item.carbs) + 'g</span><span>F ' + Math.round(item.fat) + 'g</span><span>' + (item.serving || '') + (item.unit || '') + '</span></div><button class="fd-delete" onclick="event.stopPropagation();deleteNutritionItem(' + i + ',' + j + ',\'' + activeDate + '\')">✕</button></div></div>';
       }
     }
@@ -2495,7 +2495,7 @@ function showPanel(key) {
 showMainSection('home');
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.08').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.08.2').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
