@@ -176,5 +176,8 @@ var FOODS = [
 
   // BA First Class Lounge (estimates)
   { name: 'BA Lounge Caesar Salad', cal: 143, protein: 4.3, carbs: 6.4, fat: 10, serving: 280, unit: 'g' },
-  { name: 'BA Lounge Burger & Chunky Chips', cal: 220, protein: 8, carbs: 20, fat: 11, serving: 500, unit: 'g' }
+  { name: 'BA Lounge Burger & Chunky Chips', cal: 220, protein: 8, carbs: 20, fat: 11, serving: 500, unit: 'g' },
+
+  // Tinned / Convenience
+  { name: 'John West Tuna Steak in Spring Water', cal: 97, protein: 23, carbs: 0, fat: 0.4, serving: 60, unit: 'g' }
 ];
