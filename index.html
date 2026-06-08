@@ -85,6 +85,8 @@ a{color:var(--a2)}
 .bottom-bar button .tab-icon{font-size:1.28rem;line-height:1}
 .bottom-bar button.active{color:#8a7a5c}
 .bottom-bar button.active .tab-icon{transform:scale(1.08)}
+.bottom-bar{transition:transform .25s var(--ease-out),opacity .2s}
+.bottom-bar.hidden{transform:translateY(100%);pointer-events:none;opacity:0}
 /* === OLD TOP NAV (repurposed for day sub-nav inside Train) === */
 .nav{display:none}
 .day-nav{display:flex;overflow-x:auto;background:rgba(234,230,221,.7);border:1px solid var(--border);border-radius:16px;margin:.75rem .75rem .6rem;padding:.28rem;gap:.3rem;scrollbar-width:none;-webkit-overflow-scrolling:touch;box-shadow:var(--sh)}
@@ -1784,7 +1786,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.07.9</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.07.10</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2064,6 +2066,7 @@ function renderDayStart(key, days){
 }
 function startWorkout(key){
   requestWakeLock();
+  document.getElementById('bottom-bar').classList.add('hidden');
   var days=getActiveDays();
   var day=days[key];
   steps=expand(day);idx=0;started=true;
@@ -2121,6 +2124,7 @@ function renderComplete(key){
   var day=days[key];
   var panel=document.getElementById('p-'+key);
   captureExerciseInput();stopSessionTimer();
+  document.getElementById('bottom-bar').classList.remove('hidden');
   if(currentSession)currentSession.duration=stSeconds;
   var sum=sessionSummary(currentSession),time='';
   var isPartial=currentSession&&currentSession.partial;
@@ -2138,6 +2142,7 @@ function saveCurrentSession(key){
   currentSession.completedAt=new Date().toISOString();
   DS.saveWorkout(JSON.parse(JSON.stringify(currentSession)));
   alert('Workout saved');currentSession=null;
+  document.getElementById('bottom-bar').classList.remove('hidden');
   renderHistory();renderDayStart(key);
 }
 function nextStep(){if(steps[idx]&&steps[idx].type==='ex')captureExerciseInput();stopCountdown();clearInterval(demoTimer);idx++;renderStep(currentDay)}
@@ -2213,6 +2218,12 @@ mainSections.forEach(function(sec) {
 var currentMainSection = 'home';
 
 function showMainSection(key) {
+  /* Guard: if a workout is in progress, confirm before navigating away */
+  if (currentSession && started && key !== 'train') {
+    if (!confirm('You have a workout in progress. Leave and lose your current session?')) return;
+    currentSession = null;
+    document.getElementById('bottom-bar').classList.remove('hidden');
+  }
   currentMainSection = key;
   releaseWakeLock();
   stopCountdown();
@@ -2480,7 +2491,7 @@ function showPanel(key) {
 showMainSection('home');
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.07.9').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.07.10').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
