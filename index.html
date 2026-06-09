@@ -774,6 +774,7 @@ var DS={
   saveWorkout:function(workout){var d=this.get();d.workouts.push(workout);this.save();this.syncToGist()},
   saveNutrition:function(dayData){var d=this.get();var existing=d.nutrition.findIndex(function(n){return n.date===dayData.date});if(existing>=0)d.nutrition[existing]=dayData;else d.nutrition.push(dayData);this.save();this.syncToGist()},
   lastWeight:function(exKey){var d=this.get();for(var i=d.workouts.length-1;i>=0;i--){var w=d.workouts[i];for(var j=0;j<w.exercises.length;j++){if(w.exercises[j].key===exKey&&w.exercises[j].sets&&w.exercises[j].sets.length>0){return w.exercises[j].sets[w.exercises[j].sets.length-1].weight}}}return null},
+  lastExerciseDetail:function(exKey){var d=this.get();for(var i=d.workouts.length-1;i>=0;i--){var w=d.workouts[i];for(var j=0;j<w.exercises.length;j++){var ex=w.exercises[j];if(ex.key===exKey&&ex.sets&&ex.sets.length>0){var weights=[],reps=[];ex.sets.forEach(function(s){if(s.weight!=null)weights.push(s.weight);if(s.reps!=null)reps.push(s.reps)});return {date:w.date,sets:ex.sets.length,weights:weights,reps:reps,avgWeight:weights.length?Math.round(weights.reduce(function(a,b){return a+b},0)/weights.length*10)/10:null,avgReps:reps.length?Math.round(reps.reduce(function(a,b){return a+b},0)/reps.length*10)/10:null}}}}return null},
   todayNutrition:function(){return this.dateNutrition(new Date().toISOString().slice(0,10))},
   dateNutrition:function(date){
     var d=this.get();
@@ -842,16 +843,20 @@ function defaultWeightFor(kind){var s=DS.get().settings;if(kind==='weighted-kb')
 function getLoggedSet(step){if(!currentSession)return null;for(var i=0;i<currentSession.exercises.length;i++){var ex=currentSession.exercises[i];if(ex.key===step.key&&ex.sets){for(var j=0;j<ex.sets.length;j++){if(ex.sets[j].stepIndex===idx)return ex.sets[j]}}}return null}
 function ensureExerciseEntry(step){for(var i=0;i<currentSession.exercises.length;i++){if(currentSession.exercises[i].key===step.key)return currentSession.exercises[i]}var entry={key:step.key,name:step.name,kind:exerciseKind(step.key),sets:[]};currentSession.exercises.push(entry);return entry}
 function buildWeightInputArea(step){
-  var kind=exerciseKind(step.key),logged=getLoggedSet(step),lastWeight=DS.lastWeight(step.key),defaultWeight=lastWeight!=null?lastWeight:defaultWeightFor(kind),h='<div class="weight-input-area">';
+  var kind=exerciseKind(step.key),logged=getLoggedSet(step),lastWeight=DS.lastWeight(step.key),defaultWeight=lastWeight!=null?lastWeight:defaultWeightFor(kind),lastDetail=DS.lastExerciseDetail(step.key),h='<div class="weight-input-area">';
   if(kind==='weighted-db'||kind==='weighted-kb'||kind==='weighted-med'){
     var paired=isPairedDB(step.key);
-    var unit=kind==='weighted-med'?'kg / ball':paired?'kg each (×2)':'kg';
+    var unitLabel=kind==='weighted-med'?'kg / ball':kind==='weighted-kb'?'kg / kettlebell':paired?'kg each (×2)':'kg / dumbbell';
     var repsVal=logged&&logged.reps!=null?logged.reps:parseRepCount(step.reps)||'';
-    h+='<label>Log load'+(paired?' — enter weight per dumbbell':'')+'</label><div class="wi-row"><input id="wi-weight" type="number" step="0.5" value="'+safeNum(logged&&logged.weight!=null?logged.weight:defaultWeight,defaultWeight)+'"><span class="wi-unit">'+unit+'</span><input id="wi-repsdone" type="number" step="1" value="'+repsVal+'"><span class="wi-unit">'+(step.timed?'seconds':'reps completed')+'</span></div>';
+    if(lastDetail&&lastDetail.avgWeight!=null){
+      var dateLabel=function(d){var dt=new Date(d+'T00:00:00');if(isNaN(dt.getTime()))return d;return dt.toLocaleDateString('en-GB',{day:'numeric',month:'short'})};
+      h+='<div style="font-size:.72rem;color:var(--muted);margin-bottom:.5rem;display:flex;align-items:center;gap:6px"><span style="color:var(--a2)">↩</span> Last: <strong style="color:var(--text)">'+lastDetail.avgWeight+'kg × '+lastDetail.avgReps+' reps</strong> · '+lastDetail.sets+' sets · '+dateLabel(lastDetail.date)+'</div>';
+    }
+    h+='<label>Log load'+(paired?' — enter weight per dumbbell':'')+'</label><div class="wi-row"><input id="wi-weight" type="number" step="0.5" value="'+safeNum(logged&&logged.weight!=null?logged.weight:defaultWeight,defaultWeight)+'"><span class="wi-unit">'+unitLabel+'</span><input id="wi-repsdone" type="number" step="1" value="'+repsVal+'"><span class="wi-unit">'+(step.timed?'seconds':'reps completed')+'</span></div>';
   }else if(kind==='rowing'){
     h+='<label>Log row effort</label><div class="wi-row"><input id="wi-time" type="number" step="1" value="'+(logged&&logged.time!=null?logged.time:'')+'"><span class="wi-unit">seconds</span><input id="wi-distance" type="number" step="1" value="'+(logged&&logged.distance!=null?logged.distance:(parseRepCount(step.reps)||''))+'"><span class="wi-unit">metres</span></div>';
   }else if(kind==='bodyweight'){
-    h+='<label>Log completion</label><div class="wi-row"><input id="wi-repsdone" type="number" step="1" value="'+(logged&&logged.reps!=null?logged.reps:(parseRepCount(step.reps)||''))+'"><span class="wi-unit">'+(step.timed?'seconds':'reps completed')+'</span></div>';
+    h+='<label>Log completion</label><div class="wi-row"><input id="wi-repsdone" type="number" step="1" value="'+(logged&&logged.reps!=null?logged.reps:(parseRepCount(step.reps)||''))+'"><span class="wi-unit">'+(step.timed?'seconds':'reps done')+'</span></div>';
   }else{
     h+='<label>Mobility / stretch</label><div class="wi-row"><span class="wi-unit">No load required — tap done to record completion.</span></div>';
   }
@@ -1794,7 +1799,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.10</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.10.2</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2499,7 +2504,7 @@ function showPanel(key) {
 showMainSection('home');
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.10').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.10.2').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
