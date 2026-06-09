@@ -179,5 +179,8 @@ var FOODS = [
   { name: 'BA Lounge Burger & Chunky Chips', cal: 220, protein: 8, carbs: 20, fat: 11, serving: 500, unit: 'g' },
 
   // Tinned / Convenience
-  { name: 'John West Tuna Steak in Spring Water', cal: 97, protein: 23, carbs: 0, fat: 0.4, serving: 60, unit: 'g' }
+  { name: 'John West Tuna Steak in Spring Water', cal: 97, protein: 23, carbs: 0, fat: 0.4, serving: 60, unit: 'g' },
+
+  // Chocolate
+  { name: 'Green & Blacks Dark Chocolate & Ginger', cal: 512, protein: 6, carbs: 51, fat: 30, serving: 11, unit: 'g' }
 ];
