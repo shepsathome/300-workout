@@ -538,6 +538,36 @@ a{color:var(--a2)}
 .stat-pill .stat-value,.hist-hero,.big-time,.st-time,.rest-time{font-variant-numeric:tabular-nums}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* === PHASE BANNER === */
+.phase-banner{padding:12px 16px;margin-bottom:.75rem;border-radius:16px;background:linear-gradient(135deg,rgba(232,89,12,.08),rgba(255,122,51,.04));border:1px solid rgba(232,89,12,.18);cursor:pointer;transition:transform .15s}
+.phase-banner:active{transform:scale(.98)}
+.phase-banner .pb-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.phase-banner .pb-phase{font-size:.78rem;font-weight:800;color:var(--accent);text-transform:uppercase;letter-spacing:.06em}
+.phase-banner .pb-week{font-size:.72rem;color:var(--muted);font-weight:700}
+.phase-banner .pb-label{font-size:.92rem;font-weight:800;margin-top:4px}
+.phase-banner .pb-desc{font-size:.78rem;color:var(--muted);margin-top:2px}
+.phase-banner .pb-overload{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.phase-banner .pb-chip{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:999px;background:rgba(232,89,12,.1);color:var(--accent);font-size:.72rem;font-weight:700}
+
+/* === TEMPO BADGE === */
+.tempo-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:999px;background:rgba(139,92,246,.12);color:#8b5cf6;font-size:.72rem;font-weight:800;letter-spacing:.03em;margin-left:6px}
+
+/* === PHASE CUE (injected under exercise cue) === */
+.phase-cue{font-size:.82rem;color:var(--a2);font-style:italic;margin-top:.5rem;padding:.55rem .75rem;background:rgba(59,154,255,.08);border-radius:12px;border:1px solid rgba(59,154,255,.12)}
+
+/* === GLOBAL CUES STRIP === */
+.global-cues{display:flex;gap:8px;overflow-x:auto;padding:2px 0 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin-bottom:.5rem}
+.global-cues::-webkit-scrollbar{display:none}
+.global-cues .gc-chip{flex:0 0 auto;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid var(--border);font-size:.72rem;font-weight:600;color:var(--muted);white-space:nowrap}
+
+/* === PHASE TRANSITION CARD === */
+.phase-transition{padding:16px 18px;border-radius:18px;background:linear-gradient(135deg,rgba(59,154,255,.08),rgba(139,92,246,.06));border:1px solid rgba(59,154,255,.2);margin-bottom:1rem}
+.phase-transition .pt-title{font-size:.92rem;font-weight:800;color:var(--a2);margin-bottom:8px}
+.phase-transition .pt-changes{list-style:none;padding:0;margin:8px 0}
+.phase-transition .pt-changes li{font-size:.82rem;color:var(--text);padding:4px 0 4px 18px;position:relative}
+.phase-transition .pt-changes li::before{content:'→';position:absolute;left:0;color:var(--accent);font-weight:700}
+.phase-transition .pt-actions{display:flex;gap:10px;margin-top:12px}
 </style>
 </head>
 <body>
@@ -717,7 +747,7 @@ hotel:{title:'Hotel Room Workout',icon:'✈️',time:'25–35 min',sessionTimer:
 {name:'Finisher — Tabata',rounds:1,rest:0,ex:[{k:'burpee',reps:'20s on / 10s off × 4',timed:1,sec:240},{k:'mtn-climbers',reps:'20s on / 10s off × 4',timed:1,sec:240}]}
 ]}
 };
-function expand(day){var steps=[];for(var b=0;b<day.blocks.length;b++){var bl=day.blocks[b];for(var r=0;r<bl.rounds;r++){for(var e=0;e<bl.ex.length;e++){var ex=bl.ex[e],info=EX[ex.k];steps.push({type:'ex',name:info.n,reps:ex.reps,timed:!!ex.timed,sec:ex.sec||0,cue:info.c,howTo:info.h,vid:info.v,imgKey:info.img,block:bl.name,set:r+1,of:bl.rounds,key:ex.k});if(ex.ra)steps.push({type:'rest',sec:ex.ra,block:bl.name})}if(bl.rest>0&&r<bl.rounds-1)steps.push({type:'rest',sec:bl.rest,block:bl.name})}}return steps}
+function expand(day){var steps=[];var restMult=DS.getRestMultiplier();for(var b=0;b<day.blocks.length;b++){var bl=day.blocks[b];var adjRest=bl.rest>0?Math.round(bl.rest*restMult):0;for(var r=0;r<bl.rounds;r++){for(var e=0;e<bl.ex.length;e++){var ex=bl.ex[e],info=EX[ex.k];steps.push({type:'ex',name:info.n,reps:ex.reps,timed:!!ex.timed,sec:ex.sec||0,cue:info.c,howTo:info.h,vid:info.v,imgKey:info.img,block:bl.name,set:r+1,of:bl.rounds,key:ex.k});if(ex.ra)steps.push({type:'rest',sec:Math.round((ex.ra||0)*restMult),block:bl.name})}if(adjRest>0&&r<bl.rounds-1)steps.push({type:'rest',sec:adjRest,block:bl.name})}}return steps}
 var currentDay=null,steps=[],idx=0,started=false,cdInterval=null,cdRemaining=0,stInterval=null,stSeconds=0,demoTimer=null,currentSession=null;
 var audioCtx=null;
 var syncState={text:'Not configured',cls:''};
@@ -754,7 +784,8 @@ var DS={
             sleepLog:[],
             stepsLog:[],
             recentFoods:[],
-      suggestions:null
+      suggestions:null,
+      programmeConfig:null
     };
   },
   load:function(){
@@ -775,6 +806,14 @@ var DS={
   saveNutrition:function(dayData){var d=this.get();var existing=d.nutrition.findIndex(function(n){return n.date===dayData.date});if(existing>=0)d.nutrition[existing]=dayData;else d.nutrition.push(dayData);this.save();this.syncToGist()},
   lastWeight:function(exKey){var d=this.get();for(var i=d.workouts.length-1;i>=0;i--){var w=d.workouts[i];for(var j=0;j<w.exercises.length;j++){if(w.exercises[j].key===exKey&&w.exercises[j].sets&&w.exercises[j].sets.length>0){return w.exercises[j].sets[w.exercises[j].sets.length-1].weight}}}return null},
   lastExerciseDetail:function(exKey){var d=this.get();for(var i=d.workouts.length-1;i>=0;i--){var w=d.workouts[i];for(var j=0;j<w.exercises.length;j++){var ex=w.exercises[j];if(ex.key===exKey&&ex.sets&&ex.sets.length>0){var weights=[],reps=[];ex.sets.forEach(function(s){if(s.weight!=null)weights.push(s.weight);if(s.reps!=null)reps.push(s.reps)});return {date:w.date,sets:ex.sets.length,weights:weights,reps:reps,avgWeight:weights.length?Math.round(weights.reduce(function(a,b){return a+b},0)/weights.length*10)/10:null,avgReps:reps.length?Math.round(reps.reduce(function(a,b){return a+b},0)/reps.length*10)/10:null}}}}return null},
+  getPhase:function(){var d=this.get();return d.programmeConfig&&d.programmeConfig.phase?d.programmeConfig.phase:null},
+  getOverload:function(){var d=this.get();return d.programmeConfig&&d.programmeConfig.overload?d.programmeConfig.overload:null},
+  getExOverride:function(exKey){var d=this.get();return d.programmeConfig&&d.programmeConfig.exerciseOverrides?d.programmeConfig.exerciseOverrides[exKey]||null:null},
+  getPhaseRest:function(blockType){var d=this.get();if(!d.programmeConfig||!d.programmeConfig.restPeriods)return null;var r=d.programmeConfig.restPeriods[blockType];return r!=null?r:null},
+  getRestMultiplier:function(){var d=this.get();return d.programmeConfig&&d.programmeConfig.overload?d.programmeConfig.overload.restMultiplier||1:1},
+  getGlobalCues:function(){var d=this.get();return d.programmeConfig&&d.programmeConfig.globalCues?d.programmeConfig.globalCues:[]},
+  getTransition:function(){var d=this.get();return d.programmeConfig&&d.programmeConfig.phaseTransition?d.programmeConfig.phaseTransition:null},
+  advancePhase:function(){var d=this.get();if(!d.programmeConfig||!d.programmeConfig.phaseTransition)return;var t=d.programmeConfig.phaseTransition;d.programmeConfig.phase.current=t.nextPhase;d.programmeConfig.phase.startDate=new Date().toISOString().slice(0,10);d.programmeConfig.phase.week=1;d.programmeConfig.phase.label=t.nextPhase.charAt(0).toUpperCase()+t.nextPhase.slice(1);d.programmeConfig.phase.description='Phase advanced — configure via squad review';d.programmeConfig.phaseTransition=null;this.save();this.syncToGist()},
   todayNutrition:function(){return this.dateNutrition(new Date().toISOString().slice(0,10))},
   dateNutrition:function(date){
     var d=this.get();
@@ -2107,9 +2146,17 @@ function renderStep(key){
   if(step.type==='rest')autoStartRest(step.sec);
 }
 function renderExStep(s){
-  var h='<div class="now-card"><div class="now-block">'+s.block+'</div><div class="now-set">Set <span>'+s.set+'</span> of <span>'+s.of+'</span></div><div class="now-name">'+s.name+'</div><div class="now-reps">'+s.reps+'</div>';
+  var exOverride=DS.getExOverride(s.key);
+  var overload=DS.getOverload();
+  var tempo=exOverride&&exOverride.tempo?exOverride.tempo:(overload&&overload.tempo?overload.tempo:null);
+  var phaseCue=exOverride&&exOverride.cue?exOverride.cue:null;
+  var displayReps=exOverride&&exOverride.repsTarget?exOverride.repsTarget:s.reps;
+  var h='<div class="now-card"><div class="now-block">'+s.block+'</div><div class="now-set">Set <span>'+s.set+'</span> of <span>'+s.of+'</span></div><div class="now-name">'+s.name+(tempo?'<span class="tempo-badge">⏱ '+esc(tempo)+'</span>':'')+'</div><div class="now-reps">'+displayReps+'</div>';
+  if(overload&&overload.useHalfReps&&exerciseKind(s.key)==='weighted-db'){h+='<div style="font-size:.78rem;color:#8b5cf6;font-weight:700;margin-top:4px">½ Using 1.5 reps — full rep + half rep = 1 count</div>';}
+  if(overload&&overload.pauseSeconds&&(exerciseKind(s.key)==='weighted-db'||exerciseKind(s.key)==='weighted-kb')){h+='<div style="font-size:.78rem;color:var(--accent);font-weight:700;margin-top:4px">⏸ '+overload.pauseSeconds+'s pause at bottom of each rep</div>';}
   if(s.imgKey&&IMG[s.imgKey+'_0']){h+='<div class="demo-imgs"><img src="'+IMG[s.imgKey+'_0']+'" alt="Start position"><img class="img-b" src="'+IMG[s.imgKey+'_1']+'" alt="End position"></div>'}
   h+='<div class="now-cue">\uD83D\uDCAD '+s.cue+'</div>';
+  if(phaseCue){h+='<div class="phase-cue">🎯 '+esc(phaseCue)+'</div>';}
   if(s.timed&&s.sec>0){h+='<div class="now-timer"><div class="big-time" id="cd-display">'+fmtBig(s.sec)+'</div><div><button class="btn-start" id="cd-btn" onclick="toggleCountdown('+s.sec+')">&#9654; START</button></div></div>'}
   h+='<div class="now-details"><div class="now-howto">'+s.howTo;
   if(s.vid){h+='<br><a class="now-vid" href="https://www.youtube.com/watch?v='+s.vid+'" target="_blank">\uD83D\uDCFA Watch on YouTube</a>'}
@@ -2385,6 +2432,55 @@ function renderTrainDashboard() {
 
   var h = '<div class="page-title">Train</div>';
 
+  /* === PHASE BANNER === */
+  var phase = DS.getPhase();
+  var overload = DS.getOverload();
+  var transition = DS.getTransition();
+  var globalCues = DS.getGlobalCues();
+  if (phase) {
+    var weekNum = phase.week || 1;
+    var targetWeeks = transition && transition.autoPromptAtWeek ? transition.autoPromptAtWeek : 4;
+    h += '<div class="phase-banner" onclick="this.querySelector(\'.pb-detail\').style.display=this.querySelector(\'.pb-detail\').style.display===\'none\'?\'block\':\'none\'">';
+    h += '<div class="pb-row"><div class="pb-phase">⚡ ' + esc(phase.current) + '</div><div class="pb-week">Week ' + weekNum + ' of ' + targetWeeks + '</div></div>';
+    h += '<div class="pb-label">' + esc(phase.label || phase.current) + '</div>';
+    h += '<div class="pb-desc">' + esc(phase.description || '') + '</div>';
+    if (overload) {
+      h += '<div class="pb-overload">';
+      if (overload.tempo) h += '<span class="pb-chip">⏱ Tempo ' + esc(overload.tempo) + '</span>';
+      if (overload.pauseSeconds) h += '<span class="pb-chip">⏸ ' + overload.pauseSeconds + 's pause reps</span>';
+      if (overload.useHalfReps) h += '<span class="pb-chip">½ 1.5 reps</span>';
+      if (overload.unilateral) h += '<span class="pb-chip">🦾 Unilateral</span>';
+      if (overload.restMultiplier && overload.restMultiplier !== 1) h += '<span class="pb-chip">⏳ Rest ×' + overload.restMultiplier + '</span>';
+      h += '</div>';
+    }
+    h += '<div class="pb-detail" style="display:none;margin-top:8px;font-size:.78rem;color:var(--muted)">Primary overload: <strong style="color:var(--text)">' + esc(overload && overload.primary || 'standard') + '</strong>. Started ' + esc(phase.startDate || '—') + '.</div>';
+    h += '</div>';
+  }
+
+  /* === GLOBAL CUES === */
+  if (globalCues.length) {
+    h += '<div class="global-cues">';
+    for (var gc = 0; gc < globalCues.length; gc++) h += '<div class="gc-chip">' + esc(globalCues[gc]) + '</div>';
+    h += '</div>';
+  }
+
+  /* === PHASE TRANSITION PROMPT === */
+  if (transition && phase && phase.week >= (transition.autoPromptAtWeek || 99)) {
+    h += '<div class="phase-transition">';
+    h += '<div class="pt-title">🔄 Phase Review Due</div>';
+    h += '<div style="font-size:.82rem;color:var(--muted)">You\'ve completed ' + phase.week + ' weeks of ' + esc(phase.current) + '.</div>';
+    if (transition.previewChanges && transition.previewChanges.length) {
+      h += '<div style="font-size:.82rem;font-weight:700;margin-top:8px">What changes in ' + esc(transition.nextPhase || 'next phase') + ':</div>';
+      h += '<ul class="pt-changes">';
+      for (var pc = 0; pc < transition.previewChanges.length; pc++) h += '<li>' + esc(transition.previewChanges[pc]) + '</li>';
+      h += '</ul>';
+    }
+    h += '<div class="pt-actions">';
+    h += '<button class="settings-btn" onclick="DS.advancePhase();renderTrainDashboard()">▶ Advance to ' + esc(transition.nextPhase || 'next phase') + '</button>';
+    h += '<button class="settings-btn secondary" onclick="this.closest(\'.phase-transition\').style.display=\'none\'">Stay in ' + esc(phase.current) + '</button>';
+    h += '</div></div>';
+  }
+
   /* === TODAY HERO CARD === */
   if (isRestDay) {
     h += '<div class="train-home"><div class="now-card rest-card-home" style="text-align:center;padding:1.5rem 1rem;background:rgba(52,199,89,.06);border-color:rgba(52,199,89,.16)">';
@@ -2499,6 +2595,71 @@ function showPanel(key) {
     setTimeout(function() { showDayPanel(key); }, 50);
   }
 }
+
+// === SEED FOUNDATION PROGRAMME CONFIG (if not already set) ===
+(function(){
+  var d=DS.get();
+  if(!d.programmeConfig){
+    d.programmeConfig={
+      version:1,
+      lastUpdated:'2026-06-09',
+      updatedBy:'initial-seed',
+      phase:{
+        current:'foundation',
+        startDate:'2026-05-27',
+        targetEndDate:'2026-06-24',
+        week:3,
+        label:'Foundation — Load + Reps',
+        description:'Build to max loads (15kg DB ceiling), master form, fill rep targets'
+      },
+      overload:{
+        primary:'load+reps',
+        tempo:null,
+        pauseSeconds:0,
+        useHalfReps:false,
+        unilateral:false,
+        restMultiplier:1.0
+      },
+      exerciseOverrides:{
+        'bench-press':{sets:4,repsTarget:'10–12',tempo:null,cue:'You\'re at 15kg — focus on perfect control and full ROM. When you hit 4×12 clean, Foundation is done.',weight:15},
+        'goblet-squat':{sets:4,repsTarget:'12',tempo:null,cue:'15kg for all 4 sets. Depth below parallel, chest up. Own this weight before we change the stimulus.',weight:15},
+        'rdl':{sets:4,repsTarget:'10',tempo:null,cue:'15kg — hinge from hips, feel the hamstring stretch. Slow and controlled.',weight:15},
+        'one-arm-row':{sets:3,repsTarget:'10/arm',tempo:null,cue:'15kg each arm. Pull to hip, squeeze shoulder blade. This is your main pull volume.',weight:15},
+        'shoulder-press':{sets:4,repsTarget:'10',tempo:null,cue:'10kg — if you can do 4×12 clean, try 12.5kg next session.',weight:10},
+        'split-squat':{sets:4,repsTarget:'8/leg',tempo:null,cue:'Testing 15kg — if form breaks, drop to 12.5kg on later sets. That\'s smart, not weak.',weight:15},
+        'step-ups':{sets:4,repsTarget:'10/leg',tempo:null,cue:'15kg. Drive through the heel of the working leg. Full extension at top.',weight:15},
+        'kb-clean-press':{sets:4,repsTarget:'8/arm',tempo:null,cue:'7.5kg — this is your only KB. Focus on explosive hip drive into the clean.',weight:7.5},
+        'kb-swing':{sets:3,repsTarget:'15',tempo:null,cue:'7.5kg — snap the hips. Power comes from the hinge, not the arms.',weight:7.5},
+        'renegade-row':{sets:3,repsTarget:'8/arm',tempo:null,cue:'15kg — keep hips dead still. Anti-rotation is the core workout here.',weight:15},
+        'floor-fly':{sets:4,repsTarget:'12',tempo:null,cue:'10kg — controlled arc, slight bend in elbows. Floor limits ROM which protects shoulders.',weight:10}
+      },
+      restPeriods:{
+        strength:75,
+        circuit:60,
+        emom:15,
+        core:0,
+        finisher:45
+      },
+      phaseTransition:{
+        autoPromptAtWeek:4,
+        nextPhase:'hypertrophy',
+        previewChanges:[
+          'Add 3-4s eccentric (slow lowering) to all compounds',
+          'Introduce 1.5 reps on bench, squat, RDL',
+          'Increase to 5 sets on primary compounds',
+          'Rest stays at 75-90s (time under tension does the work)',
+          'Same 15kg weights — the tempo makes them feel like 22kg'
+        ]
+      },
+      globalCues:[
+        'Equipment ceiling: 15kg DB — overload through reps and form quality',
+        'Last set = best set (Twight rule)',
+        'Foundation focus: own the movements before we change the stimulus'
+      ]
+    };
+    DS.save();
+  }
+})();
 
 // === INIT ===
 showMainSection('home');
