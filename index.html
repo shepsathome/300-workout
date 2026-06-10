@@ -1838,7 +1838,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.10.3</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.10.4</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2119,13 +2119,11 @@ function renderDayStart(key, days){
     }
     preview+='</ul></div>';
   }
-  var previewTitle=isToday?'\uD83D\uDCCB Today\'s Exercises':'\uD83D\uDCCB '+day.title+' \u2014 Preview';
-  var previewSubtitle=isToday?'Equipment & exercises at a glance':'Warm-up and exercises at a glance';
-  var head='<div class="static" style="text-align:center"><h2>'+day.icon+' '+day.title+(isToday&&!completedToday?'':'')+'</h2><p style="margin:.5rem 0">'+day.time+' \u00B7 '+totalEx+' exercises</p><div class="warmup-card"><strong>\uD83D\uDD25 Warm-up first</strong> '+day.warmup+'</div>';
-  var body='<div style="margin-top:1rem;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-card);padding:.75rem;box-shadow:var(--sh)"><h3 style="font-size:.88rem;color:var(--accent);margin-bottom:.25rem">'+previewTitle+'</h3><p style="font-size:.72rem;color:var(--muted);margin-bottom:.4rem">'+previewSubtitle+'</p>'+preview+'</div></div>';
-  if(isToday&&!completedToday){panel.innerHTML=head+'<button class="start-btn" onclick="startWorkout(\''+key+'\')">&#9654; START WORKOUT</button>'+body;return}
-  if(isToday&&completedToday){panel.innerHTML=head+'<div style="margin:.25rem 0 .15rem;padding:.8rem .9rem;border-radius:14px;background:rgba(52,199,89,.08);border:1px solid rgba(52,199,89,.16);color:var(--green);font-size:.86rem;font-weight:700">✅ Completed today</div><div style="font-size:.76rem;color:var(--muted);margin-top:.55rem"><a href="#" onclick="event.preventDefault();startWorkout(\''+key+'\')" style="color:var(--muted);text-decoration:underline">Redo workout</a></div>'+body;return}
-  panel.innerHTML='<div class="static" style="text-align:center"><h2>\uD83D\uDCCB '+day.title+' \u2014 Preview</h2><p style="margin:.5rem 0">'+day.time+' \u00B7 '+totalEx+' exercises</p><div class="warmup-card"><strong>\uD83D\uDD25 Warm-up first</strong> '+day.warmup+'</div><div style="margin-top:1rem;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-card);padding:.75rem;box-shadow:var(--sh)"><h3 style="font-size:.88rem;color:var(--accent);margin-bottom:.25rem">'+previewTitle+'</h3><p style="font-size:.72rem;color:var(--muted);margin-bottom:.4rem">'+previewSubtitle+'</p>'+preview+'</div></div>';
+  var exerciseListHtml='<div style="margin-top:1rem;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-card);padding:.75rem;box-shadow:var(--sh)"><h3 style="font-size:.88rem;color:var(--accent);margin-bottom:.25rem">\uD83D\uDCCB Exercises</h3><p style="font-size:.72rem;color:var(--muted);margin-bottom:.4rem">'+totalEx+' exercises at a glance</p>'+preview+'</div>';
+  var head='<div class="static" style="text-align:center"><h2>'+day.icon+' '+day.title+'</h2><p style="margin:.5rem 0">'+day.time+' \u00B7 '+totalEx+' exercises</p><div class="warmup-card"><strong>\uD83D\uDD25 Warm-up first</strong> '+day.warmup+'</div>';
+  if(isToday&&!completedToday){panel.innerHTML=head+'<button class="start-btn" onclick="startWorkout(\''+key+'\')">&#9654; START WORKOUT</button>'+exerciseListHtml+'</div>';return}
+  if(isToday&&completedToday){panel.innerHTML=head+'<div style="margin:.25rem 0 .15rem;padding:.8rem .9rem;border-radius:14px;background:rgba(52,199,89,.08);border:1px solid rgba(52,199,89,.16);color:var(--green);font-size:.86rem;font-weight:700">✅ Completed today</div><div style="font-size:.76rem;color:var(--muted);margin-top:.55rem"><a href="#" onclick="event.preventDefault();startWorkout(\''+key+'\')" style="color:var(--muted);text-decoration:underline">Redo workout</a></div>'+exerciseListHtml+'</div>';return}
+  panel.innerHTML=head+exerciseListHtml+'</div>';
 }
 function startWorkout(key){
   requestWakeLock();
@@ -2564,7 +2562,23 @@ function renderTrainDashboard() {
   restHtml += '</div>';
   document.getElementById('p-rest').innerHTML = restHtml;
 
-  /* Don't auto-select a day panel — the hero card IS the today entry point */
+  /* Auto-show next workout day preview */
+  var todayIsoCheck = new Date().toISOString().slice(0,10);
+  var completedTodayCheck = todayKey && hasLoggedWorkout(todayKey, todayIsoCheck);
+  if (completedTodayCheck || isRestDay) {
+    var nextKey = null;
+    var todayDow = new Date().getDay();
+    for (var look = 1; look <= 7; look++) {
+      var checkDow = (todayDow + look) % 7;
+      var candidate = null;
+      if (prog === 'travel') candidate = 'hotel';
+      else if (prog === 5) candidate = todayMap5[checkDow];
+      else if (prog === 4) candidate = todayMap4[checkDow];
+      else candidate = todayMap3[checkDow];
+      if (candidate && conf.days[candidate]) { nextKey = candidate; break; }
+    }
+    if (nextKey) showDayPanel(nextKey);
+  }
 }
 
 function switchProgramme(n) {
@@ -2689,7 +2703,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.10.3').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.10.4').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
