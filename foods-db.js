@@ -112,7 +112,7 @@ var FOODS = [
   // Adam's Kitchen
   { name: 'Homemade Granola', cal: 503, protein: 12.8, carbs: 40.7, fat: 34.6, serving: 50, unit: 'g' },
   { name: 'Protein Bar (homemade)', cal: 443, protein: 21, carbs: 43, fat: 22, serving: 35, unit: 'g' },
-  { name: 'Bean Mix (homemade)', cal: 75, protein: 4.5, carbs: 10, fat: 0.6, serving: 400, unit: 'g' },
+  { name: 'Bean Mix (homemade)', cal: 135, protein: 8.2, carbs: 23.5, fat: 1, serving: 400, unit: 'g' },
   { name: 'Chocolate Chip Cookie (homemade)', cal: 473, protein: 7.5, carbs: 60, fat: 22.5, serving: 40, unit: 'g' },
   { name: 'WW Oat Choc Chip Cookie (Smitten)', cal: 496, protein: 7.4, carbs: 61, fat: 27, serving: 40, unit: 'g' },
   { name: 'Scrambled Eggs', cal: 148, protein: 10.6, carbs: 1.6, fat: 11, serving: 120, unit: 'g' },
