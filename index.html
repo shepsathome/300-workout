@@ -1286,7 +1286,7 @@ function historyChartOpts(legend){var cT='rgba(245,245,247,.88)',cM='rgba(152,15
 
 /* === HISTORY VIEW ROUTER === */
 var historyView='overview';
-function setHistoryView(view){historyView=view;if(currentMainSection==='home')renderHome();else renderHistory();}
+function setHistoryView(view){historyView=view;var inlinePanel=document.getElementById('history-inline-panel');if(view==='overview'&&inlinePanel&&inlinePanel.innerHTML){inlinePanel.innerHTML='';destroyHistoryCharts();return}if(currentMainSection==='home')renderHome();else renderHistory();}
 
 function renderHistoryNav(){
   var views=[{id:'overview',label:'Overview',icon:'🏠'},{id:'training',label:'Training',icon:'🏋️'},{id:'body',label:'Body',icon:'📏'},{id:'recovery',label:'Recovery',icon:'😴'},{id:'steps',label:'Steps',icon:'🚶'},{id:'nutrition',label:'Nutrition',icon:'🍽️'}];
@@ -1391,9 +1391,10 @@ function renderHistoryOverview(){
 
   /* === ALERTS === */
   var alerts=[];
+  var goal=(d.settings&&d.settings.macroCalc&&d.settings.macroCalc.goal)||'maintain';
   if(sa.avgHours!=null&&sa.avgHours<6.5)alerts.push({icon:'⚠️',text:'Sleep averaging '+sa.avgHours.toFixed(1)+'h — recovery at risk',color:'var(--red)'});
-  if(ws.diff!=null&&ws.diff<0)alerts.push({icon:'📉',text:'Down '+Math.abs(ws.diff).toFixed(1)+'kg — body recomp signal',color:'var(--green)'});
-  if(ws.diff!=null&&ws.diff>1)alerts.push({icon:'📈',text:'Up '+ws.diff.toFixed(1)+'kg — check nutrition',color:'var(--accent)'});
+  if(ws.diff!=null&&ws.diff<0&&(goal==='bulk'||goal==='lean_bulk'))alerts.push({icon:'📉',text:'Down '+Math.abs(ws.diff).toFixed(1)+'kg — unexpected on a '+goal.replace('_',' ')+' goal',color:'var(--red)'});
+  if(ws.diff!=null&&ws.diff>1&&(goal==='cut'||goal==='recomp'))alerts.push({icon:'📈',text:'Up '+ws.diff.toFixed(1)+'kg — review nutrition against your '+goal+' goal',color:'var(--accent)'});
   if(stepsAvg.avgSteps!=null&&stepsAvg.avgSteps<5000)alerts.push({icon:'🚶',text:'Steps averaging '+stepsAvg.avgSteps.toLocaleString()+'/day — try to move more',color:'var(--accent)'});
   if(streak.weeks>=2)alerts.push({icon:'🔥',text:streak.weeks+'-week consistency streak',color:'var(--green)'});
   if(weekTarget>0&&weekDone<weekTarget)alerts.push({icon:'🏋️',text:(weekTarget-weekDone)+' session'+(weekTarget-weekDone===1?'':'s')+' still to go this week',color:'var(--accent)'});
@@ -1904,7 +1905,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.12.3</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.12.4</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2451,18 +2452,39 @@ function renderLog() {
   ];
   for (var hv = 0; hv < histViews.length; hv++) {
     var v = histViews[hv];
-    h += '<div class="domain-card" onclick="setHistoryView(\'' + v.id + '\');showMainSection(\'home\')" style="cursor:pointer;margin-bottom:var(--sp-2)">';
+    h += '<div class="domain-card" onclick="openHistoryInline(\'' + v.id + '\')" style="cursor:pointer;margin-bottom:var(--sp-2)">';
     h += '<div class="dc-icon">' + v.icon + '</div>';
     h += '<div class="dc-title">' + v.label + '</div>';
     h += '<div class="dc-meta">' + v.desc + '</div>';
     h += '</div>';
   }
   h += '</div></div>';
+  h += '<div id="history-inline-panel"></div>';
 
   sec.innerHTML = h;
 }
 
-/* Inline nutrition renderer for the Log tab */
+function openHistoryInline(viewId) {
+  destroyHistoryCharts();
+  var panel = document.getElementById('history-inline-panel');
+  if (!panel) return;
+  var closeBtn = '<div style="text-align:right;margin-bottom:var(--sp-2)"><button class="settings-btn secondary" style="font-size:.78rem;padding:.5rem 1rem" onclick="document.getElementById(\'history-inline-panel\').innerHTML=\'\';destroyHistoryCharts()">✕ Close</button></div>';
+  var content = '';
+  if (viewId === 'training') content = renderHistoryTraining();
+  else if (viewId === 'body') content = renderHistoryBody();
+  else if (viewId === 'recovery') content = renderHistoryRecovery();
+  else if (viewId === 'steps') content = renderHistorySteps();
+  else if (viewId === 'nutrition') content = renderHistoryNutrition();
+  panel.innerHTML = closeBtn + content;
+  panel.scrollIntoView({behavior:'smooth',block:'start'});
+  if (typeof Chart !== 'undefined') {
+    if (viewId === 'training') renderTrainingCharts();
+    else if (viewId === 'body') renderBodyCharts();
+    else if (viewId === 'recovery') renderRecoveryCharts();
+    else if (viewId === 'steps') renderStepsCharts();
+    else if (viewId === 'nutrition') renderNutritionCharts();
+  }
+}
 function renderNutritionInline(activeDate) {
   var d = DS.get();
   var isToday = activeDate === new Date().toISOString().slice(0, 10);
@@ -2798,7 +2820,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.12.3').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.12.4').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
