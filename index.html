@@ -1304,43 +1304,109 @@ function renderHistoryOverview(){
   var d=DS.get(),workouts=(d.workouts||[]).slice().reverse(),metrics=(d.bodyMetrics||[]).slice(),sleep=(d.sleepLog||[]).slice(),steps=(d.stepsLog||[]).slice(),nutrition=(d.nutrition||[]).slice().reverse();
   var streak=historyWorkoutStreak(workouts),ws=historyLatestWeight(metrics),sa=historySleepAverage(sleep),stepsAvg=historyStepsAverage(steps);
   var lastW=workouts[0],lastNut=nutrition[0],lastNutTotals=lastNut?nutritionTotals(lastNut):null;
+  var prog=getActiveProgramme(),scheduled=PROGRAMMES[prog].keys.length;
 
   var h='<div class="dash">';
 
-  /* Row 1: This Week at a glance */
-  h+='<div class="dash-section"><div class="dash-heading">This Week</div>';
-  h+='<div class="dash-row">';
-  h+='<div class="dash-metric'+(streak.thisWeek>=3?' hit':'')+'"><div class="dm-val">'+streak.thisWeek+'<span class="dm-of">/3</span></div><div class="dm-label">Sessions</div></div>';
-  h+='<div class="dash-metric'+(streak.weeks>0?' hit':'')+'"><div class="dm-val">'+streak.weeks+'</div><div class="dm-label">Wk Streak</div></div>';
-  h+='<div class="dash-metric"><div class="dm-val">'+(ws.current!=null?ws.current.toFixed(1):'—')+'</div><div class="dm-label">kg</div></div>';
-  h+='<div class="dash-metric'+(sa.avgHours!=null&&sa.avgHours>=7?' hit':'')+'"><div class="dm-val">'+(sa.avgHours!=null?sa.avgHours.toFixed(1):'—')+'</div><div class="dm-label">Sleep</div></div>';
-  h+='</div></div>';
+  /* === TRAINING CARD === */
+  var weekDone=streak.thisWeek,weekTarget=scheduled;
+  var weekComplete=(weekDone>=weekTarget);
+  var tPct=weekTarget>0?Math.min(100,Math.round(weekDone/weekTarget*100)):0;
+  h+='<div class="dash-section">';
+  h+='<div style="display:flex;justify-content:space-between;align-items:center">';
+  h+='<div class="dash-heading">🏋️ Training</div>';
+  h+='<a href="#" onclick="event.preventDefault();setHistoryView(\'training\')" style="font-size:.75rem;color:var(--accent);text-decoration:none;font-weight:600">View details →</a>';
+  h+='</div>';
+  if(weekComplete){
+    h+='<div style="text-align:center;padding:var(--sp-3) 0">';
+    h+='<div style="font-size:1.6rem;font-weight:800;color:var(--green)">✅ '+weekDone+' / '+weekTarget+' — Week Complete!</div>';
+    h+='<div style="margin-top:var(--sp-2);height:8px;border-radius:4px;background:var(--border)"><div style="width:100%;height:100%;border-radius:4px;background:var(--green)"></div></div>';
+    if(streak.weeks>0) h+='<div style="font-size:.88rem;color:var(--accent);font-weight:700;margin-top:var(--sp-3)">🔥 '+streak.weeks+'-week consistency streak</div>';
+    h+='</div>';
+  } else {
+    h+='<div style="text-align:center;padding:var(--sp-3) 0">';
+    h+='<div style="font-size:1.6rem;font-weight:800">'+weekDone+' / '+weekTarget+'</div>';
+    h+='<div style="font-size:.82rem;color:var(--muted);margin-top:2px">sessions this week · '+(weekTarget-weekDone)+' to go</div>';
+    h+='<div style="margin-top:var(--sp-2);height:8px;border-radius:4px;background:var(--border)"><div style="width:'+tPct+'%;height:100%;border-radius:4px;background:var(--accent);transition:width .3s"></div></div>';
+    if(streak.weeks>0) h+='<div style="font-size:.82rem;color:var(--accent);font-weight:700;margin-top:var(--sp-3)">🔥 '+streak.weeks+'-week streak</div>';
+    h+='</div>';
+  }
+  h+='</div>';
 
-  /* Row 2: Today's nutrition */
+  /* === BODY + SLEEP ROW === */
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3)">';
+
+  /* Body */
+  h+='<div class="dash-section">';
+  h+='<div class="dash-heading">📏 Body</div>';
+  if(ws.current!=null){
+    h+='<div style="font-size:1.4rem;font-weight:800;font-variant-numeric:tabular-nums">'+ws.current.toFixed(1)+' <span style="font-size:.82rem;font-weight:600;color:var(--muted)">kg</span></div>';
+    if(ws.diff!=null&&ws.diff!==0){
+      var diffColor=ws.diff<0?'var(--green)':'var(--accent)';
+      h+='<div style="font-size:.82rem;color:'+diffColor+';font-weight:700;margin-top:2px">'+(ws.diff>0?'↑':'↓')+' '+Math.abs(ws.diff).toFixed(1)+'kg</div>';
+    }
+  } else h+='<div style="font-size:1.1rem;color:var(--muted)">No data yet</div>';
+  h+='<a href="#" onclick="event.preventDefault();setHistoryView(\'body\')" style="font-size:.72rem;color:var(--accent);text-decoration:none;font-weight:600;display:block;margin-top:var(--sp-2)">View details →</a>';
+  h+='</div>';
+
+  /* Sleep */
+  h+='<div class="dash-section">';
+  h+='<div class="dash-heading">😴 Sleep</div>';
+  if(sa.avgHours!=null){
+    var sleepColor=sa.avgHours>=7?'var(--green)':sa.avgHours>=6?'var(--accent)':'var(--red)';
+    h+='<div style="font-size:1.4rem;font-weight:800;font-variant-numeric:tabular-nums;color:'+sleepColor+'">'+sa.avgHours.toFixed(1)+'<span style="font-size:.82rem;font-weight:600;color:var(--muted)"> hrs avg</span></div>';
+    h+='<div style="font-size:.78rem;color:var(--muted);margin-top:2px">'+(sa.avgHours>=7?'On track':'Needs attention')+'</div>';
+  } else h+='<div style="font-size:1.1rem;color:var(--muted)">No data yet</div>';
+  h+='<a href="#" onclick="event.preventDefault();setHistoryView(\'recovery\')" style="font-size:.72rem;color:var(--accent);text-decoration:none;font-weight:600;display:block;margin-top:var(--sp-2)">View details →</a>';
+  h+='</div>';
+
+  h+='</div>';
+
+  /* === NUTRITION CARD === */
   var todayDate=new Date().toISOString().slice(0,10);
   var todayNut=d.nutrition.find(function(n){return n.date===todayDate});
   var todayTotals=todayNut?nutritionTotals(todayNut):{calories:0,protein:0,carbs:0,fat:0};
   var targets=d.settings.nutritionTargets;
-  var calPct=targets.calories>0?Math.round(todayTotals.calories/targets.calories*100):0;
-  var proPct=targets.protein>0?Math.round(todayTotals.protein/targets.protein*100):0;
-  h+='<div class="dash-section"><div class="dash-heading">Today\'s Nutrition</div>';
-  h+='<div class="dash-row nut-row">';
-  h+='<div class="nut-ring"><div class="nr-val">'+Math.round(todayTotals.calories)+'</div><div class="nr-label">kcal</div><div class="nr-bar"><div class="nr-fill" style="width:'+Math.min(100,calPct)+'%"></div></div></div>';
-  h+='<div class="nut-ring"><div class="nr-val">'+Math.round(todayTotals.protein)+'g</div><div class="nr-label">protein</div><div class="nr-bar"><div class="nr-fill pro" style="width:'+Math.min(100,proPct)+'%"></div></div></div>';
+  var calPct=targets.calories>0?Math.min(100,Math.round(todayTotals.calories/targets.calories*100)):0;
+  var proPct=targets.protein>0?Math.min(100,Math.round(todayTotals.protein/targets.protein*100)):0;
+  h+='<div class="dash-section">';
+  h+='<div style="display:flex;justify-content:space-between;align-items:center">';
+  h+='<div class="dash-heading">🍽️ Today\'s Nutrition</div>';
+  h+='<a href="#" onclick="event.preventDefault();setHistoryView(\'nutrition\')" style="font-size:.75rem;color:var(--accent);text-decoration:none;font-weight:600">View details →</a>';
+  h+='</div>';
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);margin:var(--sp-2) 0">';
+  h+='<div>';
+  h+='<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:.78rem;font-weight:700">Calories</span><span style="font-size:.72rem;color:var(--muted)">'+calPct+'%</span></div>';
+  h+='<div style="height:8px;border-radius:4px;background:var(--border);margin-top:4px"><div style="width:'+calPct+'%;height:100%;border-radius:4px;background:var(--accent);transition:width .3s"></div></div>';
+  h+='<div style="font-size:1.1rem;font-weight:800;margin-top:4px;font-variant-numeric:tabular-nums">'+Math.round(todayTotals.calories)+' <span style="font-size:.75rem;font-weight:600;color:var(--muted)">/ '+targets.calories+' kcal</span></div>';
+  h+='</div>';
+  h+='<div>';
+  h+='<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:.78rem;font-weight:700">Protein</span><span style="font-size:.72rem;color:var(--muted)">'+proPct+'%</span></div>';
+  h+='<div style="height:8px;border-radius:4px;background:var(--border);margin-top:4px"><div style="width:'+proPct+'%;height:100%;border-radius:4px;background:'+(proPct>=90?'var(--green)':'rgba(59,154,255,.7)')+';transition:width .3s"></div></div>';
+  h+='<div style="font-size:1.1rem;font-weight:800;margin-top:4px;font-variant-numeric:tabular-nums">'+Math.round(todayTotals.protein)+'g <span style="font-size:.75rem;font-weight:600;color:var(--muted)">/ '+targets.protein+'g</span></div>';
+  h+='</div>';
   h+='</div>';
   h+='<button class="dash-action" onclick="showMainSection(\'log\')">🍽️ Log Food</button>';
   h+='</div>';
 
-  /* Row 3: Quick insight */
-  var insight='';
-  if(streak.weeks>=2)insight='🔥 '+streak.weeks+'-week consistency streak';
-  else if(ws.diff!=null&&ws.diff<0)insight='�� Down '+Math.abs(ws.diff).toFixed(1)+'kg — recomp signal';
-  else if(sa.avgHours!=null&&sa.avgHours<6.5)insight='⚠️ Sleep '+sa.avgHours.toFixed(1)+'h avg — recovery at risk';
-  else if(streak.thisWeek>=3)insight='✅ '+streak.thisWeek+' sessions — weekly target hit';
-  else if(lastW)insight='🏋️ Last: '+esc(historyDayLabel(lastW))+' · '+esc(historyLabelDate(lastW.date));
-  if(insight)h+='<div class="dash-insight">'+insight+'</div>';
+  /* === ALERTS === */
+  var alerts=[];
+  if(sa.avgHours!=null&&sa.avgHours<6.5)alerts.push({icon:'⚠️',text:'Sleep averaging '+sa.avgHours.toFixed(1)+'h — recovery at risk',color:'var(--red)'});
+  if(ws.diff!=null&&ws.diff<0)alerts.push({icon:'📉',text:'Down '+Math.abs(ws.diff).toFixed(1)+'kg — body recomp signal',color:'var(--green)'});
+  if(ws.diff!=null&&ws.diff>1)alerts.push({icon:'📈',text:'Up '+ws.diff.toFixed(1)+'kg — check nutrition',color:'var(--accent)'});
+  if(stepsAvg.avgSteps!=null&&stepsAvg.avgSteps<5000)alerts.push({icon:'🚶',text:'Steps averaging '+stepsAvg.avgSteps.toLocaleString()+'/day — try to move more',color:'var(--accent)'});
+  if(streak.weeks>=2)alerts.push({icon:'🔥',text:streak.weeks+'-week consistency streak',color:'var(--green)'});
+  if(weekTarget>0&&weekDone<weekTarget)alerts.push({icon:'🏋️',text:(weekTarget-weekDone)+' session'+(weekTarget-weekDone===1?'':'s')+' still to go this week',color:'var(--accent)'});
+  if(alerts.length){
+    h+='<div class="dash-section">';
+    h+='<div class="dash-heading">⚡ Attention</div>';
+    for(var ai=0;ai<alerts.length;ai++){
+      h+='<div style="padding:var(--sp-3);border-radius:var(--radius-sm);background:rgba(255,255,255,.03);border-left:3px solid '+alerts[ai].color+';margin-bottom:var(--sp-2);font-size:.86rem;font-weight:600">'+alerts[ai].icon+' '+alerts[ai].text+'</div>';
+    }
+    h+='</div>';
+  }
 
-  /* Row 4: Coach suggestions (compact) */
+  /* === COACH SUGGESTIONS === */
   var suggestions=d.suggestions;
   if(suggestions){
     h+='<div class="dash-section"><div class="dash-heading">🎯 Coach</div>';
@@ -1349,7 +1415,7 @@ function renderHistoryOverview(){
     if(suggestions.nutrition)suggestions.nutrition.forEach(function(s){allSugs.push('🍽️ '+esc(s.suggestion||''));});
     if(suggestions.recovery)suggestions.recovery.forEach(function(s){allSugs.push('😴 '+esc(s.suggestion||''));});
     for(var si=0;si<Math.min(allSugs.length,3);si++){h+='<div class="dash-sug">'+allSugs[si]+'</div>';}
-    if(allSugs.length>3)h+='<div style="font-size:.75rem;color:var(--muted);padding:.25rem 0">+'+( allSugs.length-3)+' more</div>';
+    if(allSugs.length>3)h+='<div style="font-size:.75rem;color:var(--muted);padding:.25rem 0">'+(allSugs.length-3)+' more</div>';
     h+='<button class="dash-action secondary" onclick="if(confirm(\'Clear?\')){var d=DS.get();d.suggestions=null;DS.save();DS.syncToGist();renderHome()}">Clear</button>';
     h+='</div>';
   }
@@ -1838,7 +1904,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.12.2</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.12.3</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2305,7 +2371,7 @@ function showMainSection(key) {
   if (sec) sec.classList.add('active');
   var tab = document.getElementById('tab-' + key);
   if (tab) tab.classList.add('active');
-  if (key === 'home') renderHome();
+  if (key === 'home') { historyView = 'overview'; renderHome(); }
   if (key === 'log') renderLog();
   if (key === 'train') renderTrainDashboard();
   if (key === 'settings') renderSettings();
@@ -2316,8 +2382,9 @@ function renderHome() {
   var sec = document.getElementById('sec-home');
   if (!sec) return;
   destroyHistoryCharts();
-  var h = '<div class="page-title">Home</div>';
+  var h = '';
   if (historyView === 'overview') {
+    h += '<div class="page-title">Home</div>';
     h += renderHistoryOverview();
     h += '<button class="fab-log" id="fab-btn" onclick="toggleFabMenu()">+</button>';
     h += '<div class="fab-menu" id="fab-menu" style="display:none">';
@@ -2334,7 +2401,6 @@ function renderHome() {
     else if (historyView === 'nutrition') h += renderHistoryNutrition();
     else h += renderHistoryOverview();
   }
-
   sec.innerHTML = h;
   if (typeof Chart !== 'undefined') {
     if (historyView === 'training') renderTrainingCharts();
@@ -2732,7 +2798,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.12.2').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.12.3').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
