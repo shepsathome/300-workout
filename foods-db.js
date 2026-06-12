@@ -97,6 +97,7 @@ var FOODS = [
   // Homemade
   { name: 'Sourdough Cracker (homemade)', cal: 480, protein: 7.5, carbs: 53.9, fat: 25.6, serving: 4, unit: 'g' },
   { name: 'Salted Popcorn', cal: 500, protein: 9, carbs: 50, fat: 28, serving: 50, unit: 'g' },
+  { name: 'Movies Star Popcorn Sel de Guérande (100g box)', cal: 416, protein: 10, carbs: 70, fat: 13, serving: 100, unit: 'g' },
   { name: 'Vico Lentil Crisps (Fromage du Jura)', cal: 458, protein: 13, carbs: 57, fat: 19, serving: 20, unit: 'g' },
   { name: 'M&S Olive Oil & Sea Salt Crisps', cal: 523, protein: 5.9, carbs: 52.1, fat: 31.4, serving: 40, unit: 'g' },
   { name: 'Romana Pizza Dough (1 ball)', cal: 245, protein: 6.3, carbs: 47.5, fat: 2.5, serving: 220, unit: 'g' },
