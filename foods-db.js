@@ -14,7 +14,7 @@ var FOODS = [
   { name: 'Greek Yoghurt (0% fat)', cal: 59, protein: 10.3, carbs: 3.6, fat: 0.4, serving: 170, unit: 'g' },
   { name: 'Cottage Cheese', cal: 98, protein: 11.1, carbs: 3.4, fat: 4.3, serving: 150, unit: 'g' },
   { name: 'Whey Protein Powder', cal: 400, protein: 80, carbs: 8, fat: 7, serving: 30, unit: 'g' },
-  { name: 'Tofu', cal: 144, protein: 17.3, carbs: 2.8, fat: 8.7, serving: 150, unit: 'g' },
+  { name: 'Tofu (firm)', cal: 83, protein: 9.4, carbs: 2.3, fat: 4.8, serving: 150, unit: 'g' },
   { name: 'Tempeh', cal: 193, protein: 20.3, carbs: 7.6, fat: 10.8, serving: 120, unit: 'g' },
   { name: 'Skyr', cal: 63, protein: 11, carbs: 4, fat: 0.2, serving: 170, unit: 'g' },
 
@@ -51,7 +51,7 @@ var FOODS = [
   { name: 'Semi-skimmed Milk', cal: 47, protein: 3.6, carbs: 4.8, fat: 1.7, serving: 250, unit: 'ml' },
   { name: 'Skimmed Milk', cal: 34, protein: 3.6, carbs: 5, fat: 0.2, serving: 250, unit: 'ml' },
   { name: 'Cheddar Cheese', cal: 402, protein: 25, carbs: 1.3, fat: 33, serving: 30, unit: 'g' },
-  { name: 'Mozzarella', cal: 280, protein: 28, carbs: 3.1, fat: 17, serving: 50, unit: 'g' },
+  { name: 'Mozzarella', cal: 252, protein: 24, carbs: 2.6, fat: 16, serving: 50, unit: 'g' },
   { name: 'Butter', cal: 717, protein: 0.9, carbs: 0.1, fat: 81.1, serving: 10, unit: 'g' },
   { name: 'Cream Cheese (light)', cal: 160, protein: 7, carbs: 6, fat: 11, serving: 30, unit: 'g' },
 
@@ -153,7 +153,7 @@ var FOODS = [
   { name: 'Zizzi Rustica Pepperoni Pizza', cal: 253, protein: 11, carbs: 32.3, fat: 9.3, serving: 390, unit: 'g' },
   { name: 'Côte Burger & Frites', cal: 274, protein: 13.7, carbs: 19, fat: 15.6, serving: 403, unit: 'g' },
   { name: 'Côte Steak Frites (5oz)', cal: 156, protein: 9.7, carbs: 9.2, fat: 8.6, serving: 360, unit: 'g' },
-  { name: 'Giggling Squid Prawn Crackers', cal: 508, protein: 7.3, carbs: 118, fat: 1.3, serving: 40, unit: 'g' },
+  { name: 'Giggling Squid Prawn Crackers', cal: 426, protein: 7.1, carbs: 53, fat: 16, serving: 40, unit: 'g' },
   { name: 'Giggling Squid Cloudy Lemonade', cal: 40, protein: 0, carbs: 10, fat: 0, serving: 300, unit: 'ml' },
   { name: 'Giggling Squid Beef Massaman Curry', cal: 234, protein: 5.1, carbs: 12.9, fat: 14.6, serving: 350, unit: 'g' },
   { name: 'Giggling Squid Jasmine Rice', cal: 131, protein: 2.7, carbs: 28.6, fat: 0.3, serving: 290, unit: 'g' },
