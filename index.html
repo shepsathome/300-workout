@@ -1838,7 +1838,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.12</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.12.2</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2315,26 +2315,24 @@ function showMainSection(key) {
 function renderHome() {
   var sec = document.getElementById('sec-home');
   if (!sec) return;
-  /* Reuse the history overview renderer — it IS the dashboard */
   destroyHistoryCharts();
   var h = '<div class="page-title">Home</div>';
-  h += renderHistoryNav();
-  if (historyView === 'training') h += renderHistoryTraining();
-  else if (historyView === 'body') h += renderHistoryBody();
-  else if (historyView === 'recovery') h += renderHistoryRecovery();
-  else if (historyView === 'steps') h += renderHistorySteps();
-  else if (historyView === 'nutrition') h += renderHistoryNutrition();
-  else h += renderHistoryOverview();
-
-  /* FAB for quick logging on overview */
   if (historyView === 'overview') {
+    h += renderHistoryOverview();
     h += '<button class="fab-log" id="fab-btn" onclick="toggleFabMenu()">+</button>';
     h += '<div class="fab-menu" id="fab-menu" style="display:none">';
     h += '<button onclick="showLogSheet(\'body\')"><span class="fab-emoji">📏</span> Log Measurement</button>';
     h += '<button onclick="showLogSheet(\'sleep\')"><span class="fab-emoji">😴</span> Log Sleep</button>';
     h += '<button onclick="showLogSheet(\'steps\')"><span class="fab-emoji">🚶</span> Log Steps</button>';
-h += '<button onclick="showMainSection(\'log\')"><span class="fab-emoji">🍽️</span> Add Food</button>';
+    h += '<button onclick="showMainSection(\'log\')"><span class="fab-emoji">🍽️</span> Add Food</button>';
     h += '</div>';
+  } else {
+    if (historyView === 'training') h += renderHistoryTraining();
+    else if (historyView === 'body') h += renderHistoryBody();
+    else if (historyView === 'recovery') h += renderHistoryRecovery();
+    else if (historyView === 'steps') h += renderHistorySteps();
+    else if (historyView === 'nutrition') h += renderHistoryNutrition();
+    else h += renderHistoryOverview();
   }
 
   sec.innerHTML = h;
@@ -2371,6 +2369,29 @@ function renderLog() {
   h += '<div class="nutrition-content">';
   h += renderNutritionInline(activeDate);
   h += '</div>';
+  
+  h += '<div class="settings-section" style="margin-top:var(--sp-4)">';
+  h += '<div onclick="document.getElementById(\'history-menu\').style.display=document.getElementById(\'history-menu\').style.display===\'none\'?\'block\':\'none\';this.querySelector(\'.hm-chev\').textContent=document.getElementById(\'history-menu\').style.display===\'none\'?\'›\':\'⌄\'" style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;padding:.25rem 0">';
+  h += '<h3 style="margin:0;font-size:.92rem">📊 History & Insights</h3>';
+  h += '<span class="hm-chev" style="font-size:1.2rem;color:var(--muted);transition:transform .2s">›</span>';
+  h += '</div>';
+  h += '<div id="history-menu" style="display:none;margin-top:var(--sp-3)">';
+  var histViews = [
+    {id:'training', icon:'🏋️', label:'Training', desc:'Workout history & volume trends'},
+    {id:'body', icon:'📏', label:'Body', desc:'Weight & measurements'},
+    {id:'recovery', icon:'😴', label:'Recovery', desc:'Sleep patterns'},
+    {id:'steps', icon:'🚶', label:'Steps', desc:'Daily movement'},
+    {id:'nutrition', icon:'🍽️', label:'Nutrition', desc:'Macro trends & history'}
+  ];
+  for (var hv = 0; hv < histViews.length; hv++) {
+    var v = histViews[hv];
+    h += '<div class="domain-card" onclick="setHistoryView(\'' + v.id + '\');showMainSection(\'home\')" style="cursor:pointer;margin-bottom:var(--sp-2)">';
+    h += '<div class="dc-icon">' + v.icon + '</div>';
+    h += '<div class="dc-title">' + v.label + '</div>';
+    h += '<div class="dc-meta">' + v.desc + '</div>';
+    h += '</div>';
+  }
+  h += '</div></div>';
 
   sec.innerHTML = h;
 }
@@ -2711,7 +2732,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.12').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.12.2').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
