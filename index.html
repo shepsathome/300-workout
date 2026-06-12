@@ -1838,7 +1838,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.10.5</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.12</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2524,7 +2524,7 @@ function renderTrainDashboard() {
     h += '<div style="width:56px;height:4px;border-radius:2px;background:var(--border);margin-top:4px;margin-left:auto"><div style="width:' + pctWeek + '%;height:100%;border-radius:2px;background:' + (pctWeek >= 100 ? 'var(--green)' : 'var(--accent)') + '"></div></div>';
     h += '</div></div>';
     if (completedToday) h += '<div style="margin-top:.85rem;font-size:.78rem"><a href="#" onclick="event.preventDefault();event.stopPropagation();startWorkout(\'' + todayKey + '\')" style="color:var(--muted);text-decoration:underline">Redo workout</a></div>';
-    else h += '<button class="start-btn" style="margin-top:.85rem;margin-bottom:0" onclick="event.stopPropagation();showDayPanel(\'' + todayKey + '\')">▶ START WORKOUT</button>';
+    else h += '<button class="start-btn" style="margin-top:.85rem;margin-bottom:0" onclick="event.stopPropagation();startWorkout(\'' + todayKey + '\')">▶ START WORKOUT</button>';
     h += '</div></div>';
   }
 
@@ -2711,7 +2711,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.10.5').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.12').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
