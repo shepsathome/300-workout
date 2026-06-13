@@ -1323,6 +1323,30 @@ function renderHistoryOverview(){
 
   var h='<div class="dash">';
 
+  /* === DAILY REMINDERS === */
+  var _today=new Date().toISOString().slice(0,10);
+  var _isSunday=new Date().getDay()===0;
+  var _hasSteps=steps.some(function(s){return s.date===_today});
+  var _hasSleep=sleep.some(function(s){return s.date===_today});
+  var _hasBody=_isSunday&&metrics.some(function(m){return m.date===_today});
+  var _reminders=[];
+  if(!_hasSteps)_reminders.push({icon:'🚶',text:'Log your steps for today',action:'showLogSheet(\'steps\')'});
+  if(!_hasSleep)_reminders.push({icon:'😴',text:'Log your sleep for today',action:'showLogSheet(\'sleep\')'});
+  if(_isSunday&&!_hasBody)_reminders.push({icon:'📏',text:'Sunday weigh-in — log measurements & weight',action:'showLogSheet(\'body\')'});
+  if(_reminders.length){
+    h+='<div class="dash-section">';
+    h+='<div class="dash-heading">📋 Reminders</div>';
+    for(var ri=0;ri<_reminders.length;ri++){
+      var r=_reminders[ri];
+      h+='<div onclick="'+r.action+'" style="display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-3);border-radius:var(--radius-sm);background:rgba(138,122,92,.08);border-left:3px solid var(--accent);margin-bottom:var(--sp-2);cursor:pointer;transition:background .15s">';
+      h+='<span style="font-size:1.3rem">'+r.icon+'</span>';
+      h+='<span style="font-size:.86rem;font-weight:600;flex:1">'+r.text+'</span>';
+      h+='<span style="font-size:.78rem;color:var(--accent);font-weight:700">Log →</span>';
+      h+='</div>';
+    }
+    h+='</div>';
+  }
+
   /* === TRAINING CARD === */
   var weekDone=streak.thisWeek,weekTarget=scheduled;
   var weekComplete=(weekDone>=weekTarget);
@@ -1920,7 +1944,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.14</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.14.2</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2835,7 +2859,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.14').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.14.2').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
