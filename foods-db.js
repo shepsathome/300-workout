@@ -17,6 +17,7 @@ var FOODS = [
   { name: 'Tofu (firm)', cal: 83, protein: 9.4, carbs: 2.3, fat: 4.8, serving: 150, unit: 'g' },
   { name: 'Tempeh', cal: 193, protein: 20.3, carbs: 7.6, fat: 10.8, serving: 120, unit: 'g' },
   { name: 'Skyr', cal: 63, protein: 11, carbs: 4, fat: 0.2, serving: 170, unit: 'g' },
+  { name: 'Jambon Supérieur (1 slice)', cal: 107, protein: 17, carbs: 1.5, fat: 3.5, serving: 25, unit: 'g' },
 
   // Carbs
   { name: 'White Rice (cooked)', cal: 130, protein: 2.7, carbs: 28.2, fat: 0.3, serving: 180, unit: 'g' },
@@ -29,6 +30,7 @@ var FOODS = [
   { name: 'White Potato (baked)', cal: 93, protein: 2.5, carbs: 21.2, fat: 0.1, serving: 250, unit: 'g' },
   { name: 'Bread (white)', cal: 265, protein: 8.7, carbs: 49, fat: 3.2, serving: 30, unit: 'g' },
   { name: 'Bread (wholemeal)', cal: 247, protein: 12.5, carbs: 41.2, fat: 4.2, serving: 30, unit: 'g' },
+  { name: 'French Baguette', cal: 274, protein: 8.5, carbs: 53, fat: 1.5, serving: 250, unit: 'g' },
   { name: 'Banana', cal: 89, protein: 1.1, carbs: 22.8, fat: 0.3, serving: 120, unit: 'g' },
   { name: 'Apple', cal: 52, protein: 0.3, carbs: 13.8, fat: 0.2, serving: 180, unit: 'g' },
   { name: 'Rice Cakes', cal: 387, protein: 8, carbs: 81, fat: 3, serving: 18, unit: 'g' },
@@ -52,6 +54,7 @@ var FOODS = [
   { name: 'Skimmed Milk', cal: 34, protein: 3.6, carbs: 5, fat: 0.2, serving: 250, unit: 'ml' },
   { name: 'Cheddar Cheese', cal: 402, protein: 25, carbs: 1.3, fat: 33, serving: 30, unit: 'g' },
   { name: 'Mozzarella', cal: 252, protein: 24, carbs: 2.6, fat: 16, serving: 50, unit: 'g' },
+  { name: 'Gouda (sliced)', cal: 356, protein: 24, carbs: 0, fat: 28, serving: 20, unit: 'g' },
   { name: 'Butter', cal: 717, protein: 0.9, carbs: 0.1, fat: 81.1, serving: 10, unit: 'g' },
   { name: 'Cream Cheese (light)', cal: 160, protein: 7, carbs: 6, fat: 11, serving: 30, unit: 'g' },
 
@@ -77,6 +80,7 @@ var FOODS = [
   { name: 'Porridge with Milk (prepared)', cal: 84, protein: 3.3, carbs: 12.3, fat: 2.2, serving: 250, unit: 'g' },
   { name: 'Overnight Oats', cal: 126, protein: 5.2, carbs: 16.5, fat: 4.1, serving: 200, unit: 'g' },
   { name: 'Chicken Sandwich', cal: 235, protein: 17, carbs: 23, fat: 8, serving: 180, unit: 'g' },
+  { name: 'Baguette Ham & Gouda Sandwich', cal: 269, protein: 12.9, carbs: 35.1, fat: 7.3, serving: 380, unit: 'g' },
 
   // Drinks
   { name: 'Orange Juice', cal: 45, protein: 0.7, carbs: 10.4, fat: 0.2, serving: 250, unit: 'ml' },
@@ -89,6 +93,7 @@ var FOODS = [
   { name: 'Coca-Cola Zero', cal: 1, protein: 0, carbs: 0, fat: 0, serving: 330, unit: 'ml' },
   { name: 'Electrolyte Drink', cal: 24, protein: 0, carbs: 5.9, fat: 0, serving: 500, unit: 'ml' },
   { name: 'Itsu Ginger & Lime Zen\'Water', cal: 3, protein: 0.2, carbs: 0.2, fat: 0.2, serving: 250, unit: 'ml' },
+  { name: 'Innocent Juicy Water Lemon & Lime (330ml)', cal: 21, protein: 0.8, carbs: 4.5, fat: 0, serving: 330, unit: 'ml' },
 
   // Itsu Snacks
   { name: 'Itsu 60% Dark Chocolate Moons', cal: 535, protein: 7.5, carbs: 42.5, fat: 35, serving: 40, unit: 'g' },
@@ -98,7 +103,7 @@ var FOODS = [
   { name: 'Sourdough Cracker (homemade)', cal: 480, protein: 7.5, carbs: 53.9, fat: 25.6, serving: 4, unit: 'g' },
   { name: 'Salted Popcorn', cal: 500, protein: 9, carbs: 50, fat: 28, serving: 50, unit: 'g' },
   { name: 'Movies Star Popcorn Sel de Guérande (100g box)', cal: 416, protein: 10, carbs: 70, fat: 13, serving: 100, unit: 'g' },
-  { name: 'Vico Lentil Crisps (Fromage du Jura)', cal: 458, protein: 13, carbs: 57, fat: 19, serving: 20, unit: 'g' },
+  { name: 'Vico Lentil Crisps (Fromage du Jura)', cal: 458, protein: 13, carbs: 55, fat: 19, serving: 30, unit: 'g' },
   { name: 'M&S Olive Oil & Sea Salt Crisps', cal: 523, protein: 5.9, carbs: 52.1, fat: 31.4, serving: 40, unit: 'g' },
   { name: 'Romana Pizza Dough (1 ball)', cal: 245, protein: 6.3, carbs: 47.5, fat: 2.5, serving: 220, unit: 'g' },
   { name: 'Sourdough Neapolitan Dough (1 ball)', cal: 241, protein: 6.6, carbs: 50.2, fat: 0.7, serving: 250, unit: 'g' },
