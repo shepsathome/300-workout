@@ -183,5 +183,7 @@ var FOODS = [
   { name: 'John West Tuna Steak in Spring Water', cal: 97, protein: 23, carbs: 0, fat: 0.4, serving: 60, unit: 'g' },
 
   // Chocolate
-  { name: 'Green & Blacks Dark Chocolate & Ginger', cal: 512, protein: 6, carbs: 51, fat: 30, serving: 11, unit: 'g' }
+  { name: 'Green & Blacks Dark Chocolate & Ginger', cal: 512, protein: 6, carbs: 51, fat: 30, serving: 11, unit: 'g' },
+  { name: 'Forest Feast Dark Choc Salted Almonds (3 almonds)', cal: 566, protein: 12, carbs: 31, fat: 43, serving: 10, unit: 'g' },
+  { name: 'Island Bakery Chocolate Ginger (1 biscuit)', cal: 449, protein: 4.7, carbs: 65, fat: 19, serving: 17, unit: 'g' }
 ];
