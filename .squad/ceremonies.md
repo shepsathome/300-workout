@@ -67,3 +67,29 @@ At round start, call Test-RetroOverdue (see skill retro-enforcement). If overdue
 
 **Why GitHub Issues, not markdown:**
 Production data: 0% completion across 6 retros using markdown checklists, 100% after switching to GitHub Issues.
+
+---
+
+## Sunday Fitness Review
+
+| Field | Value |
+|-------|-------|
+| **Trigger** | manual |
+| **When** | Sunday (or on demand) |
+| **Condition** | Adam asks for "Sunday review", "fitness review", "weekly check-in", or similar |
+| **Facilitator** | Dallas |
+| **Participants** | fitness-squad personas (Twight, Layne, Waterson, Nguyen, Ashwell) |
+| **Time budget** | ~30 minutes |
+| **Enabled** | ✅ yes |
+| **Skill** | fitness-review |
+
+**Agenda:**
+1. Load PWA data + vault progress logs (see `.squad/skills/fitness-review/SKILL.md`)
+2. Data Gaps & Source Coverage (Ashwell)
+3. Performance Summary (Ashwell)
+4. Training Review (Waterson)
+5. Nutrition Review (Layne)
+6. Recovery Assessment (Nguyen)
+7. Synthesis & Next Week — grade + ONE priority action (Twight)
+
+**Output:** Premium HTML report saved to `Adam_Personal/Health & Fitness/Squad Reports/`

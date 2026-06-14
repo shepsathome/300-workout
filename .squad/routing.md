@@ -12,6 +12,7 @@ How to decide who handles what.
 | HTML structure & rendering | Ripley | Render functions, history views, nav, FAB menus |
 | Food database | Kane | Adding/editing foods-db.js entries, nutrition data |
 | Testing & QA | Lambert | Edge cases, cross-browser, PWA install testing |
+| Weekly fitness review | Dallas (orchestrates fitness-squad) | "Sunday review", "fitness review", "weekly check-in", "how was my week" — uses `.squad/skills/fitness-review/` |
 | Code review | Dallas | Review PRs, check quality, suggest improvements |
 | Scope & priorities | Dallas | What to build next, trade-offs, decisions |
 | Session logging | Scribe | Automatic — never needs routing |
