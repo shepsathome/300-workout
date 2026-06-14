@@ -157,6 +157,7 @@ var FOODS = [
   // Eating out
   { name: 'itsu Katsu Curry Noodles', cal: 117, protein: 3.4, carbs: 14.9, fat: 4.3, serving: 385, unit: 'g' },
   { name: 'Five Guys Little Cheeseburger (plain + BBQ)', cal: 307, protein: 12.8, carbs: 25.2, fat: 15.1, serving: 218, unit: 'g' },
+  { name: 'Five Guys Hot Dog (ketchup)', cal: 356, protein: 12.1, carbs: 28.2, fat: 23.5, serving: 149, unit: 'g' },
   { name: 'Five Guys Little Fries (half portion)', cal: 232, protein: 3.5, carbs: 31.6, fat: 10.1, serving: 114, unit: 'g' },
   { name: 'Five Guys Little Chocolate Shake', cal: 157, protein: 3.7, carbs: 15.1, fat: 8, serving: 350, unit: 'ml' },
   { name: 'Amorino Sorbet Little Pot (half — strawberry/chocolate)', cal: 144, protein: 1, carbs: 30, fat: 2.4, serving: 50, unit: 'g' },
