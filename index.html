@@ -1049,6 +1049,26 @@ var QUICK_MEALS = [
       { name: 'Bean Mix - homemade (400g)', calories: 300, protein: 18, carbs: 40, fat: 2.4 },
       { name: 'Grilled Chicken Breast (80g)', calories: 132, protein: 24.8, carbs: 0, fat: 2.9 }
     ]
+  },
+  {
+    name: 'Five Guys Cheat Meal',
+    emoji: '\u{1F354}',
+    slot: 1,
+    desc: 'Little cheeseburger (BBQ), half little fries, little choc shake',
+    items: [
+      { name: 'Little Cheeseburger (plain + BBQ)', calories: 670, protein: 28, carbs: 55, fat: 33 },
+      { name: 'Little Fries (half portion)', calories: 265, protein: 4, carbs: 36, fat: 11.5 },
+      { name: 'Little Chocolate Shake', calories: 550, protein: 13, carbs: 53, fat: 28 }
+    ]
+  },
+  {
+    name: 'Amorino Sorbet (half pot)',
+    emoji: '\u{1F368}',
+    slot: 3,
+    desc: 'Half a little pot — strawberry & chocolate sorbet mix',
+    items: [
+      { name: 'Amorino Sorbet half pot (50g)', calories: 72, protein: 0.5, carbs: 15, fat: 1.2 }
+    ]
   }
 
 ];
@@ -1945,7 +1965,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.14.4</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.14.5</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2861,7 +2881,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.14.4').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.14.5').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);

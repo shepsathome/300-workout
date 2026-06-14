@@ -156,6 +156,10 @@ var FOODS = [
 
   // Eating out
   { name: 'itsu Katsu Curry Noodles', cal: 117, protein: 3.4, carbs: 14.9, fat: 4.3, serving: 385, unit: 'g' },
+  { name: 'Five Guys Little Cheeseburger (plain + BBQ)', cal: 670, protein: 28, carbs: 55, fat: 33, serving: 218, unit: 'g' },
+  { name: 'Five Guys Little Fries (half portion)', cal: 265, protein: 4, carbs: 36, fat: 11.5, serving: 114, unit: 'g' },
+  { name: 'Five Guys Little Chocolate Shake', cal: 550, protein: 13, carbs: 53, fat: 28, serving: 350, unit: 'ml' },
+  { name: 'Amorino Sorbet Little Pot (half — strawberry/chocolate)', cal: 72, protein: 0.5, carbs: 15, fat: 1.2, serving: 50, unit: 'g' },
   { name: 'Zizzi Rustica Pepperoni Pizza', cal: 253, protein: 11, carbs: 32.3, fat: 9.3, serving: 390, unit: 'g' },
   { name: 'Côte Burger & Frites', cal: 274, protein: 13.7, carbs: 19, fat: 15.6, serving: 403, unit: 'g' },
   { name: 'Côte Steak Frites (5oz)', cal: 156, protein: 9.7, carbs: 9.2, fat: 8.6, serving: 360, unit: 'g' },
