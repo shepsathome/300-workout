@@ -1327,11 +1327,12 @@ function renderHistoryOverview(){
   var _today=new Date().toISOString().slice(0,10);
   var _isSunday=new Date().getDay()===0;
   var _hasSteps=steps.some(function(s){return s.date===_today});
-  var _hasSleep=sleep.some(function(s){return s.date===_today});
+  var _yesterday=new Date(Date.now()-864e5).toISOString().slice(0,10);
+  var _hasSleep=sleep.some(function(s){return s.date===_yesterday});
   var _hasBody=_isSunday&&metrics.some(function(m){return m.date===_today});
   var _reminders=[];
   if(!_hasSteps)_reminders.push({icon:'🚶',text:'Log your steps for today',action:'showLogSheet(\'steps\')'});
-  if(!_hasSleep)_reminders.push({icon:'😴',text:'Log your sleep for today',action:'showLogSheet(\'sleep\')'});
+  if(!_hasSleep)_reminders.push({icon:'😴',text:'Log last night\'s sleep',action:'showLogSheet(\'sleep\')'});
   if(_isSunday&&!_hasBody)_reminders.push({icon:'📏',text:'Sunday weigh-in — log measurements & weight',action:'showLogSheet(\'body\')'});
   if(_reminders.length){
     h+='<div class="dash-section">';
@@ -1944,7 +1945,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.14.2</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.14.3</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2859,7 +2860,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.14.2').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.14.3').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
