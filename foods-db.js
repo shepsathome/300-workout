@@ -159,7 +159,7 @@ var FOODS = [
   { name: 'Five Guys Little Cheeseburger (plain + BBQ)', cal: 307, protein: 12.8, carbs: 25.2, fat: 15.1, serving: 218, unit: 'g' },
   { name: 'Five Guys Hot Dog (ketchup)', cal: 356, protein: 12.1, carbs: 28.2, fat: 23.5, serving: 149, unit: 'g' },
   { name: 'Five Guys Little Fries (half portion)', cal: 232, protein: 3.5, carbs: 31.6, fat: 10.1, serving: 114, unit: 'g' },
-  { name: 'Five Guys Little Chocolate Shake', cal: 157, protein: 3.7, carbs: 15.1, fat: 8, serving: 350, unit: 'ml' },
+  { name: 'Five Guys Little Chocolate Shake', cal: 167, protein: 3.7, carbs: 24, fat: 5.3, serving: 187, unit: 'ml' },
   { name: 'Amorino Sorbet Little Pot (half — strawberry/chocolate)', cal: 144, protein: 1, carbs: 30, fat: 2.4, serving: 50, unit: 'g' },
   { name: 'Zizzi Rustica Pepperoni Pizza', cal: 253, protein: 11, carbs: 32.3, fat: 9.3, serving: 390, unit: 'g' },
   { name: 'Côte Burger & Frites', cal: 274, protein: 13.7, carbs: 19, fat: 15.6, serving: 403, unit: 'g' },
