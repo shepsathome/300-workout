@@ -1945,7 +1945,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.14.3</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.14.4</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2184,6 +2184,7 @@ function addCustomFood() {
 }
 function quickAddRecent(mealIndex,recentIndex){var entry=DS.dateNutrition(nutActiveDate()),food=DS.get().recentFoods[recentIndex];if(!food)return;entry.meals[mealIndex].items.push({name:food.name,calories:food.calories,protein:food.protein,carbs:food.carbs,fat:food.fat});DS.saveNutrition(entry);refreshNutritionView()}
 function removeMealItem(mealIndex,itemIndex){var entry=DS.dateNutrition(nutActiveDate());entry.meals[mealIndex].items.splice(itemIndex,1);DS.saveNutrition(entry);refreshNutritionView()}
+function deleteNutritionItem(mealIndex,itemIndex,date){if(!confirm('Remove this item?'))return;var entry=DS.dateNutrition(date);entry.meals[mealIndex].items.splice(itemIndex,1);DS.saveNutrition(entry);renderLog()}
 function addQuickMeal(qmIndex) {
   var qm = QUICK_MEALS[qmIndex];
   if (!qm) return;
@@ -2860,7 +2861,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.14.3').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.14.4').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
