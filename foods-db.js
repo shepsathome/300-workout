@@ -17,6 +17,7 @@ var FOODS = [
   { name: 'Tofu (firm)', cal: 83, protein: 9.4, carbs: 2.3, fat: 4.8, serving: 150, unit: 'g' },
   { name: 'Tempeh', cal: 193, protein: 20.3, carbs: 7.6, fat: 10.8, serving: 120, unit: 'g' },
   { name: 'Skyr', cal: 63, protein: 11, carbs: 4, fat: 0.2, serving: 170, unit: 'g' },
+  { name: 'HiPRO Chocolat (160g pot)', cal: 74, protein: 11, carbs: 6.3, fat: 0.4, serving: 160, unit: 'g' },
   { name: 'Jambon Supérieur (1 slice)', cal: 107, protein: 17, carbs: 1.5, fat: 3.5, serving: 25, unit: 'g' },
 
   // Carbs
