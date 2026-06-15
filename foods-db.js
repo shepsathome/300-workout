@@ -151,6 +151,9 @@ var FOODS = [
   // Biscuits
   { name: 'McVities Dark Choc Digestive (1 biscuit)', cal: 500, protein: 6.5, carbs: 65.9, fat: 23.5, serving: 17, unit: 'g' },
 
+  // Meal Prep
+  { name: 'Lemon Garlic Chicken & Crispy Potatoes (meal prep)', cal: 131, protein: 12.7, carbs: 11.5, fat: 3.5, serving: 340, unit: 'g' },
+
   // Pasta meals
   { name: 'White Pasta (dry)', cal: 355, protein: 12.5, carbs: 71, fat: 1.5, serving: 125, unit: 'g' },
 
