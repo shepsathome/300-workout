@@ -83,6 +83,7 @@ var FOODS = [
   { name: 'Skyr PB & Dark Choc Bowl', cal: 169, protein: 12.1, carbs: 9.8, fat: 9.4, serving: 150, unit: 'g' },
   { name: 'Chicken Sandwich', cal: 235, protein: 17, carbs: 23, fat: 8, serving: 180, unit: 'g' },
   { name: 'Baguette Ham & Gouda Sandwich', cal: 269, protein: 12.9, carbs: 35.1, fat: 7.3, serving: 380, unit: 'g' },
+  { name: 'Hotdog (Knacki + Bun)', cal: 276, protein: 11.8, carbs: 31.8, fat: 12.8, serving: 85, unit: 'g' },
 
   // Drinks
   { name: 'Orange Juice', cal: 45, protein: 0.7, carbs: 10.4, fat: 0.2, serving: 250, unit: 'ml' },
