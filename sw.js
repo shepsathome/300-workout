@@ -1,4 +1,4 @@
-const CACHE_NAME = '300-2026.06.16';
+const CACHE_NAME = '300-2026.06.16.2';
 const ASSETS = [
   './',
   './index.html',

@@ -1965,7 +1965,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.16</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.16.2</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2135,7 +2135,7 @@ function selectFood(index, query) {
   var s = food.serving || 100;
   area.innerHTML = '<div class="food-serving-edit">' +
     '<div class="fse-name">' + esc(food.name) + '</div>' +
-    '<div class="fse-row"><label>Amount</label><input id="fse-amount" type="number" value="' + s + '" min="1" step="5" oninput="updateServingCalc()"> <span style="font-size:.8rem;color:var(--muted)">' + food.unit + '</span></div>' +
+    '<div class="fse-row"><label>Amount</label><input id="fse-amount" type="number" value="' + s + '" min="1" step="' + (food.unit === 'g' || food.unit === 'ml' ? 5 : 1) + '" oninput="updateServingCalc()"> <span style="font-size:.8rem;color:var(--muted)">' + food.unit + '</span></div>' +
     '<div class="fse-macros" id="fse-macros"></div>' +
     '<button class="settings-btn" style="width:100%" onclick="confirmAddFood()">✓ Add</button>' +
     '</div>';
@@ -2881,7 +2881,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.16').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.16.2').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);

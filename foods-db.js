@@ -112,11 +112,11 @@ var FOODS = [
   { name: 'Fior di Latte Mozzarella', cal: 280, protein: 22, carbs: 0, fat: 22, serving: 70, unit: 'g' },
   { name: 'Mozzarella di Bufala', cal: 288, protein: 17, carbs: 0.4, fat: 24, serving: 90, unit: 'g' },
 
-  // Fruit
-  { name: 'Blueberries', cal: 57, protein: 0.7, carbs: 14.5, fat: 0.3, serving: 80, unit: 'g' },
-  { name: 'Raspberries', cal: 52, protein: 1.2, carbs: 12, fat: 0.6, serving: 80, unit: 'g' },
-  { name: 'Blackberries', cal: 43, protein: 1.4, carbs: 9.6, fat: 0.5, serving: 80, unit: 'g' },
-  { name: 'Strawberries', cal: 32, protein: 0.7, carbs: 7.7, fat: 0.3, serving: 80, unit: 'g' },
+  // Fruit (values per 100 berries for count-based logging)
+  { name: 'Blueberries', cal: 86, protein: 1.1, carbs: 21.8, fat: 0.5, serving: 15, unit: ' berries' },
+  { name: 'Raspberries', cal: 260, protein: 6, carbs: 60, fat: 3, serving: 15, unit: ' berries' },
+  { name: 'Blackberries', cal: 301, protein: 9.8, carbs: 67.2, fat: 3.5, serving: 12, unit: ' berries' },
+  { name: 'Strawberries', cal: 576, protein: 12.6, carbs: 138.6, fat: 5.4, serving: 5, unit: ' berries' },
 
   // Adam's Kitchen
   { name: 'Homemade Granola', cal: 503, protein: 12.8, carbs: 40.7, fat: 34.6, serving: 50, unit: 'g' },
