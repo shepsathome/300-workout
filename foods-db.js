@@ -115,6 +115,7 @@ var FOODS = [
   // Fruit
   { name: 'Blueberries', cal: 57, protein: 0.7, carbs: 14.5, fat: 0.3, serving: 80, unit: 'g' },
   { name: 'Raspberries', cal: 52, protein: 1.2, carbs: 12, fat: 0.6, serving: 80, unit: 'g' },
+  { name: 'Blackberries', cal: 43, protein: 1.4, carbs: 9.6, fat: 0.5, serving: 80, unit: 'g' },
   { name: 'Strawberries', cal: 32, protein: 0.7, carbs: 7.7, fat: 0.3, serving: 80, unit: 'g' },
 
   // Adam's Kitchen
