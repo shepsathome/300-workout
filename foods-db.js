@@ -104,7 +104,7 @@ var FOODS = [
   { name: 'Itsu Sweet Chilli Toasted Cashews', cal: 590, protein: 18, carbs: 30, fat: 42.5, serving: 40, unit: 'g' },
 
   // Homemade
-  { name: 'Dark Chocolate PB Crunch Bar (homemade)', cal: 498, protein: 9.4, carbs: 49.3, fat: 30.4, serving: 35, unit: 'g' },
+  { name: 'Dark Chocolate PB Crunch Bar (homemade)', cal: 519, protein: 10.1, carbs: 45.6, fat: 33.9, serving: 35, unit: 'g' },
   { name: 'Sourdough Cracker (homemade)', cal: 480, protein: 7.5, carbs: 53.9, fat: 25.6, serving: 4, unit: 'g' },
   { name: 'Salted Popcorn', cal: 500, protein: 9, carbs: 50, fat: 28, serving: 50, unit: 'g' },
   { name: 'Movies Star Popcorn Sel de Guérande (100g box)', cal: 416, protein: 10, carbs: 70, fat: 13, serving: 100, unit: 'g' },
