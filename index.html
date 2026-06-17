@@ -125,7 +125,7 @@ a{color:var(--a2)}
 .now-timer button,.btn-done,.btn-back,.start-btn,.settings-btn,.session-timer button,.rest-card-auto .skip-btn{border:none;padding:.88rem 1.3rem;border-radius:14px;font-size:.94rem;font-weight:700;cursor:pointer;transition:transform .12s ease,box-shadow .2s ease,background .2s ease;color:#fff;min-height:52px}
 .now-timer button:active,.btn-done:active,.btn-back:active,.start-btn:active,.settings-btn:active,.session-timer button:active,.rest-card-auto .skip-btn:active,.train-home .today-card:active{transform:scale(.98)}
 .btn-done{background:linear-gradient(135deg,var(--green),#4cd964);box-shadow:0 10px 18px rgba(52,199,89,.18);transition:transform .2s var(--spring),box-shadow .2s}
-.now-timer .btn-start{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#1a1a1a;box-shadow:0 8px 18px rgba(138,122,92,.2);font-size:1rem;font-weight:800;padding:.9rem 2rem;letter-spacing:.02em}
+.now-timer .btn-start{background:linear-gradient(135deg,var(--green),#4cd964);color:#fff;box-shadow:0 10px 18px rgba(52,199,89,.22);font-size:1rem;font-weight:800;padding:.9rem 2rem;letter-spacing:.02em}
 .now-timer .btn-pause,.settings-btn.danger,.session-timer button.st-stop{background:linear-gradient(135deg,var(--red),#ff8a80);box-shadow:0 10px 18px rgba(255,92,87,.14)}
 .now-details{margin-top:.65rem}
 .now-howto{font-size:.88rem;color:var(--muted);line-height:1.7;padding:.65rem 0}
@@ -1965,7 +1965,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.16.3</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.17</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2357,7 +2357,7 @@ function toggleCountdown(sec){
   var btn=document.getElementById('cd-btn');var display=document.getElementById('cd-display');
   if(cdInterval){clearInterval(cdInterval);cdInterval=null;btn.textContent='\u25B6 RESUME';btn.className='btn-start'}
   else{if(cdRemaining<=0)cdRemaining=sec;btn.textContent='\u23F3 PAUSE';btn.className='btn-pause';display.classList.add('running');display.classList.remove('danger','done');
-    cdInterval=setInterval(function(){cdRemaining--;display.textContent=fmtBig(cdRemaining);if(cdRemaining<=5&&cdRemaining>0){display.classList.add('danger');display.classList.remove('running');tickBeep()}if(cdRemaining<=0){clearInterval(cdInterval);cdInterval=null;cdRemaining=0;display.textContent='\u2714 DONE';display.classList.remove('danger');display.classList.add('done');doneBeep();setTimeout(doneBeep,200)}},1000)}
+    cdInterval=setInterval(function(){cdRemaining--;display.textContent=fmtBig(cdRemaining);if(cdRemaining<=5&&cdRemaining>0){display.classList.add('danger');display.classList.remove('running');tickBeep()}if(cdRemaining<=0){clearInterval(cdInterval);cdInterval=null;cdRemaining=0;display.textContent='\u2714 DONE';display.classList.remove('danger');display.classList.add('done');btn.textContent='\uD83D\uDD04 RESTART';btn.className='btn-start';doneBeep();setTimeout(doneBeep,200)}},1000)}
 }
 function autoStartRest(sec){
   cdRemaining=sec;var display=document.getElementById('cd-display');
@@ -2881,7 +2881,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.16.3').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.17').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
