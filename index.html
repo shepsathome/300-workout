@@ -864,15 +864,21 @@ var DS={
       if(gist.files&&gist.files['300-data.json']){
         var remote=JSON.parse(gist.files['300-data.json'].content);
         if(remote.workouts&&remote.workouts.length>d.workouts.length)d.workouts=remote.workouts;
-        if(remote.nutrition&&remote.nutrition.length>d.nutrition.length)d.nutrition=remote.nutrition;
-        else if(remote.nutrition&&remote.nutrition.length===d.nutrition.length){
-          var today=new Date().toISOString().slice(0,10);
-          var localToday=d.nutrition.find(function(n){return n.date===today});
-          var remoteToday=remote.nutrition.find(function(n){return n.date===today});
-          var localItems=0,remoteItems=0;
-          if(localToday&&localToday.meals)localToday.meals.forEach(function(m){localItems+=(m.items||[]).length});
-          if(remoteToday&&remoteToday.meals)remoteToday.meals.forEach(function(m){remoteItems+=(m.items||[]).length});
-          if(remoteItems>=localItems)d.nutrition=remote.nutrition;
+        /* Per-day nutrition merge: for each date keep the version with more food items */
+        if(remote.nutrition&&remote.nutrition.length){
+          var countItems=function(day){var n=0;if(day&&day.meals)day.meals.forEach(function(m){n+=(m.items||[]).length});return n};
+          var localMap={};d.nutrition.forEach(function(n){localMap[n.date]=n});
+          var remoteMap={};remote.nutrition.forEach(function(n){remoteMap[n.date]=n});
+          var allDates={};Object.keys(localMap).forEach(function(k){allDates[k]=1});Object.keys(remoteMap).forEach(function(k){allDates[k]=1});
+          var merged=[];
+          Object.keys(allDates).forEach(function(date){
+            var loc=localMap[date],rem=remoteMap[date];
+            if(!loc){merged.push(rem)}
+            else if(!rem){merged.push(loc)}
+            else{merged.push(countItems(rem)>=countItems(loc)?rem:loc)}
+          });
+          merged.sort(function(a,b){return a.date.localeCompare(b.date)});
+          d.nutrition=merged;
         }
         if(remote.recentFoods&&remote.recentFoods.length>(d.recentFoods||[]).length)d.recentFoods=remote.recentFoods;
         if(remote.stepsLog&&remote.stepsLog.length>(d.stepsLog||[]).length)d.stepsLog=remote.stepsLog;
@@ -1965,7 +1971,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.18</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.18.2</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2897,7 +2903,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.18').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.18.2').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
