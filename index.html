@@ -1965,7 +1965,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.17</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.18</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2474,20 +2474,36 @@ function renderHome() {
 }
 
 // === LOG — Quick Entry Hub ===
+var _logDate = null;
+function logActiveDate() { return _logDate || new Date().toISOString().slice(0, 10); }
+function logShiftDate(offset) {
+  var d = new Date(logActiveDate() + 'T12:00:00');
+  d.setDate(d.getDate() + offset);
+  _logDate = d.toISOString().slice(0, 10);
+  window._nutDate = _logDate;
+  renderLog();
+}
 function renderLog() {
   var sec = document.getElementById('sec-log');
   if (!sec) return;
   var d = DS.get();
-  var activeDate = new Date().toISOString().slice(0, 10);
+  var activeDate = logActiveDate();
+  window._nutDate = activeDate;
   var entry = DS.dateNutrition(activeDate);
   var totals = nutritionTotals(entry);
   var targets = d.settings.nutritionTargets;
+  var isToday = activeDate === new Date().toISOString().slice(0, 10);
+  var dayLabel = isToday ? 'Today' : historyLabelDate(activeDate);
 
   var h = '<div class="page-title">Log</div>';
 
+  /* Date navigation */
+  h += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;padding:.5rem .2rem"><button class="settings-btn secondary" style="padding:.5rem .85rem;min-height:44px" onclick="logShiftDate(-1)">◀</button><div style="text-align:center;flex:1"><div style="font-weight:800;font-size:1rem">' + esc(dayLabel) + '</div><div style="font-size:.82rem;color:var(--muted)">' + esc(activeDate) + '</div></div><button class="settings-btn secondary" style="padding:.5rem .85rem;min-height:44px" onclick="logShiftDate(1)">▶</button></div>';
+  if (!isToday) { h += '<div style="text-align:center;margin-bottom:.6rem"><button style="background:none;border:none;color:var(--a2);font-size:.84rem;font-weight:700;cursor:pointer;padding:.3rem .7rem" onclick="_logDate=null;window._nutDate=null;renderLog()">↩ Back to Today</button></div>'; }
+
   /* Quick action buttons */
   h += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-3);margin-bottom:var(--sp-4)">';
-  h += '<div class="domain-card" onclick="showMainSection(\'log\')" style="cursor:pointer"><div class="dc-icon">🍽️</div><div class="dc-title">Log Food</div><div class="dc-meta">'+Math.round(totals.calories)+' / '+targets.calories+' kcal today</div></div>';
+  h += '<div class="domain-card" onclick="showMainSection(\'log\')" style="cursor:pointer"><div class="dc-icon">🍽️</div><div class="dc-title">Log Food</div><div class="dc-meta">'+Math.round(totals.calories)+' / '+targets.calories+' kcal ' + (isToday ? 'today' : dayLabel) + '</div></div>';
   h += '<div class="domain-card" onclick="showLogSheet(\'steps\')"><div class="dc-icon">🚶</div><div class="dc-title">Log Steps</div><div class="dc-meta">Daily movement</div></div>';
   h += '<div class="domain-card" onclick="showLogSheet(\'sleep\')"><div class="dc-icon">😴</div><div class="dc-title">Log Sleep</div><div class="dc-meta">Recovery tracking</div></div>';
   h += '<div class="domain-card" onclick="showLogSheet(\'body\')"><div class="dc-icon">📏</div><div class="dc-title">Weigh In</div><div class="dc-meta">Body measurements</div></div>';
@@ -2881,7 +2897,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.17').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.18').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
