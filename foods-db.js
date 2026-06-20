@@ -19,6 +19,7 @@ var FOODS = [
   { name: 'Skyr', cal: 63, protein: 11, carbs: 4, fat: 0.2, serving: 170, unit: 'g' },
   { name: 'HiPRO Chocolat (160g pot)', cal: 74, protein: 11, carbs: 6.3, fat: 0.4, serving: 160, unit: 'g' },
   { name: 'Jambon Supérieur (1 slice)', cal: 107, protein: 17, carbs: 1.5, fat: 3.5, serving: 25, unit: 'g' },
+  { name: 'Herta Le Bon Paris -25% Sel Ham (1 slice)', cal: 107, protein: 18, carbs: 1, fat: 3.4, serving: 35, unit: 'g' },
 
   // Carbs
   { name: 'White Rice (cooked)', cal: 130, protein: 2.7, carbs: 28.2, fat: 0.3, serving: 180, unit: 'g' },
@@ -32,6 +33,7 @@ var FOODS = [
   { name: 'Bread (white)', cal: 265, protein: 8.7, carbs: 49, fat: 3.2, serving: 30, unit: 'g' },
   { name: 'Bread (wholemeal)', cal: 247, protein: 12.5, carbs: 41.2, fat: 4.2, serving: 30, unit: 'g' },
   { name: 'French Baguette', cal: 274, protein: 8.5, carbs: 53, fat: 1.5, serving: 250, unit: 'g' },
+  { name: 'Baguette de Tradition (L\'Eclerc)', cal: 274, protein: 8.5, carbs: 53, fat: 1.5, serving: 225, unit: 'g' },
   { name: 'Banana', cal: 89, protein: 1.1, carbs: 22.8, fat: 0.3, serving: 120, unit: 'g' },
   { name: 'Apple', cal: 52, protein: 0.3, carbs: 13.8, fat: 0.2, serving: 180, unit: 'g' },
   { name: 'Rice Cakes', cal: 387, protein: 8, carbs: 81, fat: 3, serving: 18, unit: 'g' },
@@ -56,6 +58,7 @@ var FOODS = [
   { name: 'Cheddar Cheese', cal: 402, protein: 25, carbs: 1.3, fat: 33, serving: 30, unit: 'g' },
   { name: 'Mozzarella', cal: 252, protein: 24, carbs: 2.6, fat: 16, serving: 50, unit: 'g' },
   { name: 'Gouda (sliced)', cal: 356, protein: 24, carbs: 0, fat: 28, serving: 20, unit: 'g' },
+  { name: 'British Heritage Extra Mature Cheddar (1 slice)', cal: 411, protein: 24, carbs: 0.1, fat: 35, serving: 25, unit: 'g' },
   { name: 'Butter', cal: 717, protein: 0.9, carbs: 0.1, fat: 81.1, serving: 10, unit: 'g' },
   { name: 'Cream Cheese (light)', cal: 160, protein: 7, carbs: 6, fat: 11, serving: 30, unit: 'g' },
 
