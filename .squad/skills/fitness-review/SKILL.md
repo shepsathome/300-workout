@@ -113,6 +113,45 @@ The PWA now includes a `bodyMetrics[]` array:
 - Chest, arms, thighs: expected monthly
 - Ashwell tracks trends and deltas between entries
 
+### Circumference interpretation (the recomp picture)
+
+For a body-recomposition goal, circumferences tell the half of the story
+the scale cannot. **Always evaluate all four, not just waist:**
+
+- **Waist** → the fat-loss signal (abdominal/visceral). Falling waist on
+  flat weight = recomposition working.
+- **Chest, arms, thighs** → the muscle-gain signal. These are how Adam
+  *sees* the "build" side. Without them you only measure fat loss, not
+  muscle gain — an incomplete recomp assessment.
+
+### Consistency guardrail (critical)
+
+Circumference data is only as good as the measurement consistency. Before
+trusting a delta, sanity-check it:
+
+- **Flag physically impossible swings.** A >3-4 cm change in thigh/chest/
+  arm in a single week is almost always a tape-placement change, not real
+  tissue change. Example (Jun 21): thigh read 57→37.5 cm — exclude as a
+  method change, do not analyse as real.
+- **Treat weekly circumference noise as noise.** Arms/chest/thighs move
+  slowly; ~1-1.5 cm week-to-week swings are measurement variance (flexed vs
+  relaxed, post-training pump, tape tension). Interpret these as **monthly
+  trends**, not weekly deltas.
+- **Waist + weight stay the weekly signals.** Circumferences are the
+  **monthly muscle panel**.
+- When a reading looks inconsistent, say so and assign **low confidence**
+  for that metric — never present a bad number as a real change.
+
+### In the report
+
+- Include a **Body Composition Trend** chart with body weight + waist as
+  the reliable weekly lines (dual axis).
+- When 2+ consistent monthly circumference readings exist, add a **muscle
+  panel** (chest/arms/thighs trend) — but only plot readings that pass the
+  consistency check. Annotate any excluded/low-confidence points.
+- Ashwell explicitly states confidence per measurement in the Data Gaps
+  section.
+
 ## Review Flow
 
 ### Section 1 — Data Gaps & Source Coverage (Ashwell leads)
@@ -226,11 +265,17 @@ for tracking progress:
    actual calories as bars or filled area. Shade deficit days red,
    surplus days green.
 4. **Protein Trend** — line chart, daily protein with target line.
-5. **Body Weight Trend** — line chart from bodyMetrics[], with waist
-   as secondary axis if available. Show weekly entries.
+5. **Body Weight & Waist Trend** — line chart from bodyMetrics[], body
+   weight + waist on a dual axis. These are the reliable weekly signals.
+   Falling waist on flat weight = recomposition; annotate it.
 6. **Sleep Trend** — line chart of nightly hours from sleepLog[],
    colour-coded zones (green ≥7.5, amber 6.5-7.4, red <6.5).
    Show 7-day rolling average as a smoothed overlay line.
+
+**When 2+ consistent circumference readings exist, add:**
+6b. **Muscle Panel** — chest/arms/thighs trend (the monthly muscle-gain
+    signal). Plot only readings that pass the consistency guardrail; omit
+    or annotate any flagged as method changes / low confidence.
 
 **When 4+ weeks of data exist, add:**
 7. **Key Lift Progression** — multi-line chart tracking working weight
