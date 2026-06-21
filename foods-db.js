@@ -108,6 +108,9 @@ var FOODS = [
   { name: 'Itsu Sweet Chilli Toasted Cashews', cal: 590, protein: 18, carbs: 30, fat: 42.5, serving: 40, unit: 'g' },
 
   // Homemade
+  { name: 'Tandoori Chicken Breast (homemade)', cal: 188, protein: 30, carbs: 2.4, fat: 5.9, serving: 170, unit: 'g' },
+  { name: 'Crispy Air-Fryer Fries (homemade)', cal: 117, protein: 2.9, carbs: 25.3, fat: 0.8, serving: 155, unit: 'g' },
+  { name: 'Light Slaw - no onion (homemade)', cal: 69, protein: 1.7, carbs: 9.7, fat: 2.9, serving: 160, unit: 'g' },
   { name: 'Crispy Honey Garlic Chicken (homemade)', cal: 225, protein: 22.5, carbs: 3.6, fat: 13.1, serving: 200, unit: 'g' },
   { name: 'Potato Salad (homemade, Jersey Royals)', cal: 111, protein: 1.8, carbs: 12.7, fat: 5.9, serving: 200, unit: 'g' },
   { name: 'Hartley\'s Strawberry Jelly (prepared)', cal: 61, protein: 1.2, carbs: 14, fat: 0, serving: 140, unit: 'g' },
