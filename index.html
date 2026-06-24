@@ -1993,7 +1993,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.24.2</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.24.3</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2208,6 +2208,195 @@ function confirmAddFood() {
 function refreshNutritionView() {
   if (currentMainSection === 'log') renderLog();
   else renderNutrition();
+}
+
+// === PORTION CALCULATOR ===
+// Picks a food and tells you the largest portion that fits in the day's
+// remaining macros. Calories/carbs/fat are treated as ceilings; protein is
+// NOT a ceiling (going over protein is fine for recomp) and is shown as info.
+function pcActiveDate() { return (typeof logActiveDate === 'function') ? logActiveDate() : new Date().toISOString().slice(0, 10); }
+
+function openPortionCalc() {
+  var date = pcActiveDate();
+  var entry = DS.dateNutrition(date);
+  var totals = nutritionTotals(entry);
+  var t = DS.get().settings.nutritionTargets;
+  var rem = {
+    calories: Math.round(t.calories - totals.calories),
+    protein: Math.round(t.protein - totals.protein),
+    carbs: Math.round(t.carbs - totals.carbs),
+    fat: Math.round(t.fat - totals.fat)
+  };
+  window._pcRemaining = rem;
+
+  var chip = function(label, val, unit) {
+    var over = val < 0;
+    var color = over ? 'var(--red)' : 'var(--green)';
+    var txt = over ? ('over ' + Math.abs(val) + unit) : (val + unit + ' left');
+    return '<div style="flex:1;min-width:0;text-align:center;background:var(--bg);border-radius:10px;padding:.5rem .3rem">' +
+      '<div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);font-weight:700">' + label + '</div>' +
+      '<div style="font-size:.92rem;font-weight:800;color:' + color + '">' + txt + '</div></div>';
+  };
+  var remHtml = '<div style="display:flex;gap:.4rem;margin-bottom:.7rem">' +
+    chip('Cal', rem.calories, '') + chip('Protein', rem.protein, 'g') +
+    chip('Carbs', rem.carbs, 'g') + chip('Fat', rem.fat, 'g') + '</div>';
+
+  var overlay = document.createElement('div');
+  overlay.className = 'food-modal-overlay';
+  overlay.id = 'pc-modal';
+  overlay.onclick = function(e) { if (e.target === overlay) closePortionCalc(); };
+  overlay.innerHTML = '<div class="food-modal">' +
+    '<h3>🧮 Portion Calculator</h3>' +
+    '<div style="font-size:.78rem;color:var(--muted);margin-bottom:.6rem">Remaining for ' + esc(date === new Date().toISOString().slice(0,10) ? 'today' : date) + ' — pick a food to see the biggest portion that fits.</div>' +
+    remHtml +
+    '<input class="food-search-input" id="pc-search" type="text" placeholder="Search foods..." oninput="pcSearchFoods(this.value)" autofocus>' +
+    '<div id="pc-result"></div>' +
+    '<div id="pc-results" class="food-results"></div>' +
+    '<button class="settings-btn secondary" style="width:100%;margin-top:.5rem" onclick="closePortionCalc()">Close</button>' +
+    '</div>';
+  document.body.appendChild(overlay);
+  setTimeout(function() { var inp = document.getElementById('pc-search'); if (inp) inp.focus(); }, 100);
+  pcSearchFoods('');
+}
+
+function closePortionCalc() {
+  var m = document.getElementById('pc-modal');
+  if (m) m.remove();
+}
+
+function pcSearchFoods(query) {
+  var results = document.getElementById('pc-results');
+  if (!results) return;
+  var q = (query || '').toLowerCase().trim();
+  var matches = [];
+  for (var i = 0; i < FOODS.length; i++) {
+    if (!q || FOODS[i].name.toLowerCase().indexOf(q) >= 0) matches.push(FOODS[i]);
+  }
+  var recent = DS.get().recentFoods || [];
+  for (var r = 0; r < recent.length; r++) {
+    if (!q || recent[r].name.toLowerCase().indexOf(q) >= 0) {
+      var isDupe = false;
+      for (var m = 0; m < matches.length; m++) { if (matches[m].name === recent[r].name) { isDupe = true; break; } }
+      if (!isDupe) matches.unshift({ name: recent[r].name, cal: recent[r].calories || 0, protein: recent[r].protein || 0, carbs: recent[r].carbs || 0, fat: recent[r].fat || 0, serving: 100, unit: 'g', isRecent: true });
+    }
+  }
+  var h = '';
+  var shown = Math.min(matches.length, 20);
+  for (var j = 0; j < shown; j++) {
+    var f = matches[j];
+    h += '<div class="food-result-item" onclick="pcSelectFood(' + j + ')">' +
+      '<div><div class="fr-name">' + (f.isRecent ? '🕐 ' : '') + esc(f.name) + '</div>' +
+      '<div class="fr-macros">' + f.cal + ' kcal · ' + f.protein + 'P · ' + f.carbs + 'C · ' + f.fat + 'F (per 100' + f.unit + ')</div></div></div>';
+  }
+  if (!shown) h = '<p style="text-align:center;color:var(--muted);padding:1rem;font-size:.85rem">No matches found.</p>';
+  results.innerHTML = h;
+  window._pcMatches = matches;
+}
+
+function pcSelectFood(index) {
+  var food = window._pcMatches[index];
+  if (!food) return;
+  window._pcSelectedFood = food;
+  var rem = window._pcRemaining;
+  var unit = food.unit || 'g';
+  var isWeight = (unit === 'g' || unit === 'ml');
+  var step = isWeight ? 5 : 1;
+
+  // Find the limiting ceiling among calories, carbs and fat
+  var ceilings = [
+    { key: 'calories', label: 'calories', per100: food.cal, unit: 'kcal' },
+    { key: 'carbs', label: 'carbs', per100: food.carbs, unit: 'g' },
+    { key: 'fat', label: 'fat', per100: food.fat, unit: 'g' }
+  ];
+  var maxAmt = Infinity, limiter = null, anyCeiling = false;
+  for (var c = 0; c < ceilings.length; c++) {
+    if (ceilings[c].per100 > 0) {
+      anyCeiling = true;
+      var r = rem[ceilings[c].key];
+      var amt = r > 0 ? (r * 100 / ceilings[c].per100) : 0;
+      if (amt < maxAmt) { maxAmt = amt; limiter = ceilings[c]; }
+    }
+  }
+
+  var resultEl = document.getElementById('pc-result');
+  document.getElementById('pc-results').innerHTML = '';
+
+  if (!anyCeiling) {
+    resultEl.innerHTML = '<div class="food-serving-edit"><div class="fse-name">' + esc(food.name) + '</div>' +
+      '<div style="font-size:.85rem;color:var(--green);font-weight:700;margin:.4rem 0">No ceiling — this food has no calories, carbs or fat, so it won\'t affect your targets.</div></div>';
+    return;
+  }
+
+  // Round down to a sensible step
+  var portion = Math.floor(maxAmt / step) * step;
+  if (portion < 0) portion = 0;
+  window._pcPortion = portion;
+
+  var headline;
+  if (portion <= 0) {
+    headline = '<div style="font-size:.9rem;color:var(--red);font-weight:700;margin:.3rem 0">You\'re already at your ' + limiter.label + ' limit for today — no room for this without going over.</div>';
+  } else {
+    headline = '<div style="margin:.3rem 0"><span style="font-size:1.8rem;font-weight:800;color:var(--accent)">' + portion + unit + '</span>' +
+      '<span style="font-size:.8rem;color:var(--muted);margin-left:.4rem">fits — limited by <strong>' + limiter.label + '</strong></span></div>';
+  }
+
+  var slotSel = '<select id="pc-slot" style="border:1px solid var(--border);border-radius:10px;padding:.5rem;background:var(--bg);color:var(--text);font-size:.85rem">' +
+    '<option value="0">🌅 Breakfast</option><option value="1">☀️ Lunch</option><option value="2">🌙 Dinner</option><option value="3" selected>🍿 Snacks</option></select>';
+
+  resultEl.innerHTML = '<div class="food-serving-edit" style="border:1px solid var(--border);border-radius:14px;padding:.8rem;margin-bottom:.6rem">' +
+    '<div class="fse-name">' + esc(food.name) + '</div>' +
+    headline +
+    '<div class="fse-row" style="margin-top:.4rem"><label>Portion</label>' +
+    '<input id="pc-amount" type="number" value="' + portion + '" min="0" step="' + step + '" oninput="pcUpdateCalc()"> ' +
+    '<span style="font-size:.8rem;color:var(--muted)">' + unit + '</span></div>' +
+    '<div class="fse-macros" id="pc-macros" style="margin:.4rem 0"></div>' +
+    '<div style="display:flex;gap:.5rem;align-items:center;margin-top:.5rem">' + slotSel +
+    '<button class="settings-btn" style="flex:1" onclick="pcAddToMeal()">✓ Add to day</button></div>' +
+    '</div>';
+  pcUpdateCalc();
+}
+
+function pcUpdateCalc() {
+  var food = window._pcSelectedFood;
+  if (!food) return;
+  var amt = safeNum((document.getElementById('pc-amount') || {}).value, 0);
+  var factor = amt / 100;
+  var rem = window._pcRemaining;
+  var cal = food.cal * factor, p = food.protein * factor, cb = food.carbs * factor, ft = food.fat * factor;
+  var flag = function(used, left) { return (used > left && left >= 0) ? 'color:var(--red);font-weight:800' : ''; };
+  var el = document.getElementById('pc-macros');
+  if (el) el.innerHTML =
+    '<span style="' + flag(cal, rem.calories) + '"><strong>' + Math.round(cal) + '</strong> kcal</span> · ' +
+    '<strong>' + Math.round(p) + '</strong>g P · ' +
+    '<span style="' + flag(cb, rem.carbs) + '"><strong>' + Math.round(cb) + '</strong>g C</span> · ' +
+    '<span style="' + flag(ft, rem.fat) + '"><strong>' + Math.round(ft) + '</strong>g F</span>';
+}
+
+function pcAddToMeal() {
+  var food = window._pcSelectedFood;
+  if (!food) return;
+  var amt = safeNum((document.getElementById('pc-amount') || {}).value, 0);
+  if (amt <= 0) return;
+  var slot = parseInt((document.getElementById('pc-slot') || {}).value, 10);
+  if (isNaN(slot)) slot = 3;
+  var factor = amt / 100;
+  var item = {
+    name: food.name + ' (' + amt + (food.unit || 'g') + ')',
+    calories: Math.round(food.cal * factor),
+    protein: +(food.protein * factor).toFixed(1),
+    carbs: +(food.carbs * factor).toFixed(1),
+    fat: +(food.fat * factor).toFixed(1)
+  };
+  var entry = DS.dateNutrition(pcActiveDate());
+  entry.meals[slot].items.push(item);
+  var d = DS.get();
+  d.recentFoods = d.recentFoods || [];
+  d.recentFoods = d.recentFoods.filter(function(f) { return f.name !== food.name; });
+  d.recentFoods.unshift({ name: food.name, calories: food.cal, protein: food.protein, carbs: food.carbs, fat: food.fat });
+  d.recentFoods = d.recentFoods.slice(0, 12);
+  DS.saveNutrition(entry);
+  closePortionCalc();
+  refreshNutritionView();
 }
 
 function addCustomFood() {
@@ -2536,6 +2725,9 @@ function renderLog() {
   h += '<div class="domain-card" onclick="showLogSheet(\'sleep\')"><div class="dc-icon">😴</div><div class="dc-title">Log Sleep</div><div class="dc-meta">Recovery tracking</div></div>';
   h += '<div class="domain-card" onclick="showLogSheet(\'body\')"><div class="dc-icon">📏</div><div class="dc-title">Weigh In</div><div class="dc-meta">Body measurements</div></div>';
   h += '</div>';
+
+  /* Portion Calculator — find the biggest portion of a food that fits remaining macros */
+  h += '<button class="settings-btn" style="width:100%;margin-bottom:var(--sp-4);display:flex;align-items:center;justify-content:center;gap:.5rem;font-size:.92rem" onclick="openPortionCalc()">🧮 Portion Calculator <span style="font-weight:600;opacity:.75;font-size:.8rem">— how much fits in your macros?</span></button>';
 
   /* Inline nutrition for today — the most frequent logging action */
   h += '<div class="nutrition-content">';
@@ -2925,7 +3117,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.24.2').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.24.3').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
