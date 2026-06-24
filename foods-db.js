@@ -19,6 +19,7 @@ var FOODS = [
   { name: 'Skyr', cal: 63, protein: 11, carbs: 4, fat: 0.2, serving: 170, unit: 'g' },
   { name: 'Siggi\'s Skyr Stracciatella 3% (140g pot)', cal: 103, protein: 9.2, carbs: 9.6, fat: 3.1, serving: 140, unit: 'g' },
   { name: 'HiPRO Chocolat (160g pot)', cal: 74, protein: 11, carbs: 6.3, fat: 0.4, serving: 160, unit: 'g' },
+  { name: 'Auchan SPORT Crème Dessert Chocolat 13g (125g pot)', cal: 89, protein: 10.4, carbs: 9, fat: 1.5, serving: 125, unit: 'g' },
   { name: 'Jambon Supérieur (1 slice)', cal: 107, protein: 17, carbs: 1.5, fat: 3.5, serving: 25, unit: 'g' },
   { name: 'Herta Le Bon Paris -25% Sel Ham (1 slice)', cal: 107, protein: 18, carbs: 1, fat: 3.4, serving: 35, unit: 'g' },
 
