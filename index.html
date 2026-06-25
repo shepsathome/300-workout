@@ -2031,7 +2031,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.25.3</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.25.4</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2528,8 +2528,12 @@ function amUpdate() {
     var amt = safeNum(rows[r].querySelector('.am-amt').value, 0);
     var s = amScaleItem(it, amt);
     tc += s.cal; tp += s.p; tcb += s.c; tf += s.fa;
+    rows[r].style.opacity = (amt <= 0) ? '0.4' : '1';
     var el = document.getElementById('am-macros-' + i);
-    if (el) el.innerHTML = '<span class="m-cal">' + Math.round(s.cal) + '</span><span class="m-p">' + Math.round(s.p) + 'P</span><span class="m-c">' + Math.round(s.c) + 'C</span><span class="m-f">' + Math.round(s.fa) + 'F</span>';
+    if (el) {
+      if (amt <= 0) { el.innerHTML = '<span style="color:var(--muted);font-weight:600">won\'t be added</span>'; }
+      else { el.innerHTML = '<span class="m-cal">' + Math.round(s.cal) + '</span><span class="m-p">' + Math.round(s.p) + 'P</span><span class="m-c">' + Math.round(s.c) + 'C</span><span class="m-f">' + Math.round(s.fa) + 'F</span>'; }
+    }
   }
   var tot = document.getElementById('am-total');
   if (tot) tot.innerHTML = 'Total: <span class="m-cal" style="color:var(--accent)">' + Math.round(tc) + ' kcal</span> · <span class="m-p">' + Math.round(tp) + 'P</span> <span class="m-c">' + Math.round(tcb) + 'C</span> <span class="m-f">' + Math.round(tf) + 'F</span>';
@@ -3253,7 +3257,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.25.3').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.25.4').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
