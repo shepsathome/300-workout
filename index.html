@@ -219,9 +219,20 @@ a{color:var(--a2)}
 .food-results{max-height:40vh;overflow-y:auto}
 .food-result-item{display:flex;justify-content:space-between;align-items:center;padding:.7rem .3rem;border-bottom:1px solid rgba(255,255,255,.06);cursor:pointer;transition:background .15s;border-radius:12px;min-height:52px}
 .food-result-item:active{background:rgba(232,89,12,.08)}
-.food-result-item .fr-name{font-size:.95rem;font-weight:600;color:var(--text)}
-.food-result-item .fr-macros{font-size:.8rem;color:var(--muted)}
+.food-result-item .fr-name{font-size:1rem;font-weight:700;color:var(--text)}
+.food-result-item .fr-macros{font-size:.86rem;font-weight:800;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;margin-top:3px}
+.food-result-item .fr-macros .fr-cal{color:var(--accent)}
+.food-result-item .fr-macros .fr-per{color:var(--muted);font-weight:600;font-size:.74rem}
 .food-result-item .fr-serving{font-size:.78rem;color:var(--a2)}
+.m-p{color:var(--green)}.m-c{color:var(--yellow)}.m-f{color:var(--clay)}
+.am-row{display:flex;flex-direction:column;gap:5px;padding:.65rem .2rem;border-bottom:1px solid rgba(255,255,255,.06)}
+.am-row .am-name{font-size:.95rem;font-weight:600}
+.am-row .am-ctrl{display:flex;align-items:center;gap:.45rem}
+.am-row .am-ctrl input{width:96px;text-align:center;font-weight:800;font-size:1rem;border:1px solid var(--border);border-radius:10px;padding:.5rem;background:var(--bg);color:var(--text);outline:none}
+.am-row .am-unit{font-size:.82rem;color:var(--muted)}
+.am-row .am-macros{font-size:.88rem;font-weight:800;display:flex;gap:.65rem}
+.am-row .am-macros .m-cal{color:var(--accent)}
+.am-total{margin-top:.7rem;padding:.65rem;border-radius:12px;background:var(--bg);font-size:.95rem;font-weight:800;text-align:center}
 .food-serving-edit{background:rgba(0,122,255,.05);border:1px solid rgba(0,122,255,.12);border-radius:16px;padding:.85rem;margin-top:.6rem}
 .food-serving-edit .fse-name{font-size:.92rem;font-weight:700;color:var(--text);margin-bottom:.45rem}
 .food-serving-edit .fse-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.45rem}
@@ -976,11 +987,30 @@ var QUICK_MEALS = [
     name: 'Tandoori Chicken, Fries & Slaw',
     emoji: '\u{1F357}',
     slot: 1,
-    desc: 'Tandoori chicken breast, crispy fries & no-onion slaw (1 of 5 servings)',
+    adjustable: true,
+    desc: 'Tandoori chicken breast, crispy fries & no-onion slaw — set each weight',
     items: [
-      { name: 'Tandoori Chicken Breast (per serving)', calories: 320, protein: 51, carbs: 4, fat: 10 },
-      { name: 'Crispy Fries (per serving)', calories: 183, protein: 4.6, carbs: 39.5, fat: 1.3 },
-      { name: 'Creamy Coleslaw - no onion (per serving)', calories: 111, protein: 2.7, carbs: 15.5, fat: 4.7 }
+      { name: 'Tandoori Chicken Breast', amt: 170, unit: 'g', calories: 320, protein: 51, carbs: 4, fat: 10 },
+      { name: 'Crispy Air-Fryer Fries', amt: 155, unit: 'g', calories: 181, protein: 4.5, carbs: 39.2, fat: 1.2 },
+      { name: 'Light Slaw (no onion)', amt: 160, unit: 'g', calories: 110, protein: 2.7, carbs: 15.5, fat: 4.6 }
+    ]
+  },
+  {
+    name: 'Default Breakfast',
+    emoji: '\u{1F373}',
+    slot: 0,
+    adjustable: true,
+    desc: 'Scrambled eggs, bean mix, sourdough, granola, berries & skyr — set each weight',
+    items: [
+      { name: 'Scrambled Eggs', amt: 120, unit: 'g', calories: 178, protein: 12.7, carbs: 1.9, fat: 13.2 },
+      { name: 'Bean Mix (homemade)', amt: 300, unit: 'g', calories: 225, protein: 13.5, carbs: 30, fat: 1.8 },
+      { name: 'Seeded Sourdough (1 slice)', amt: 50, unit: 'g', calories: 130, protein: 4.5, carbs: 21.5, fat: 2.5 },
+      { name: 'Granola (homemade)', amt: 25, unit: 'g', calories: 118, protein: 2.5, carbs: 16, fat: 5 },
+      { name: 'Strawberries', amt: 30, unit: 'g', calories: 10, protein: 0.2, carbs: 2.3, fat: 0.1 },
+      { name: 'Raspberries', amt: 20, unit: 'g', calories: 10, protein: 0.2, carbs: 2.4, fat: 0.1 },
+      { name: 'Blueberries', amt: 20, unit: 'g', calories: 11, protein: 0.1, carbs: 2.9, fat: 0.1 },
+      { name: 'Blackberries', amt: 20, unit: 'g', calories: 9, protein: 0.3, carbs: 2, fat: 0.1 },
+      { name: 'Skyr (0% fat)', amt: 50, unit: 'g', calories: 32, protein: 5.5, carbs: 2, fat: 0.1 }
     ]
   },
   {
@@ -2001,7 +2031,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.25.2</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.25.3</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2152,7 +2182,7 @@ function searchFoods(query) {
     var f = matches[j];
     h += '<div class="food-result-item" onclick="selectFood(' + j + ',\'' + esc(q) + '\')">' +
       '<div><div class="fr-name">' + (f.isRecent ? '🕐 ' : '') + esc(f.name) + '</div>' +
-      '<div class="fr-macros">' + f.cal + ' kcal · ' + f.protein + 'P · ' + f.carbs + 'C · ' + f.fat + 'F (per 100' + f.unit + ')</div></div>' +
+      '<div class="fr-macros"><span class="fr-cal">' + f.cal + ' kcal</span><span class="m-p">' + f.protein + 'P</span><span class="m-c">' + f.carbs + 'C</span><span class="m-f">' + f.fat + 'F</span><span class="fr-per">/100' + f.unit + '</span></div></div>' +
       '<div class="fr-serving">' + f.serving + f.unit + '</div></div>';
   }
   if (!shown) {
@@ -2294,7 +2324,7 @@ function pcSearchFoods(query) {
     var f = matches[j];
     h += '<div class="food-result-item" onclick="pcSelectFood(' + j + ')">' +
       '<div><div class="fr-name">' + (f.isRecent ? '🕐 ' : '') + esc(f.name) + '</div>' +
-      '<div class="fr-macros">' + f.cal + ' kcal · ' + f.protein + 'P · ' + f.carbs + 'C · ' + f.fat + 'F (per 100' + f.unit + ')</div></div></div>';
+      '<div class="fr-macros"><span class="fr-cal">' + f.cal + ' kcal</span><span class="m-p">' + f.protein + 'P</span><span class="m-c">' + f.carbs + 'C</span><span class="m-f">' + f.fat + 'F</span><span class="fr-per">/100' + f.unit + '</span></div></div></div>';
   }
   if (!shown) h = '<p style="text-align:center;color:var(--muted);padding:1rem;font-size:.85rem">No matches found.</p>';
   results.innerHTML = h;
@@ -2433,6 +2463,7 @@ function deleteNutritionItem(mealIndex,itemIndex,date){if(!confirm('Remove this 
 function addQuickMeal(qmIndex) {
   var qm = QUICK_MEALS[qmIndex];
   if (!qm) return;
+  if (qm.adjustable) { openAdjustableMeal(qmIndex); return; }
   var entry = DS.dateNutrition(nutActiveDate());
   for (var i = 0; i < qm.items.length; i++) {
     entry.meals[qm.slot].items.push({
@@ -2446,6 +2477,94 @@ function addQuickMeal(qmIndex) {
   DS.saveNutrition(entry);
   refreshNutritionView();
 }
+
+// === ADJUSTABLE QUICK MEAL — pick a combo, set each component's quantity ===
+function amScaleItem(it, amt) { var f = (it.amt > 0) ? (amt / it.amt) : 0; return { cal: it.calories * f, p: it.protein * f, c: it.carbs * f, fa: it.fat * f }; }
+
+function openAdjustableMeal(qmIndex) {
+  var qm = QUICK_MEALS[qmIndex];
+  if (!qm) return;
+  window._amQm = qmIndex;
+  var defaultSlot = (_activeMealIndex >= 0) ? _activeMealIndex : qm.slot;
+  var rows = '';
+  for (var i = 0; i < qm.items.length; i++) {
+    var it = qm.items[i];
+    var step = (it.unit === 'g' || it.unit === 'ml') ? 5 : 1;
+    rows += '<div class="am-row" data-i="' + i + '">' +
+      '<div class="am-name">' + esc(it.name) + '</div>' +
+      '<div class="am-ctrl"><input class="am-amt" type="number" min="0" step="' + step + '" value="' + it.amt + '" oninput="amUpdate()"> <span class="am-unit">' + (it.unit || 'g') + '</span>' +
+      '<div class="am-macros" id="am-macros-' + i + '" style="margin-left:auto"></div></div></div>';
+  }
+  var slotOpts = ['🌅 Breakfast', '☀️ Lunch', '🌙 Dinner', '🍿 Snacks'].map(function(lbl, idx) {
+    return '<option value="' + idx + '"' + (idx === defaultSlot ? ' selected' : '') + '>' + lbl + '</option>';
+  }).join('');
+
+  var overlay = document.createElement('div');
+  overlay.className = 'food-modal-overlay';
+  overlay.id = 'am-modal';
+  overlay.onclick = function(e) { if (e.target === overlay) closeAdjustableMeal(); };
+  overlay.innerHTML = '<div class="food-modal">' +
+    '<h3>' + qm.emoji + ' ' + esc(qm.name) + '</h3>' +
+    '<div style="font-size:.8rem;color:var(--muted);margin-bottom:.6rem">Set the quantity for each item — macros update live — then add them all at once.</div>' +
+    rows +
+    '<div class="am-total" id="am-total"></div>' +
+    '<div style="display:flex;gap:.5rem;margin-top:.6rem;align-items:center">' +
+    '<select id="am-slot" style="border:1px solid var(--border);border-radius:10px;padding:.5rem;background:var(--bg);color:var(--text);font-size:.85rem">' + slotOpts + '</select>' +
+    '<button class="settings-btn" style="flex:1" onclick="amConfirm()">✓ Add all</button></div>' +
+    '<button class="settings-btn secondary" style="width:100%;margin-top:.5rem" onclick="closeAdjustableMeal()">Cancel</button>' +
+    '</div>';
+  document.body.appendChild(overlay);
+  amUpdate();
+}
+
+function amUpdate() {
+  var qm = QUICK_MEALS[window._amQm];
+  if (!qm) return;
+  var tc = 0, tp = 0, tcb = 0, tf = 0;
+  var rows = document.querySelectorAll('#am-modal .am-row');
+  for (var r = 0; r < rows.length; r++) {
+    var i = parseInt(rows[r].getAttribute('data-i'), 10);
+    var it = qm.items[i];
+    var amt = safeNum(rows[r].querySelector('.am-amt').value, 0);
+    var s = amScaleItem(it, amt);
+    tc += s.cal; tp += s.p; tcb += s.c; tf += s.fa;
+    var el = document.getElementById('am-macros-' + i);
+    if (el) el.innerHTML = '<span class="m-cal">' + Math.round(s.cal) + '</span><span class="m-p">' + Math.round(s.p) + 'P</span><span class="m-c">' + Math.round(s.c) + 'C</span><span class="m-f">' + Math.round(s.fa) + 'F</span>';
+  }
+  var tot = document.getElementById('am-total');
+  if (tot) tot.innerHTML = 'Total: <span class="m-cal" style="color:var(--accent)">' + Math.round(tc) + ' kcal</span> · <span class="m-p">' + Math.round(tp) + 'P</span> <span class="m-c">' + Math.round(tcb) + 'C</span> <span class="m-f">' + Math.round(tf) + 'F</span>';
+}
+
+function amConfirm() {
+  var qm = QUICK_MEALS[window._amQm];
+  if (!qm) return;
+  var slotEl = document.getElementById('am-slot');
+  var slot = slotEl ? parseInt(slotEl.value, 10) : qm.slot;
+  if (isNaN(slot)) slot = qm.slot;
+  var entry = DS.dateNutrition(nutActiveDate());
+  var rows = document.querySelectorAll('#am-modal .am-row');
+  var added = 0;
+  for (var r = 0; r < rows.length; r++) {
+    var i = parseInt(rows[r].getAttribute('data-i'), 10);
+    var it = qm.items[i];
+    var amt = safeNum(rows[r].querySelector('.am-amt').value, 0);
+    if (amt <= 0) continue;
+    var s = amScaleItem(it, amt);
+    entry.meals[slot].items.push({
+      name: it.name + ' (' + amt + (it.unit || 'g') + ')',
+      calories: Math.round(s.cal),
+      protein: +s.p.toFixed(1),
+      carbs: +s.c.toFixed(1),
+      fat: +s.fa.toFixed(1)
+    });
+    added++;
+  }
+  if (added) DS.saveNutrition(entry);
+  closeAdjustableMeal();
+  refreshNutritionView();
+}
+
+function closeAdjustableMeal() { var m = document.getElementById('am-modal'); if (m) m.remove(); }
 function beep(freq,dur){try{if(!audioCtx){audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume()}var o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.frequency.value=freq||880;o.type='square';g.gain.value=.6;var t=audioCtx.currentTime;g.gain.setValueAtTime(.6,t);g.gain.exponentialRampToValueAtTime(.01,t+(dur||.2));o.start(t);o.stop(t+(dur||.2))}catch(e){console.log('beep err:',e)}}
 function tickBeep(){beep(660,.12)}
 function doneBeep(){beep(1200,.35);setTimeout(function(){beep(1500,.35)},180)}
@@ -3134,7 +3253,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.25.2').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.25.3').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
