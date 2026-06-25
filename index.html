@@ -246,19 +246,25 @@ a{color:var(--a2)}
 /* === NUTRITION MEAL CARDS === */
 .meal-card{margin-bottom:.65rem}
 .meal-card h3{display:flex;align-items:baseline;gap:.4rem;margin-bottom:.35rem}
-.meal-card h3 .meal-macros{font-weight:400;font-size:.72rem;color:var(--muted)}
-.food-item{display:flex;justify-content:space-between;align-items:center;padding:.5rem .15rem;border-bottom:1px solid rgba(255,255,255,.06);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s}
+.meal-card h3 .meal-macros{font-weight:600;font-size:.8rem;color:var(--text)}
+.food-item{display:flex;justify-content:space-between;align-items:center;gap:.5rem;padding:.65rem .2rem;border-bottom:1px solid rgba(255,255,255,.06);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s}
 .food-item:active{background:rgba(255,255,255,.03)}
 .food-item:last-of-type{border-bottom:none}
-.food-item .fi-name{font-size:.88rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.food-item .fi-kcal{font-size:.82rem;font-weight:600;color:var(--accent);white-space:nowrap;margin-left:.5rem}
-.food-item .fi-chev{font-size:.6rem;color:var(--muted);margin-left:.35rem;transition:transform .2s}
+.food-item .fi-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.food-item .fi-name{font-size:.98rem;font-weight:600;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.food-item .fi-macros{font-size:.9rem;font-weight:800;letter-spacing:.01em;display:flex;gap:.7rem}
+.food-item .fi-macros .m-p{color:var(--green)}
+.food-item .fi-macros .m-c{color:var(--yellow)}
+.food-item .fi-macros .m-f{color:var(--clay)}
+.food-item .fi-kcal{font-size:1.1rem;font-weight:800;color:var(--accent);white-space:nowrap;display:flex;flex-direction:column;align-items:flex-end;line-height:1}
+.food-item .fi-kcal small{font-size:.6rem;color:var(--muted);font-weight:700;margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
+.food-item .fi-chev{font-size:.7rem;color:var(--muted);margin-left:.15rem;transition:transform .2s}
 .food-item.expanded .fi-chev{transform:rotate(90deg)}
 .food-details{max-height:0;overflow:hidden;transition:max-height .25s ease}
 .food-item.expanded+.food-details{max-height:80px}
-.food-details-inner{display:flex;justify-content:space-between;align-items:center;padding:.35rem .15rem .45rem;font-size:.78rem;color:var(--muted)}
-.food-details-inner .fd-macros span{margin-right:.6rem}
-.food-details-inner .fd-delete{background:none;border:none;color:var(--red);cursor:pointer;font-size:.82rem;padding:.2rem .4rem}
+.food-details-inner{display:flex;justify-content:space-between;align-items:center;padding:.4rem .2rem .55rem;font-size:.82rem;color:var(--muted)}
+.food-details-inner .fd-macros span{margin-right:.7rem}
+.food-details-inner .fd-delete{background:none;border:none;color:var(--red);cursor:pointer;font-size:.88rem;font-weight:700;padding:.25rem .5rem}
 /* === TRAIN DASHBOARD === */
 .train-home{padding:.25rem 0}
 .train-home .today-card{padding:1.2rem 1rem .95rem;margin-bottom:.7rem;cursor:pointer;transition:transform .2s var(--spring),box-shadow .2s;border-radius:var(--radius-card)}
@@ -1134,12 +1140,13 @@ function renderNutrition(){
       for(var j=0;j<meal.items.length;j++){
         var item=meal.items[j];
         h+='<div class="food-item" onclick="this.classList.toggle(\'expanded\');this.setAttribute(\'aria-expanded\',this.classList.contains(\'expanded\'))" role="button" tabindex="0" aria-expanded="false">';
-        h+='<span class="fi-name">'+esc(item.name)+'</span>';
-        h+='<span class="fi-kcal">'+Math.round(item.calories||0)+'</span>';
-        h+='<span class="fi-chev">▶</span>';
+        h+='<div class="fi-main"><span class="fi-name">'+esc(item.name)+'</span>';
+        h+='<span class="fi-macros"><span class="m-p">'+Math.round(item.protein||0)+'P</span><span class="m-c">'+Math.round(item.carbs||0)+'C</span><span class="m-f">'+Math.round(item.fat||0)+'F</span></span></div>';
+        h+='<span class="fi-kcal">'+Math.round(item.calories||0)+'<small>kcal</small></span>';
+        h+='<span class="fi-chev">›</span>';
         h+='</div>';
         h+='<div class="food-details"><div class="food-details-inner">';
-        h+='<div class="fd-macros"><span>P: '+Math.round(item.protein||0)+'g</span><span>C: '+Math.round(item.carbs||0)+'g</span><span>F: '+Math.round(item.fat||0)+'g</span></div>';
+        h+='<div class="fd-macros"><span>'+(item.serving?('Serving: '+item.serving+(item.unit||'')):'Tap remove to delete')+'</span></div>';
         h+='<button class="fd-delete" onclick="event.stopPropagation();removeMealItem('+i+','+j+')">✕ Remove</button>';
         h+='</div></div>';
       }
@@ -1994,7 +2001,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.25</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.25.2</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2815,8 +2822,11 @@ function renderNutritionInline(activeDate) {
     if (meal.items && meal.items.length) {
       for (var j = 0; j < meal.items.length; j++) {
         var item = meal.items[j];
-        h += '<div class="food-item" onclick="this.classList.toggle(\'expanded\')"><span class="fi-name">' + esc(item.name) + '</span><span class="fi-kcal">' + Math.round(item.calories) + '</span><span class="fi-chev">›</span></div>';
-        h += '<div class="food-details"><div class="food-details-inner"><div class="fd-macros"><span>P ' + Math.round(item.protein) + 'g</span><span>C ' + Math.round(item.carbs) + 'g</span><span>F ' + Math.round(item.fat) + 'g</span><span>' + (item.serving || '') + (item.unit || '') + '</span></div><button class="fd-delete" onclick="event.stopPropagation();deleteNutritionItem(' + i + ',' + j + ',\'' + activeDate + '\')">✕</button></div></div>';
+        h += '<div class="food-item" onclick="this.classList.toggle(\'expanded\')">' +
+          '<div class="fi-main"><span class="fi-name">' + esc(item.name) + '</span>' +
+          '<span class="fi-macros"><span class="m-p">' + Math.round(item.protein) + 'P</span><span class="m-c">' + Math.round(item.carbs) + 'C</span><span class="m-f">' + Math.round(item.fat) + 'F</span></span></div>' +
+          '<span class="fi-kcal">' + Math.round(item.calories) + '<small>kcal</small></span><span class="fi-chev">›</span></div>';
+        h += '<div class="food-details"><div class="food-details-inner"><div class="fd-macros"><span>' + (item.serving ? ('Serving: ' + item.serving + (item.unit || '')) : 'Tap ✕ to remove') + '</span></div><button class="fd-delete" onclick="event.stopPropagation();deleteNutritionItem(' + i + ',' + j + ',\'' + activeDate + '\')">✕ Remove</button></div></div>';
       }
     }
     h += '<button class="settings-btn secondary" style="margin-top:.5rem;width:100%;font-size:.82rem" onclick="addMealItem(' + i + ')">+ Add Food</button>';
@@ -3124,7 +3134,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.25').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.25.2').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
