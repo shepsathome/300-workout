@@ -643,7 +643,7 @@ const IMG={'Barbell_Deadlift_0':'./img/exercises/Barbell_Deadlift_0.jpg','Barbel
 const EX={
 'bench-press':{n:'Dumbbell Bench Press',h:'<strong>Setup:</strong> Lie flat on bench, feet on floor, DB in each hand at chest, palms forward.<br><strong>Move:</strong> Press up until arms extended (don\'t lock elbows). Lower until upper arms parallel to floor.',c:'Chest, shoulders, triceps. Squeeze chest at the top.',v:'VmB1G1K7v94',img:'Dumbbell_Bench_Press'},
 'one-arm-row':{n:'One-Arm Dumbbell Row',h:'<strong>Setup:</strong> One knee + hand on bench, other foot wide on floor. DB hanging in free hand.<br><strong>Move:</strong> Pull DB to hip, squeeze shoulder blade back. Keep torso flat, don\'t twist. Lower slowly.',c:'Lats (mid-back). Pull elbow to your back pocket.',v:'pYcpY20QaE8',img:'One-Arm_Kettlebell_Row'},
-'shoulder-press':{n:'Dumbbell Shoulder Press',h:'<strong>Setup:</strong> Stand or sit, DBs at shoulder height, palms forward, elbows 90deg.<br><strong>Move:</strong> Press overhead until arms almost straight. Don\'t arch lower back. Lower slowly.',c:'Deltoids + triceps. Keep ribs down.',v:'qEwKCR5JCog',img:'Dumbbell_Shoulder_Press'},
+'shoulder-press':{n:'Half-Kneeling Single-Arm DB Press',h:'<strong>Setup:</strong> Half-kneeling — one knee down, opposite foot flat in front. Single DB at shoulder height, palm forward, ribs down, glutes &amp; core tight.<br><strong>Move:</strong> Press one DB overhead until the arm is almost straight, keeping the shoulder blade controlled — <strong>no shrug</strong>. Lower slowly. Finish all reps, then swap arm and leg.',c:'Same delts + triceps as a standard press, with built-in core &amp; scapular control. Half-kneeling kills the arch/cheat that aggravates the neck. Ribs down, no shrugging — stop if you feel a between-the-blades tweak.',v:'qEwKCR5JCog',img:'Dumbbell_Shoulder_Press'},
 'face-pulls':{n:'Resistance Band Face Pulls',h:'<strong>Setup:</strong> Anchor band at face height. Hold both ends palms down.<br><strong>Move:</strong> Pull towards face, elbows flared wide. Squeeze shoulder blades at end. Slowly return.',c:'Rear shoulders + upper back. Posture-fixer.',v:'PYj77in44ms',img:'YT_face-pulls'},
 'floor-fly':{n:'Dumbbell Floor Fly',h:'<strong>Setup:</strong> Lie on bench, DBs above chest, palms facing each other, slight elbow bend.<br><strong>Move:</strong> Open arms wide until chest stretch. Squeeze chest to bring back. Keep elbow bend constant.',c:'Outer chest. Imagine hugging a large tree.',v:'UKwkChzThig',img:'Dumbbell_Flyes'},
 'farmer-carry':{n:'Kettlebell Farmer\'s Carry',h:'<strong>Setup:</strong> KB in each hand at sides. Stand tall, shoulders back, chest proud.<br><strong>Move:</strong> Walk slowly with controlled steps. Core tight, don\'t lean.',c:'Grip, core, traps. Walk like you own the place.',v:'rt17lmnaLSM',img:'Farmers_Walk'},
@@ -715,7 +715,7 @@ const EX={
 'decline-pushup':{n:'Decline Push-Up (feet on bench)',h:'<strong>Setup:</strong> Feet on bench, hands on floor wider than shoulders. Body straight.<br><strong>Move:</strong> Lower chest to floor, push back up. Elbows at 45 degrees.',c:'Upper chest emphasis + front delts. Harder than regular push-ups — the elevation shifts the load.',v:'SKPab2YC8BE',img:'decline_pushup'}
 };
 const DAYS={
-mon:{title:'Monday — Upper Body + Core',icon:'💪',time:'45–50 min',warmup:'2 min easy row → arm circles → band pull-aparts → push-up to downward dog x 5',blocks:[{name:'Block A — Supersets',rounds:3,rest:60,ex:[{k:'bench-press',reps:'10–12'},{k:'db-pullover',reps:'12'},{k:'one-arm-row',reps:'10/arm'},{k:'shoulder-press',reps:'10'},{k:'face-pulls',reps:'15'},{k:'band-lat-pulldown',reps:'15'},{k:'kb-clean-press',reps:'8/arm'},{k:'farmer-carry',reps:'40s',timed:1,sec:40}]},{name:'Block B — Calisthenics',rounds:3,rest:60,ex:[{k:'bench-dips',reps:'12–15'},{k:'ytw-raises',reps:'8–10'},{k:'decline-pushup',reps:'12–15'},{k:'db-curl',reps:'10-12'},{k:'hammer-curl',reps:'10'}]},{name:'Block C — Core',rounds:2,rest:0,ex:[{k:'hollow-body',reps:'30s',timed:1,sec:30},{k:'dead-bugs',reps:'12/side'},{k:'russian-twists',reps:'20 total'},{k:'side-plank',reps:'20s/side',timed:1,sec:20}]},{name:'Finisher — Rowing',rounds:4,rest:45,ex:[{k:'row-sprint',reps:'250m'}]}]},
+mon:{title:'Monday — Upper Body + Core',icon:'💪',time:'45–50 min',warmup:'2 min easy row → arm circles → band pull-aparts → push-up to downward dog x 5',blocks:[{name:'Block A — Supersets',rounds:3,rest:60,ex:[{k:'bench-press',reps:'10–12'},{k:'db-pullover',reps:'12'},{k:'one-arm-row',reps:'10/arm'},{k:'shoulder-press',reps:'10/arm'},{k:'face-pulls',reps:'15'},{k:'band-lat-pulldown',reps:'15'},{k:'kb-clean-press',reps:'8/arm'},{k:'farmer-carry',reps:'40s',timed:1,sec:40}]},{name:'Block B — Calisthenics',rounds:3,rest:60,ex:[{k:'bench-dips',reps:'12–15'},{k:'ytw-raises',reps:'8–10'},{k:'decline-pushup',reps:'12–15'},{k:'db-curl',reps:'10-12'},{k:'hammer-curl',reps:'10'}]},{name:'Block C — Core',rounds:2,rest:0,ex:[{k:'hollow-body',reps:'30s',timed:1,sec:30},{k:'dead-bugs',reps:'12/side'},{k:'russian-twists',reps:'20 total'},{k:'side-plank',reps:'20s/side',timed:1,sec:20}]},{name:'Finisher — Rowing',rounds:4,rest:45,ex:[{k:'row-sprint',reps:'250m'}]}]},
 tue:{title:'Tuesday — Conditioning & Agility',icon:'⚡',time:'50–55 min',warmup:'Dynamic stretches → high knees → lateral shuffles',blocks:[{name:'Block A — EMOM x 12 min (start each min, rest remaining)',rounds:4,rest:15,ex:[{k:'thruster',reps:'10'},{k:'renegade-row',reps:'8/arm'},{k:'burpee',reps:'10'}]},{name:'Block B — Agility Circuit',rounds:3,rest:60,ex:[{k:'bear-crawl',reps:'30s',timed:1,sec:30},{k:'bosu-hops',reps:'30s',timed:1,sec:30},{k:'mtn-climbers',reps:'30s',timed:1,sec:30},{k:'kb-swing',reps:'15'},{k:'bosu-balance',reps:'8/leg'},{k:'woodchops',reps:'12/side'},{k:'band-pull-apart',reps:'20'}]},{name:'Rowing Pyramid',rounds:1,rest:0,ex:[{k:'row-distance',reps:'500m',ra:60},{k:'row-distance',reps:'400m',ra:60},{k:'row-distance',reps:'300m',ra:60},{k:'row-distance',reps:'200m',ra:60},{k:'row-distance',reps:'100m'}]}]},
 wed:{title:'Wednesday \u2014 Lower Body + Power',icon:'\ud83e\uddb5',time:'50\u201355 min',warmup:'2 min easy row \u2192 squats x 10 \u2192 walking lunges x 10 \u2192 leg swings',blocks:[{name:'Block A \u2014 Strength',rounds:4,rest:75,ex:[{k:'goblet-squat',reps:'12'},{k:'rdl',reps:'10'},{k:'split-squat',reps:'8/leg'},{k:'step-ups',reps:'10/leg'},{k:'nordic-curl',reps:'8/leg'}]},{name:'Block B \u2014 Power',rounds:3,rest:60,ex:[{k:'kb-swing',reps:'15'},{k:'jump-squat',reps:'10'},{k:'tuck-jumps',reps:'10'},{k:'calf-raises',reps:'15/leg'}]},{name:'Block C \u2014 Core',rounds:2,rest:0,ex:[{k:'hollow-body',reps:'30s',timed:1,sec:30},{k:'floor-wipers',reps:'12/side'},{k:'flutter-kicks',reps:'30 (4-count)'},{k:'leg-levers',reps:'20'},{k:'glute-bridge',reps:'10/side'}]}]},
 thu:{title:'Thursday — Recovery & Mobility',icon:'🧘',time:'35–45 min',warmup:'Take it slow today — this is recovery.',blocks:[{name:'Foam/Band Activation',rounds:2,rest:0,ex:[{k:'shoulder-dislocates',reps:'10'},{k:'hip-circles',reps:'10/dir'},{k:'kb-halos',reps:'8/dir'},{k:'arm-haulers',reps:'15'},{k:'band-pull-apart',reps:'15'}]},{name:'Turkish Get-Up Practice',rounds:1,rest:0,ex:[{k:'turkish-getup',reps:'3/side'}]},{name:'Yoga Block Flow',rounds:1,rest:0,ex:[{k:'pigeon',reps:'90s/side',timed:1,sec:90},{k:'thoracic-ext',reps:'60s',timed:1,sec:60},{k:'childs-pose',reps:'60s',timed:1,sec:60},{k:'lizard-lunge',reps:'60s/side',timed:1,sec:60}]},{name:'Bosu Balance',rounds:3,rest:0,ex:[{k:'sl-stand',reps:'30s/leg',timed:1,sec:30},{k:'bosu-hold',reps:'30s',timed:1,sec:30}]},{name:'Light Cardio',rounds:1,rest:0,ex:[{k:'easy-row',reps:'15 min'},{k:'static-stretch',reps:'5 min'}]}]},
@@ -723,7 +723,7 @@ fri:{title:'Friday \u2014 "The 300"',icon:'\u2694\ufe0f',time:'40\u201350 min',s
 };
 var DAYS_4={
 d4_1:{title:'Day 1 — Upper Body + Conditioning',icon:'💪',time:'50–55 min',warmup:'2 min easy row → arm circles → band pull-aparts → push-up to downward dog x 5',blocks:[
-{name:'Block A — Upper Supersets',rounds:3,rest:60,ex:[{k:'bench-press',reps:'10–12'},{k:'one-arm-row',reps:'10/arm'},{k:'shoulder-press',reps:'10'},{k:'face-pulls',reps:'15'},{k:'kb-clean-press',reps:'8/arm'}]},
+{name:'Block A — Upper Supersets',rounds:3,rest:60,ex:[{k:'bench-press',reps:'10–12'},{k:'one-arm-row',reps:'10/arm'},{k:'shoulder-press',reps:'10/arm'},{k:'face-pulls',reps:'15'},{k:'kb-clean-press',reps:'8/arm'}]},
 {name:'Block B — Calisthenics',rounds:3,rest:45,ex:[{k:'bench-dips',reps:'12–15'},{k:'ytw-raises',reps:'8–10'},{k:'diamond-pushups',reps:'10–12'}]},
 {name:'Block C — EMOM x 8 min',rounds:4,rest:15,ex:[{k:'thruster',reps:'8'},{k:'burpee',reps:'8'}]},
 {name:'Finisher — Rowing',rounds:3,rest:45,ex:[{k:'row-sprint',reps:'250m'}]}
@@ -747,7 +747,7 @@ d4_4:{title:'Day 4 — "The 300"',icon:'⚔️',time:'40–50 min',sessionTimer:
 
 var DAYS_3={
 d3_1:{title:'Day 1 — Push + Conditioning',icon:'💪',time:'50–55 min',warmup:'2 min easy row → arm circles → push-up to downward dog x 5',blocks:[
-{name:'Block A — Push Strength',rounds:4,rest:60,ex:[{k:'bench-press',reps:'10–12'},{k:'shoulder-press',reps:'10'},{k:'floor-fly',reps:'12'},{k:'kb-clean-press',reps:'8/arm'},{k:'diamond-pushups',reps:'10–12'}]},
+{name:'Block A — Push Strength',rounds:4,rest:60,ex:[{k:'bench-press',reps:'10–12'},{k:'shoulder-press',reps:'10/arm'},{k:'floor-fly',reps:'12'},{k:'kb-clean-press',reps:'8/arm'},{k:'diamond-pushups',reps:'10–12'}]},
 {name:'Block B — Conditioning',rounds:3,rest:45,ex:[{k:'thruster',reps:'10'},{k:'ball-slams',reps:'12'},{k:'kb-swing',reps:'15'},{k:'burpee',reps:'8'},{k:'mtn-climbers',reps:'30s',timed:1,sec:30}]},
 {name:'Block C — Core',rounds:2,rest:0,ex:[{k:'hollow-body',reps:'30s',timed:1,sec:30},{k:'plank-taps',reps:'20 total'},{k:'russian-twists',reps:'20 total'}]},
 {name:'Finisher — Rowing',rounds:3,rest:45,ex:[{k:'row-sprint',reps:'250m'}]}
@@ -784,7 +784,7 @@ const EX_CLASS={
 };
 var EX_KIND={};
 Object.keys(EX_CLASS).forEach(function(kind){EX_CLASS[kind].forEach(function(k){EX_KIND[k]=kind})});
-var PAIRED_DB=new Set(['bench-press','shoulder-press','floor-fly','farmer-carry','rdl','split-squat','step-ups','curl-to-press','renegade-row','db-deadlift','reverse-lunge']);
+var PAIRED_DB=new Set(['bench-press','floor-fly','farmer-carry','rdl','split-squat','step-ups','curl-to-press','renegade-row','db-deadlift','reverse-lunge']);
 function isPairedDB(key){return PAIRED_DB.has(key)}
 var DS={
   _key:'300-data',
@@ -2031,7 +2031,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.26</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.26.2</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -3195,7 +3195,7 @@ var PHASE_DEFS = {
       'goblet-squat': { sets: 5, repsTarget: '15', tempo: '4-1-1', weight: 15, cue: '15kg, 4s down, 1s pause below parallel. Time under tension replaces heavier load.' },
       'rdl': { sets: 4, repsTarget: '12', tempo: '4-0-1', weight: 15, cue: '15kg — 4s eccentric, feel the hamstring stretch. Control owns this.' },
       'one-arm-row': { sets: 4, repsTarget: '12/arm', tempo: '3-1-1', weight: 15, cue: '15kg each arm, 1s squeeze at the top. Your main pull volume — make every rep count.' },
-      'shoulder-press': { sets: 4, repsTarget: '12', tempo: '3-0-1', weight: 10, cue: 'Close the overhead gap — when you hit 4×12 clean at 10kg, jump to 12.5kg.' },
+      'shoulder-press': { sets: 4, repsTarget: '12/arm', tempo: '3-0-1', weight: 10, cue: 'Half-kneeling single-arm — close the overhead gap safely. Ribs down, no shrug. When you hit 4×12/arm clean, jump to 12.5kg.' },
       'split-squat': { sets: 4, repsTarget: '10/leg', tempo: '3-1-1', weight: 15, cue: 'Unilateral overload — 15kg, 3s down, pause at the bottom. This is how you beat the DB ceiling.' },
       'step-ups': { sets: 4, repsTarget: '12/leg', tempo: null, weight: 15, cue: '15kg, controlled. Full extension at top, no pushing off the bottom foot.' },
       'kb-clean-press': { sets: 4, repsTarget: '10/arm', tempo: null, weight: 7.5, cue: '7.5kg — explosive hip drive, then controlled lower. Volume up to 10/arm.' },
@@ -3232,7 +3232,7 @@ var PHASE_DEFS = {
       'goblet-squat': { sets: 5, repsTarget: '8', tempo: '2-1-1', weight: 15, cue: '15kg, pause in the hole, drive up explosively. Low reps, max intent.' },
       'rdl': { sets: 4, repsTarget: '6–8', tempo: '3-0-1', weight: 15, cue: '15kg — heavy-feel hinge. Brace hard, control the stretch.' },
       'one-arm-row': { sets: 4, repsTarget: '8/arm', tempo: '2-1-1', weight: 15, cue: '15kg, 1s squeeze. Heavy, deliberate pulls.' },
-      'shoulder-press': { sets: 4, repsTarget: '8', tempo: '2-0-1', weight: 12.5, cue: 'Push to 12.5kg here if 10kg felt strong in hypertrophy.' },
+      'shoulder-press': { sets: 4, repsTarget: '8/arm', tempo: '2-0-1', weight: 12.5, cue: 'Half-kneeling single-arm — push to 12.5kg if 10kg felt strong and pain-free in hypertrophy.' },
       'split-squat': { sets: 4, repsTarget: '8/leg', tempo: '2-1-1', weight: 15, cue: '15kg, pause at the bottom. Unilateral strength.' }
     },
     restPeriods: { strength: 150, circuit: 75, emom: 20, core: 0, finisher: 60 },
@@ -3315,7 +3315,7 @@ function applyPhaseConfig(cfg, key) {
         'goblet-squat':{sets:4,repsTarget:'12',tempo:null,cue:'15kg for all 4 sets. Depth below parallel, chest up. Own this weight before we change the stimulus.',weight:15},
         'rdl':{sets:4,repsTarget:'10',tempo:null,cue:'15kg — hinge from hips, feel the hamstring stretch. Slow and controlled.',weight:15},
         'one-arm-row':{sets:3,repsTarget:'10/arm',tempo:null,cue:'15kg each arm. Pull to hip, squeeze shoulder blade. This is your main pull volume.',weight:15},
-        'shoulder-press':{sets:4,repsTarget:'10',tempo:null,cue:'10kg — if you can do 4×12 clean, try 12.5kg next session.',weight:10},
+        'shoulder-press':{sets:4,repsTarget:'10/arm',tempo:null,cue:'Half-kneeling single-arm — if you can do 4×12/arm clean, try 12.5kg next session.',weight:10},
         'split-squat':{sets:4,repsTarget:'8/leg',tempo:null,cue:'Testing 15kg — if form breaks, drop to 12.5kg on later sets. That\'s smart, not weak.',weight:15},
         'step-ups':{sets:4,repsTarget:'10/leg',tempo:null,cue:'15kg. Drive through the heel of the working leg. Full extension at top.',weight:15},
         'kb-clean-press':{sets:4,repsTarget:'8/arm',tempo:null,cue:'7.5kg — this is your only KB. Focus on explosive hip drive into the clean.',weight:7.5},
@@ -3377,7 +3377,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.26').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.26.2').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
