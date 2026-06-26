@@ -121,7 +121,7 @@ These are non-negotiable facts the squad must respect at all times:
 
 | Constraint | Detail |
 |---|---|
-| **Equipment** | DBs 2-15kg, 7.5kg KB, bench (not jump-rated), rower, treadmill, Bosu, 10lb med ball, Swiss ball (stability/exercise ball), yoga blocks, resistance bands |
+| **Equipment** | DBs 2-15kg, 7.5kg KB, bench (not jump-rated; flat or very slight incline only — NOT 45°), rower, treadmill, Bosu, 10lb med ball, Swiss ball (stability/exercise ball), yoga blocks, resistance bands |
 | **No pull-up bar** | Cannot do vertical hanging work. All vertical pull must be substituted with horizontal alternatives |
 | **Goal** | Lean, functional, athletic — "300 meets Spider-Man". NOT bulky |
 | **Weight** | ~80kg, targeting body recomposition |
