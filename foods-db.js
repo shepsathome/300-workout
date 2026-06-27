@@ -113,6 +113,7 @@ var FOODS = [
   // Homemade
   { name: 'Taco Beef 5% (homemade)', cal: 133, protein: 20, carbs: 3.7, fat: 4.8, serving: 400, unit: 'g' },
   { name: 'Taco Salsa Sauce', cal: 52, protein: 1, carbs: 11, fat: 0.5, serving: 30, unit: 'g' },
+  { name: 'Mexican Street Corn (CPK copycat, homemade)', cal: 236, protein: 4.9, carbs: 11.7, fat: 18.8, serving: 150, unit: 'g' },
   { name: 'Old El Paso Mini Tortilla Shell (28g each)', cal: 8200, protein: 250, carbs: 1460, fat: 140, serving: 4, unit: ' shells' },
   { name: 'Tandoori Chicken Breast (homemade)', cal: 188, protein: 30, carbs: 2.4, fat: 5.9, serving: 170, unit: 'g' },
   { name: 'Crispy Air-Fryer Fries (homemade)', cal: 117, protein: 2.9, carbs: 25.3, fat: 0.8, serving: 155, unit: 'g' },
