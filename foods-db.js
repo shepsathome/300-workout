@@ -111,6 +111,7 @@ var FOODS = [
 
   // Homemade
   { name: 'Taco Beef 5% (homemade)', cal: 133, protein: 20, carbs: 3.7, fat: 4.8, serving: 400, unit: 'g' },
+  { name: 'Old El Paso Mini Tortilla Shell (28g each)', cal: 8200, protein: 250, carbs: 1460, fat: 140, serving: 4, unit: ' shells' },
   { name: 'Tandoori Chicken Breast (homemade)', cal: 188, protein: 30, carbs: 2.4, fat: 5.9, serving: 170, unit: 'g' },
   { name: 'Crispy Air-Fryer Fries (homemade)', cal: 117, protein: 2.9, carbs: 25.3, fat: 0.8, serving: 155, unit: 'g' },
   { name: 'Light Slaw - no onion (homemade)', cal: 69, protein: 1.7, carbs: 9.7, fat: 2.9, serving: 160, unit: 'g' },
