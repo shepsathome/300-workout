@@ -59,6 +59,7 @@ var FOODS = [
   { name: 'Semi-skimmed Milk', cal: 47, protein: 3.6, carbs: 4.8, fat: 1.7, serving: 250, unit: 'ml' },
   { name: 'Skimmed Milk', cal: 34, protein: 3.6, carbs: 5, fat: 0.2, serving: 250, unit: 'ml' },
   { name: 'Cheddar Cheese', cal: 402, protein: 25, carbs: 1.3, fat: 33, serving: 30, unit: 'g' },
+  { name: 'Mature Cheddar Cheese', cal: 416, protein: 25, carbs: 0.5, fat: 35, serving: 30, unit: 'g' },
   { name: 'Mozzarella', cal: 252, protein: 24, carbs: 2.6, fat: 16, serving: 50, unit: 'g' },
   { name: 'Gouda (sliced)', cal: 356, protein: 24, carbs: 0, fat: 28, serving: 20, unit: 'g' },
   { name: 'British Heritage Extra Mature Cheddar (1 slice)', cal: 411, protein: 24, carbs: 0.1, fat: 35, serving: 25, unit: 'g' },
@@ -111,6 +112,7 @@ var FOODS = [
 
   // Homemade
   { name: 'Taco Beef 5% (homemade)', cal: 133, protein: 20, carbs: 3.7, fat: 4.8, serving: 400, unit: 'g' },
+  { name: 'Taco Salsa Sauce', cal: 52, protein: 1, carbs: 11, fat: 0.5, serving: 30, unit: 'g' },
   { name: 'Old El Paso Mini Tortilla Shell (28g each)', cal: 8200, protein: 250, carbs: 1460, fat: 140, serving: 4, unit: ' shells' },
   { name: 'Tandoori Chicken Breast (homemade)', cal: 188, protein: 30, carbs: 2.4, fat: 5.9, serving: 170, unit: 'g' },
   { name: 'Crispy Air-Fryer Fries (homemade)', cal: 117, protein: 2.9, carbs: 25.3, fat: 0.8, serving: 155, unit: 'g' },
