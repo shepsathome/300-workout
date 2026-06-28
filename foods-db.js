@@ -148,6 +148,7 @@ var FOODS = [
   { name: 'WW Oat Choc Chip Cookie (Smitten)', cal: 496, protein: 7.4, carbs: 61, fat: 27, serving: 40, unit: 'g' },
   { name: 'Scrambled Eggs', cal: 148, protein: 10.6, carbs: 1.6, fat: 11, serving: 120, unit: 'g' },
   { name: 'Buttermilk Pancakes (half batch)', cal: 200, protein: 6, carbs: 28, fat: 7, serving: 225, unit: 'g' },
+  { name: 'Buttermilk Pancakes - Light Milk (homemade)', cal: 189, protein: 6.1, carbs: 28.1, fat: 5.8, serving: 225, unit: 'g' },
 
   // Branded / Specific
   { name: 'Greek Yoghurt (full fat)', cal: 97, protein: 9, carbs: 3.6, fat: 5, serving: 150, unit: 'g' },
