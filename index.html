@@ -1044,7 +1044,7 @@ var QUICK_MEALS = [
     slot: 0,
     desc: 'Buttermilk pancakes, bacon & maple syrup',
     items: [
-      { name: 'Buttermilk Pancakes - half batch (225g)', calories: 450, protein: 13.5, carbs: 63, fat: 15.8 },
+      { name: 'Buttermilk Pancakes x2 (light milk, ½ of half-batch)', calories: 385, protein: 13.8, carbs: 58.9, fat: 10.3 },
       { name: 'Streaky Bacon x3 (75g)', calories: 406, protein: 27.8, carbs: 1.1, fat: 31.5 },
       { name: 'Maple Syrup (60g)', calories: 156, protein: 0, carbs: 40.2, fat: 0.1 }
     ]
@@ -2044,7 +2044,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.28.2</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.28.3</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -3390,7 +3390,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.28.2').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.28.3').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
