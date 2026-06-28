@@ -120,7 +120,7 @@ var FOODS = [
   { name: 'Crispy Air-Fryer Fries (homemade)', cal: 117, protein: 2.9, carbs: 25.3, fat: 0.8, serving: 155, unit: 'g' },
   { name: 'Light Slaw - no onion (homemade)', cal: 69, protein: 1.7, carbs: 9.7, fat: 2.9, serving: 160, unit: 'g' },
   { name: 'Crispy Honey Garlic Chicken (homemade)', cal: 144, protein: 25.8, carbs: 3.6, fat: 2.9, serving: 200, unit: 'g' },
-  { name: 'Potato Salad (homemade, Jersey Royals)', cal: 111, protein: 1.8, carbs: 12.7, fat: 5.9, serving: 200, unit: 'g' },
+  { name: 'Potato Salad (light mayo, homemade, Jersey Royals)', cal: 92, protein: 1.6, carbs: 13.6, fat: 3.5, serving: 200, unit: 'g' },
   { name: 'Hartley\'s Strawberry Jelly (prepared)', cal: 61, protein: 1.2, carbs: 14, fat: 0, serving: 140, unit: 'g' },
   { name: 'Bobby Flay Coleslaw (light mayo, homemade)', cal: 69, protein: 1.3, carbs: 8.3, fat: 3.7, serving: 100, unit: 'g' },
   { name: 'Dark Chocolate PB Crunch Bar (homemade)', cal: 530, protein: 9.9, carbs: 44.7, fat: 35.3, serving: 35, unit: 'g' },
