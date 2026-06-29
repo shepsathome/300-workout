@@ -276,6 +276,8 @@ a{color:var(--a2)}
 .food-details-inner{display:flex;justify-content:space-between;align-items:center;padding:.4rem .2rem .55rem;font-size:.82rem;color:var(--muted)}
 .food-details-inner .fd-macros span{margin-right:.7rem}
 .food-details-inner .fd-delete{background:none;border:none;color:var(--red);cursor:pointer;font-size:.88rem;font-weight:700;padding:.25rem .5rem}
+.food-details-inner .fd-modify{background:none;border:none;color:var(--a2);cursor:pointer;font-size:.88rem;font-weight:700;padding:.25rem .5rem}
+.food-details-inner .fd-actions{display:flex;gap:.2rem;flex-shrink:0}
 /* === TRAIN DASHBOARD === */
 .train-home{padding:.25rem 0}
 .train-home .today-card{padding:1.2rem 1rem .95rem;margin-bottom:.7rem;cursor:pointer;transition:transform .2s var(--spring),box-shadow .2s;border-radius:var(--radius-card)}
@@ -1019,10 +1021,10 @@ var QUICK_MEALS = [
       { name: 'Bean Mix (homemade)', amt: 300, unit: 'g', calories: 225, protein: 13.5, carbs: 30, fat: 1.8 },
       { name: 'Seeded Sourdough (1 slice)', amt: 50, unit: 'g', calories: 130, protein: 4.5, carbs: 21.5, fat: 2.5 },
       { name: 'Granola (homemade)', amt: 25, unit: 'g', calories: 118, protein: 2.5, carbs: 16, fat: 5 },
-      { name: 'Strawberries', amt: 30, unit: 'g', calories: 10, protein: 0.2, carbs: 2.3, fat: 0.1 },
-      { name: 'Raspberries', amt: 20, unit: 'g', calories: 10, protein: 0.2, carbs: 2.4, fat: 0.1 },
-      { name: 'Blueberries', amt: 20, unit: 'g', calories: 11, protein: 0.1, carbs: 2.9, fat: 0.1 },
-      { name: 'Blackberries', amt: 20, unit: 'g', calories: 9, protein: 0.3, carbs: 2, fat: 0.1 },
+      { name: 'Strawberries', amt: 5, unit: ' berries', calories: 29, protein: 0.6, carbs: 6.9, fat: 0.3 },
+      { name: 'Raspberries', amt: 15, unit: ' berries', calories: 39, protein: 0.9, carbs: 9, fat: 0.5 },
+      { name: 'Blueberries', amt: 15, unit: ' berries', calories: 13, protein: 0.2, carbs: 3.3, fat: 0.1 },
+      { name: 'Blackberries', amt: 12, unit: ' berries', calories: 36, protein: 1.2, carbs: 8.1, fat: 0.4 },
       { name: 'Skyr (0% fat)', amt: 50, unit: 'g', calories: 32, protein: 5.5, carbs: 2, fat: 0.1 }
     ]
   },
@@ -1189,8 +1191,8 @@ function renderNutrition(){
         h+='<span class="fi-chev">›</span>';
         h+='</div>';
         h+='<div class="food-details"><div class="food-details-inner">';
-        h+='<div class="fd-macros"><span>'+(item.serving?('Serving: '+item.serving+(item.unit||'')):'Tap remove to delete')+'</span></div>';
-        h+='<button class="fd-delete" onclick="event.stopPropagation();removeMealItem('+i+','+j+')">✕ Remove</button>';
+        h+='<div class="fd-macros"><span>'+(item.serving?('Serving: '+item.serving+(item.unit||'')):'Adjust or remove')+'</span></div>';
+        h+='<div class="fd-actions"><button class="fd-modify" onclick="event.stopPropagation();modifyMealItem('+i+','+j+')">✎ Modify</button><button class="fd-delete" onclick="event.stopPropagation();removeMealItem('+i+','+j+')">✕ Remove</button></div>';
         h+='</div></div>';
       }
     } else {
@@ -2044,7 +2046,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.06.28.6</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.06.29</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2473,6 +2475,87 @@ function addCustomFood() {
 function quickAddRecent(mealIndex,recentIndex){var entry=DS.dateNutrition(nutActiveDate()),food=DS.get().recentFoods[recentIndex];if(!food)return;entry.meals[mealIndex].items.push({name:food.name,calories:food.calories,protein:food.protein,carbs:food.carbs,fat:food.fat});DS.saveNutrition(entry);refreshNutritionView()}
 function removeMealItem(mealIndex,itemIndex){var entry=DS.dateNutrition(nutActiveDate());entry.meals[mealIndex].items.splice(itemIndex,1);DS.saveNutrition(entry);refreshNutritionView()}
 function deleteNutritionItem(mealIndex,itemIndex,date){if(!confirm('Remove this item?'))return;var entry=DS.dateNutrition(date);entry.meals[mealIndex].items.splice(itemIndex,1);DS.saveNutrition(entry);renderLog()}
+
+// === MODIFY A LOGGED ITEM ===
+// Parses the trailing "(<amount><unit>)" from the item name. If found, lets
+// you change the amount and rescales macros linearly. If not, falls back to
+// editing the four macros directly.
+function parseItemAmount(name){
+  var m = String(name||'').match(/\(([\d.]+)(\s*[a-zA-Z][a-zA-Z ]*)\)\s*$/);
+  if(!m) return null;
+  return { amt: parseFloat(m[1]), unit: m[2] || 'g' };
+}
+function modifyMealItem(mealIndex, itemIndex, date){
+  date = date || nutActiveDate();
+  var entry = DS.dateNutrition(date);
+  var meal = entry.meals[mealIndex];
+  var item = meal && meal.items[itemIndex];
+  if(!item) return;
+  window._modCtx = { mealIndex: mealIndex, itemIndex: itemIndex, date: date };
+  var parsed = parseItemAmount(item.name);
+  var overlay = document.createElement('div');
+  overlay.className = 'food-modal-overlay';
+  overlay.id = 'mod-modal';
+  overlay.onclick = function(e){ if(e.target===overlay) closeModifyItem(); };
+  var body;
+  if(parsed && parsed.amt > 0){
+    var baseName = item.name.replace(/\s*\([^)]*\)\s*$/,'');
+    var per = { cal:(item.calories||0)/parsed.amt, p:(item.protein||0)/parsed.amt, c:(item.carbs||0)/parsed.amt, f:(item.fat||0)/parsed.amt };
+    window._modBase = { name: baseName, unit: parsed.unit, per: per };
+    var step = (parsed.unit==='g'||parsed.unit==='ml') ? 5 : 1;
+    body = '<div class="food-serving-edit"><div class="fse-name">'+esc(baseName)+'</div>'+
+      '<div class="fse-row" style="margin-top:.4rem"><label>Amount</label>'+
+      '<input id="mod-amt" type="number" min="0" step="'+step+'" value="'+parsed.amt+'" oninput="modUpdateCalc()"> '+
+      '<span style="font-size:.8rem;color:var(--muted)">'+esc(parsed.unit.trim()||'g')+'</span></div>'+
+      '<div class="fse-macros" id="mod-macros" style="margin:.5rem 0"></div>'+
+      '<button class="settings-btn" style="width:100%" onclick="modSave()">✓ Save</button></div>';
+  } else {
+    window._modBase = null;
+    body = '<div class="food-serving-edit"><div class="fse-name">'+esc(item.name)+'</div>'+
+      '<div style="font-size:.78rem;color:var(--muted);margin:.3rem 0">No amount in the name — edit the macros directly.</div>'+
+      '<div class="fse-row"><label>Calories</label><input id="mod-cal" type="number" min="0" value="'+Math.round(item.calories||0)+'"></div>'+
+      '<div class="fse-row"><label>Protein g</label><input id="mod-p" type="number" min="0" step="0.1" value="'+(item.protein||0)+'"></div>'+
+      '<div class="fse-row"><label>Carbs g</label><input id="mod-c" type="number" min="0" step="0.1" value="'+(item.carbs||0)+'"></div>'+
+      '<div class="fse-row"><label>Fat g</label><input id="mod-f" type="number" min="0" step="0.1" value="'+(item.fat||0)+'"></div>'+
+      '<button class="settings-btn" style="width:100%;margin-top:.5rem" onclick="modSave()">✓ Save</button></div>';
+  }
+  overlay.innerHTML = '<div class="food-modal"><h3>✎ Modify item</h3>'+body+
+    '<button class="settings-btn secondary" style="width:100%;margin-top:.5rem" onclick="closeModifyItem()">Cancel</button></div>';
+  document.body.appendChild(overlay);
+  if(window._modBase) modUpdateCalc();
+}
+function modUpdateCalc(){
+  var b = window._modBase; if(!b) return;
+  var amt = safeNum((document.getElementById('mod-amt')||{}).value, 0);
+  var el = document.getElementById('mod-macros');
+  if(el) el.innerHTML = '<strong>'+Math.round(b.per.cal*amt)+'</strong> kcal · <strong>'+Math.round(b.per.p*amt)+'</strong>g P · <strong>'+Math.round(b.per.c*amt)+'</strong>g C · <strong>'+Math.round(b.per.f*amt)+'</strong>g F';
+}
+function modSave(){
+  var ctx = window._modCtx; if(!ctx) return;
+  var entry = DS.dateNutrition(ctx.date);
+  var meal = entry.meals[ctx.mealIndex];
+  var item = meal && meal.items[ctx.itemIndex];
+  if(!item){ closeModifyItem(); return; }
+  var b = window._modBase;
+  if(b){
+    var amt = safeNum((document.getElementById('mod-amt')||{}).value, 0);
+    if(amt<=0){ closeModifyItem(); return; }
+    item.name = b.name + ' (' + amt + b.unit + ')';
+    item.calories = Math.round(b.per.cal*amt);
+    item.protein = +(b.per.p*amt).toFixed(1);
+    item.carbs = +(b.per.c*amt).toFixed(1);
+    item.fat = +(b.per.f*amt).toFixed(1);
+  } else {
+    item.calories = Math.round(safeNum((document.getElementById('mod-cal')||{}).value, item.calories));
+    item.protein = +safeNum((document.getElementById('mod-p')||{}).value, item.protein).toFixed(1);
+    item.carbs = +safeNum((document.getElementById('mod-c')||{}).value, item.carbs).toFixed(1);
+    item.fat = +safeNum((document.getElementById('mod-f')||{}).value, item.fat).toFixed(1);
+  }
+  DS.saveNutrition(entry);
+  closeModifyItem();
+  refreshNutritionView();
+}
+function closeModifyItem(){ var m=document.getElementById('mod-modal'); if(m) m.remove(); }
 function addQuickMeal(qmIndex) {
   var qm = QUICK_MEALS[qmIndex];
   if (!qm) return;
@@ -2962,7 +3045,7 @@ function renderNutritionInline(activeDate) {
           '<div class="fi-main"><span class="fi-name">' + esc(item.name) + '</span>' +
           '<span class="fi-macros"><span class="m-p">' + Math.round(item.protein) + 'P</span><span class="m-c">' + Math.round(item.carbs) + 'C</span><span class="m-f">' + Math.round(item.fat) + 'F</span></span></div>' +
           '<span class="fi-kcal">' + Math.round(item.calories) + '<small>kcal</small></span><span class="fi-chev">›</span></div>';
-        h += '<div class="food-details"><div class="food-details-inner"><div class="fd-macros"><span>' + (item.serving ? ('Serving: ' + item.serving + (item.unit || '')) : 'Tap ✕ to remove') + '</span></div><button class="fd-delete" onclick="event.stopPropagation();deleteNutritionItem(' + i + ',' + j + ',\'' + activeDate + '\')">✕ Remove</button></div></div>';
+        h += '<div class="food-details"><div class="food-details-inner"><div class="fd-macros"><span>' + (item.serving ? ('Serving: ' + item.serving + (item.unit || '')) : 'Adjust or remove') + '</span></div><div class="fd-actions"><button class="fd-modify" onclick="event.stopPropagation();modifyMealItem(' + i + ',' + j + ',\'' + activeDate + '\')">✎ Modify</button><button class="fd-delete" onclick="event.stopPropagation();deleteNutritionItem(' + i + ',' + j + ',\'' + activeDate + '\')">✕ Remove</button></div></div></div>';
       }
     }
     h += '<button class="settings-btn secondary" style="margin-top:.5rem;width:100%;font-size:.82rem" onclick="addMealItem(' + i + ')">+ Add Food</button>';
@@ -3390,7 +3473,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.06.28.6').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.06.29').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
