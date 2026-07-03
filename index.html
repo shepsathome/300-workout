@@ -979,6 +979,17 @@ function sessionSummary(session){
 }
 var QUICK_MEALS = [
   {
+    name: 'Jordan Porridge + Sugar',
+    emoji: '\u{1F963}',
+    slot: 0,
+    adjustable: true,
+    desc: 'Jordan organic porridge (skimmed milk) + brown sugar — set portions & sugar',
+    items: [
+      { name: 'Jordan Organic Porridge (skimmed milk)', amt: 1, unit: ' portion', calories: 226, protein: 12.9, carbs: 35.8, fat: 3.3 },
+      { name: 'Brown Granulated Sugar', amt: 5, unit: 'g', calories: 19, protein: 0, carbs: 4.9, fat: 0 }
+    ]
+  },
+  {
     name: 'Beef Tacos (homemade)',
     emoji: '\u{1F32E}',
     slot: 2,
@@ -2050,7 +2061,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.07.03.5</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.07.03.6</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -3489,7 +3500,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.07.03.5').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.07.03.6').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);

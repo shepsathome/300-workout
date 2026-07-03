@@ -162,6 +162,7 @@ var FOODS = [
   { name: 'Streaky Bacon (cooked)', cal: 541, protein: 37, carbs: 1.4, fat: 42, serving: 25, unit: 'g' },
   { name: 'Streaky Bacon (Nature, 1 slice ~14g)', cal: 292, protein: 16, carbs: 0.8, fat: 25, serving: 43, unit: 'g' },
   { name: 'Maple Syrup', cal: 260, protein: 0, carbs: 67, fat: 0.1, serving: 60, unit: 'g' },
+  { name: 'Brown Granulated Sugar', cal: 380, protein: 0, carbs: 98, fat: 0, serving: 5, unit: 'g' },
   { name: 'Green Tea', cal: 1, protein: 0, carbs: 0.3, fat: 0, serving: 250, unit: 'ml' },
 
   // French
