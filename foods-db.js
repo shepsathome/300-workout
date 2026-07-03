@@ -30,6 +30,7 @@ var FOODS = [
   { name: 'Quinoa (cooked)', cal: 120, protein: 4.4, carbs: 21.3, fat: 1.9, serving: 185, unit: 'g' },
   { name: 'Oats (dry)', cal: 389, protein: 16.9, carbs: 66.3, fat: 6.9, serving: 50, unit: 'g' },
   { name: 'Granola', cal: 471, protein: 10, carbs: 64, fat: 20, serving: 50, unit: 'g' },
+  { name: 'Kellogg\'s Rice Krispies (no milk)', cal: 382, protein: 6, carbs: 87, fat: 1, serving: 30, unit: 'g' },
   { name: 'Sweet Potato (baked)', cal: 90, protein: 2, carbs: 20.7, fat: 0.2, serving: 200, unit: 'g' },
   { name: 'White Potato (baked)', cal: 93, protein: 2.5, carbs: 21.2, fat: 0.1, serving: 250, unit: 'g' },
   { name: 'Bread (white)', cal: 265, protein: 8.7, carbs: 49, fat: 3.2, serving: 30, unit: 'g' },
