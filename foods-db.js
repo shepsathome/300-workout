@@ -96,6 +96,7 @@ var FOODS = [
   { name: 'Hotdog (Knacki Gourmande + Bun)', cal: 271, protein: 10.7, carbs: 23.1, fat: 14.6, serving: 130, unit: 'g' },
 
   // Drinks
+  { name: 'Kokaz Kéfir Mangue', cal: 65, protein: 3.3, carbs: 7.1, fat: 2.6, serving: 250, unit: 'ml' },
   { name: 'Orange Juice', cal: 45, protein: 0.7, carbs: 10.4, fat: 0.2, serving: 250, unit: 'ml' },
   { name: 'Protein Shake (typical)', cal: 80, protein: 15, carbs: 4, fat: 0.8, serving: 330, unit: 'ml' },
   { name: 'Oat Milk', cal: 46, protein: 1, carbs: 6.7, fat: 1.5, serving: 250, unit: 'ml' },
