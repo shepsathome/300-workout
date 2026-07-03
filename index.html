@@ -174,6 +174,10 @@ a{color:var(--a2)}
 .session-timer{text-align:center;padding:.8rem;background:rgba(184,168,138,.05);border-radius:16px;margin-bottom:.75rem;border:1px solid rgba(184,168,138,.08);box-shadow:var(--sh)}
 .session-timer .st-label{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
 .session-timer .st-time{font-size:1.85rem;font-weight:800;font-family:'SF Mono','Courier New',monospace;color:var(--accent);letter-spacing:-.03em}
+.session-timer .st-pb{font-size:.82rem;font-weight:700;margin:.15rem 0 .35rem;color:var(--muted)}
+.session-timer .st-pb .st-delta{font-weight:800}
+.session-timer .st-pb .st-delta.ahead{color:var(--green)}
+.session-timer .st-pb .st-delta.behind{color:var(--red)}
 .session-timer button{padding:.7rem 1rem;font-size:.76rem;background:var(--grad);color:#1a1a1a;box-shadow:0 8px 16px rgba(184,168,138,.12)}
 .session-timer button.st-reset{background:var(--card2);color:var(--text);box-shadow:none;border:1px solid var(--border)}
 /* === STATIC PANELS === */
@@ -773,7 +777,7 @@ hotel:{title:'Hotel Room Workout',icon:'✈️',time:'25–35 min',sessionTimer:
 ]}
 };
 function expand(day){var steps=[];var restMult=DS.getRestMultiplier();for(var b=0;b<day.blocks.length;b++){var bl=day.blocks[b];var adjRest=bl.rest>0?Math.round(bl.rest*restMult):0;for(var r=0;r<bl.rounds;r++){for(var e=0;e<bl.ex.length;e++){var ex=bl.ex[e],info=EX[ex.k];steps.push({type:'ex',name:info.n,reps:ex.reps,timed:!!ex.timed,sec:ex.sec||0,cue:info.c,howTo:info.h,vid:info.v,imgKey:info.img,block:bl.name,set:r+1,of:bl.rounds,key:ex.k});if(ex.ra)steps.push({type:'rest',sec:Math.round((ex.ra||0)*restMult),block:bl.name})}if(adjRest>0&&r<bl.rounds-1)steps.push({type:'rest',sec:adjRest,block:bl.name})}}return steps}
-var currentDay=null,currentTodayKey=null,steps=[],idx=0,started=false,cdInterval=null,cdRemaining=0,stInterval=null,stSeconds=0,demoTimer=null,currentSession=null;
+var currentDay=null,currentTodayKey=null,steps=[],idx=0,started=false,cdInterval=null,cdRemaining=0,stInterval=null,stSeconds=0,stStartMs=0,stAccumMs=0,stPB=null,demoTimer=null,currentSession=null;
 var audioCtx=null;
 var syncState={text:'Not configured',cls:''};
 const EX_CLASS={
@@ -2046,7 +2050,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.07.03</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.07.03.2</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2703,7 +2707,7 @@ function startWorkout(key){
   var days=getActiveDays();
   var day=days[key];
   steps=expand(day);idx=0;started=true;
-  stopCountdown();clearInterval(demoTimer);stopSessionTimer();stSeconds=0;
+  stopCountdown();clearInterval(demoTimer);stopSessionTimer();stSeconds=0;stAccumMs=0;stStartMs=0;stPB=day.sessionTimer?sessionPB(key):null;
   currentSession={date:new Date().toISOString().slice(0,10),day:key,dayOfWeek:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()],startedAt:new Date().toISOString(),duration:0,exercises:[],notes:''};
   if(day.sessionTimer)startSessionTimer();
   renderStep(key);
@@ -2718,7 +2722,7 @@ function renderStep(key){
   var doneEx=steps.slice(0,idx).filter(function(s){return s.type==='ex'}).length;
   var pct=totalEx?(doneEx/totalEx*100):0;
   var h='';
-  if(day.sessionTimer)h+='<div class="session-timer"><div class="st-label">Session Time</div><div class="st-time" id="st-display">'+fmt(stSeconds)+'</div><button onclick="startSessionTimer()">&#9654;</button><button class="st-stop" onclick="stopSessionTimer()">&#9208;</button><button class="st-reset" onclick="resetSessionTimer()">&#8634;</button></div>';
+  if(day.sessionTimer){h+='<div class="session-timer"><div class="st-label">Session Time</div><div class="st-time" id="st-display">'+fmt(stSeconds)+'</div>';if(stPB)h+='<div class="st-pb">🏆 PB '+fmt(stPB)+' · <span class="st-delta ahead" id="st-delta">'+fmt(Math.max(0,stPB-stSeconds))+' to beat PB</span></div>';h+='<button onclick="startSessionTimer()">&#9654;</button><button class="st-stop" onclick="stopSessionTimer()">&#9208;</button><button class="st-reset" onclick="resetSessionTimer()">&#8634;</button></div>';}
   if(step.type==='rest'){h+=renderRestStep(step)}else{h+=renderExStep(step)}
   h+='<div class="prog-bar"><div class="fill" style="width:'+pct+'%"></div></div><div class="prog-text">'+doneEx+' / '+totalEx+' exercises done</div>';
   h+=renderUpcoming();
@@ -2778,7 +2782,7 @@ function renderComplete(key){
   var heading=isPartial?'Workout Stopped':'Workout Complete!';
   var emoji=isPartial?'\u23F9':'\uD83C\uDF89';
   var subtitle=isPartial?'<p style="color:var(--muted);margin-top:.5rem">'+currentSession.completedExercises+' of '+currentSession.totalExercises+' exercises completed</p>':'<p style="color:var(--muted);margin-top:.5rem">Recovery starts now.</p>';
-  if(day.sessionTimer&&stSeconds>0)time='<p style="font-size:1.2rem;margin:.5rem 0">\u23F1\uFE0F Time: <strong>'+fmt(stSeconds)+'</strong></p>';
+  if(day.sessionTimer&&stSeconds>0){var pbNote='';if(stPB){if(stSeconds<stPB)pbNote=' <span style="color:var(--green);font-weight:700">🎉 NEW PB by '+fmt(stPB-stSeconds)+'</span>';else if(stSeconds===stPB)pbNote=' <span style="color:var(--muted)">= matched PB</span>';else pbNote=' <span style="color:var(--muted)">'+fmt(stSeconds-stPB)+' off PB ('+fmt(stPB)+')</span>';}time='<p style="font-size:1.2rem;margin:.5rem 0">\u23F1\uFE0F Time: <strong>'+fmt(stSeconds)+'</strong>'+pbNote+'</p>';}
   panel.innerHTML='<div class="complete-card"><div class="emoji">'+emoji+'</div><h2>'+heading+'</h2>'+time+subtitle+'<div class="workout-summary"><div class="ws-row"><span>Total logged sets</span><strong>'+sum.exerciseCount+'</strong></div><div class="ws-row"><span>Total volume</span><strong>'+Math.round(sum.volume)+' kg</strong></div>'+(sum.rowDistance?'<div class="ws-row"><span>Total row distance</span><strong>'+Math.round(sum.rowDistance)+' m</strong></div>':'')+(sum.rowTime?'<div class="ws-row"><span>Total row time</span><strong>'+fmt(Math.round(sum.rowTime))+'</strong></div>':'')+'</div><div class="workout-summary"><label for="workout-notes">Notes</label><textarea id="workout-notes" placeholder="How did it feel?'+(isPartial?' Why did you stop early?':'')+'">'+esc(currentSession&&currentSession.notes||'')+'</textarea></div><button class="start-btn" style="margin-top:1rem" onclick="saveCurrentSession(\''+key+'\')">Save Workout</button><button class="btn-back" onclick="renderDayStart(\''+key+'\')">&#8592; Back</button></div>';
 }
 function saveCurrentSession(key){
@@ -2814,9 +2818,21 @@ function autoStartRest(sec){
   cdInterval=setInterval(function(){cdRemaining--;if(display)display.textContent=fmtBig(cdRemaining);if(cdRemaining<=5&&cdRemaining>0){if(display)display.classList.add('danger');tickBeep()}if(cdRemaining<=0){clearInterval(cdInterval);cdInterval=null;doneBeep();setTimeout(doneBeep,200);setTimeout(function(){nextStep()},800)}},1000);
 }
 function stopCountdown(){if(cdInterval){clearInterval(cdInterval);cdInterval=null}cdRemaining=0}
-function startSessionTimer(){if(stInterval)return;stInterval=setInterval(function(){stSeconds++;var d=document.getElementById('st-display');if(d)d.textContent=fmt(stSeconds)},1000)}
-function stopSessionTimer(){if(stInterval){clearInterval(stInterval);stInterval=null}}
-function resetSessionTimer(){stopSessionTimer();stSeconds=0;var d=document.getElementById('st-display');if(d)d.textContent='00:00'}
+function is300Day(key){return key==='fri'||key==='d4_4'||key==='d3_3'}
+function sessionPB(key){
+  var d=DS.get();var keys=is300Day(key)?['fri','d4_4','d3_3']:[key];var best=null;
+  (d.workouts||[]).forEach(function(w){if(w&&keys.indexOf(w.day)>=0&&!w.partial&&w.duration>0){if(best===null||w.duration<best)best=w.duration}});
+  return best;
+}
+function updateSessionPBDelta(){
+  var el=document.getElementById('st-delta');if(!el||!stPB)return;
+  var diff=stPB-stSeconds;
+  if(diff>=0){el.textContent=fmt(diff)+' to beat PB';el.className='st-delta ahead'}
+  else{el.textContent=fmt(-diff)+' over PB';el.className='st-delta behind'}
+}
+function startSessionTimer(){if(stInterval)return;stStartMs=Date.now();stInterval=setInterval(function(){stSeconds=Math.floor((stAccumMs+(Date.now()-stStartMs))/1000);var d=document.getElementById('st-display');if(d)d.textContent=fmt(stSeconds);updateSessionPBDelta()},250)}
+function stopSessionTimer(){if(stInterval){clearInterval(stInterval);stInterval=null;if(stStartMs>0)stAccumMs+=Date.now()-stStartMs;stSeconds=Math.floor(stAccumMs/1000)}}
+function resetSessionTimer(){stopSessionTimer();stAccumMs=0;stStartMs=0;stSeconds=0;var d=document.getElementById('st-display');if(d)d.textContent='00:00';updateSessionPBDelta()}
 var demoState=0;
 function startDemoCycle(){demoState=0;demoTimer=setInterval(cycleDemo,1500)}
 function cycleDemo(){var img=document.getElementById('demo-img');var d0=document.getElementById('dot0');var d1=document.getElementById('dot1');var lbl=document.getElementById('demo-label');if(!img)return;var step=steps[idx];if(!step||!step.imgKey)return;demoState=1-demoState;if(demoState===1){img.src=IMG[step.imgKey+'_1'];if(d0)d0.classList.remove('active');if(d1)d1.classList.add('active');if(lbl)lbl.textContent='End position'}else{img.src=IMG[step.imgKey+'_0'];if(d1)d1.classList.remove('active');if(d0)d0.classList.add('active');if(lbl)lbl.textContent='Start position'}}
@@ -3473,7 +3489,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.07.03').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.07.03.2').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
