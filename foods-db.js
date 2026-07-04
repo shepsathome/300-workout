@@ -37,6 +37,7 @@ var FOODS = [
   { name: 'Bread (wholemeal)', cal: 247, protein: 12.5, carbs: 41.2, fat: 4.2, serving: 30, unit: 'g' },
   { name: 'French Baguette', cal: 274, protein: 8.5, carbs: 53, fat: 1.5, serving: 250, unit: 'g' },
   { name: 'Baguette de Tradition (L\'Eclerc)', cal: 274, protein: 8.5, carbs: 53, fat: 1.5, serving: 225, unit: 'g' },
+  { name: 'Brioche Burger Bun (1 bun ~62.5g)', cal: 307, protein: 9.1, carbs: 52.8, fat: 6.1, serving: 62.5, unit: 'g' },
   { name: 'Banana', cal: 89, protein: 1.1, carbs: 22.8, fat: 0.3, serving: 120, unit: 'g' },
   { name: 'Apple', cal: 52, protein: 0.3, carbs: 13.8, fat: 0.2, serving: 180, unit: 'g' },
   { name: 'Watermelon', cal: 30, protein: 0.6, carbs: 7.6, fat: 0.2, serving: 200, unit: 'g' },
