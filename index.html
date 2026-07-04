@@ -979,6 +979,19 @@ function sessionSummary(session){
 }
 var QUICK_MEALS = [
   {
+    name: 'Chicken Gyros (homemade)',
+    emoji: '\u{1F959}',
+    slot: 2,
+    adjustable: true,
+    desc: 'Gyros chicken breast, seasoned fries, tzatziki + 1 naan — set chicken/fries/tzatziki weight',
+    items: [
+      { name: 'Gyros Chicken Breast (cooked)', amt: 150, unit: 'g', calories: 282, protein: 46.5, carbs: 4.2, fat: 7.5 },
+      { name: 'Gyros Seasoned Fries', amt: 150, unit: 'g', calories: 210, protein: 4.4, carbs: 37.8, fat: 4.7 },
+      { name: 'Tzatziki', amt: 60, unit: 'g', calories: 26, protein: 1.4, carbs: 2.8, fat: 1.1 },
+      { name: 'Garlic Naan (Skyr)', amt: 1, unit: ' naan', calories: 197, protein: 10, carbs: 36.3, fat: 0.7 }
+    ]
+  },
+  {
     name: 'Jordan Porridge + Sugar',
     emoji: '\u{1F963}',
     slot: 0,
@@ -2061,7 +2074,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.07.04.3</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.07.04.4</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -3500,7 +3513,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.07.04.3').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.07.04.4').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
