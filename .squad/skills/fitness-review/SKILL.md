@@ -2,13 +2,14 @@
 name: fitness-review
 description: >
   Weekly fitness review skill — typically run on Sundays for ~30 minutes.
-  Composes all five fitness-squad personas (Twight, Layne, Waterson,
-  Nguyen, Ashwell) into a structured weekly analysis. Reads training logs,
-  nutrition data, body metrics, Friday 300 benchmark times, and programme
-  phase status. Produces a premium HTML report with Chart.js visualisations
-  and per-persona sections. Use when Adam says "fitness review", "weekly
-  fitness check", "how was my training week", "review my fitness", "Sunday
-  check-in", or any variation asking for a composed weekly fitness analysis.
+  Composes all six fitness-squad personas (Twight, Layne, Waterson,
+  Nguyen, Ashwell, Spector) into a structured weekly analysis. Reads training
+  logs, nutrition data (macros AND food quality), body metrics, Friday 300
+  benchmark times, and programme phase status. Produces a premium HTML report
+  with Chart.js visualisations and per-persona sections. Use when Adam says
+  "fitness review", "weekly fitness check", "how was my training week", "review
+  my fitness", "Sunday check-in", or any variation asking for a composed weekly
+  fitness analysis.
 ---
 
 # Fitness Review — Weekly Fitness Analysis
@@ -16,7 +17,7 @@ description: >
 A structured ~30-minute weekly fitness review for Adam Shepherd. Designed
 to be run on Sunday evenings (default) but invokable any time. Composes
 with the **`fitness-squad`** skill — the Fitness Review orchestrates all
-five personas through a specific weekly review flow.
+six personas through a specific weekly review flow.
 
 **Output goal:** Adam ends the review with (1) clear understanding of
 what went well and what didn't this week, (2) data-driven assessment of
@@ -44,12 +45,13 @@ Read these files from `C:\Users\adamshep\OneDrive\Copilot\Obsidian\Adam_Personal
 7. `Research/Intermittent Fasting Research.md` — IF protocol and evidence
 
 ### From the fitness-squad
-Load all five charter files from `~/.github/skills/fitness-squad/charters/`:
+Load all six charter files from `~/.github/skills/fitness-squad/charters/`:
 - `00-head-trainer.md` (Twight)
 - `01-nutrition-strategist.md` (Layne)
 - `02-programme-architect.md` (Waterson)
 - `03-recovery-coach.md` (Nguyen)
 - `04-performance-analyst.md` (Ashwell)
+- `05-health-nutritionist.md` (Spector)
 
 Load research files as needed from `~/.github/skills/fitness-squad/research/`.
 
@@ -113,45 +115,6 @@ The PWA now includes a `bodyMetrics[]` array:
 - Chest, arms, thighs: expected monthly
 - Ashwell tracks trends and deltas between entries
 
-### Circumference interpretation (the recomp picture)
-
-For a body-recomposition goal, circumferences tell the half of the story
-the scale cannot. **Always evaluate all four, not just waist:**
-
-- **Waist** → the fat-loss signal (abdominal/visceral). Falling waist on
-  flat weight = recomposition working.
-- **Chest, arms, thighs** → the muscle-gain signal. These are how Adam
-  *sees* the "build" side. Without them you only measure fat loss, not
-  muscle gain — an incomplete recomp assessment.
-
-### Consistency guardrail (critical)
-
-Circumference data is only as good as the measurement consistency. Before
-trusting a delta, sanity-check it:
-
-- **Flag physically impossible swings.** A >3-4 cm change in thigh/chest/
-  arm in a single week is almost always a tape-placement change, not real
-  tissue change. Example (Jun 21): thigh read 57→37.5 cm — exclude as a
-  method change, do not analyse as real.
-- **Treat weekly circumference noise as noise.** Arms/chest/thighs move
-  slowly; ~1-1.5 cm week-to-week swings are measurement variance (flexed vs
-  relaxed, post-training pump, tape tension). Interpret these as **monthly
-  trends**, not weekly deltas.
-- **Waist + weight stay the weekly signals.** Circumferences are the
-  **monthly muscle panel**.
-- When a reading looks inconsistent, say so and assign **low confidence**
-  for that metric — never present a bad number as a real change.
-
-### In the report
-
-- Include a **Body Composition Trend** chart with body weight + waist as
-  the reliable weekly lines (dual axis).
-- When 2+ consistent monthly circumference readings exist, add a **muscle
-  panel** (chest/arms/thighs trend) — but only plot readings that pass the
-  consistency check. Annotate any excluded/low-confidence points.
-- Ashwell explicitly states confidence per measurement in the Data Gaps
-  section.
-
 ## Review Flow
 
 ### Section 1 — Data Gaps & Source Coverage (Ashwell leads)
@@ -189,18 +152,42 @@ Waterson assesses the training week:
 
 ### Section 4 — Nutrition Review (Layne leads)
 
-Layne assesses the nutrition week:
+Layne assesses the nutrition week (**quantity & performance**):
 - Average daily calories vs. target
 - Protein total and per-meal distribution
 - Leucine threshold compliance (did each meal hit ~3g leucine?)
-- Fibre intake
 - Hydration indicators
 - NEAT (step count if available)
 - Metabolic adaptation signals (if in extended deficit)
+- (Fibre & food quality are Spector's domain — Section 5)
 
 **Format:** Macro breakdown table + evidence-based recommendations
 
-### Section 5 — Recovery Assessment (Nguyen leads)
+### Section 5 — Food Quality & Wellbeing (Spector leads)
+
+Spector assesses **what** Adam ate this week (quality, not quantity), reading
+the actual logged food identities — not just macro totals:
+- **Plant diversity** — count distinct plants over the week (veg, fruit,
+  legumes, whole grains, nuts, seeds, herbs/spices). Target ~30. 🟢 25+ / 🟡 15–24 / 🔴 <15
+- **Fibre** — estimated daily grams vs 25–35 g target. 🟢 25+ / 🟡 18–24 / 🔴 <18
+- **Oily fish / omega-3** — servings this week (target 1–2); flag if zero
+- **Ultra-processed-food (UPF) load** — rough NOVA read: are UPFs occasional or
+  structurally anchoring meals?
+- **Veg/fruit proportion** — closer to ½ the plate, or a side-dish afterthought?
+- **Mediterranean/longevity pattern** — how close is the week to a Med-style
+  pattern (plants, olive oil, fish, legumes, minimal red/processed meat)?
+- **Added-sugar items** — occasional topping vs structural
+
+**Rules:** judge the **pattern over the week, never a single meal**; frame every
+suggestion as **"add," not "restrict"**; never moralise ("clean eating" is not a
+concept). Where a quality fix tensions with Layne's fuelling needs, surface the
+trade-off for Twight. Cite `research/health-research.md` (Harvard Healthy Eating
+Plate, fibre targets, Spector/ZOE plant diversity, NOVA/UPF, PREDIMED/Med diet).
+
+**Format:** Traffic-light scorecard (plants / fibre / oily fish / UPF load) +
+2–3 concrete "add this" swaps.
+
+### Section 6 — Recovery Assessment (Nguyen leads)
 
 Nguyen assesses recovery status:
 - Rest days taken vs. planned
@@ -212,9 +199,9 @@ Nguyen assesses recovery status:
 
 **Format:** Traffic light system (🟢 🟡 🔴) for each recovery dimension
 
-### Section 6 — Synthesis & Next Week (Twight leads)
+### Section 7 — Synthesis & Next Week (Twight leads)
 
-Twight synthesises all four lenses into a unified assessment:
+Twight synthesises all five lenses into a unified assessment:
 1. **Week grade** — A/B/C/D based on compliance, progression, and recovery
 2. **What went well** — top 2-3 wins, attributed to the right dimension
 3. **What needs work** — top 1-2 issues, with specific persona attribution
@@ -265,17 +252,11 @@ for tracking progress:
    actual calories as bars or filled area. Shade deficit days red,
    surplus days green.
 4. **Protein Trend** — line chart, daily protein with target line.
-5. **Body Weight & Waist Trend** — line chart from bodyMetrics[], body
-   weight + waist on a dual axis. These are the reliable weekly signals.
-   Falling waist on flat weight = recomposition; annotate it.
+5. **Body Weight Trend** — line chart from bodyMetrics[], with waist
+   as secondary axis if available. Show weekly entries.
 6. **Sleep Trend** — line chart of nightly hours from sleepLog[],
    colour-coded zones (green ≥7.5, amber 6.5-7.4, red <6.5).
    Show 7-day rolling average as a smoothed overlay line.
-
-**When 2+ consistent circumference readings exist, add:**
-6b. **Muscle Panel** — chest/arms/thighs trend (the monthly muscle-gain
-    signal). Plot only readings that pass the consistency guardrail; omit
-    or annotate any flagged as method changes / low confidence.
 
 **When 4+ weeks of data exist, add:**
 7. **Key Lift Progression** — multi-line chart tracking working weight
@@ -319,6 +300,7 @@ Key requirements:
   - Waterson (Programme): #2563eb (blueprint blue)
   - Nguyen (Recovery): #7c3aed (calm purple)
   - Ashwell (Performance): #dc2626 (data red)
+  - Spector (Food Quality): #ea580c (warm orange)
 - Charts: muted palette, clear labels, responsive, 250-350px height
 - Chart containers use `display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem`
   on desktop, `grid-template-columns: 1fr` on mobile
