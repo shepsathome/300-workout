@@ -174,7 +174,7 @@ var FOODS = [
 
   // WillPowders variants
   { name: 'WillPowders Dark Protein Shake (12g + water)', cal: 25.2, protein: 2.9, carbs: 0.5, fat: 0.9, serving: 262, unit: 'ml' },
-  { name: 'WillPowders Dark Protein Shake (12g + skimmed milk)', cal: 54.8, protein: 5.7, carbs: 5, fat: 1, serving: 312, unit: 'ml' },
+  { name: 'WillPowders Dark Protein Shake (24g + skimmed milk)', cal: 72, protein: 8, carbs: 5.4, fat: 1.6, serving: 324, unit: 'ml' },
   { name: 'WillPowders Dark Protein Shake (12g + whole milk)', cal: 86.3, protein: 6.1, carbs: 5.1, fat: 4.3, serving: 262, unit: 'ml' },
 
   // Dairy
