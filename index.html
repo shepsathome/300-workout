@@ -2074,7 +2074,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.07.04.4</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.07.04.5</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -3318,26 +3318,30 @@ function showPanel(key) {
 
 // === SEED FOUNDATION PROGRAMME CONFIG (if not already set) ===
 // === PHASE DEFINITIONS (squad-authored periodisation) ===
-// Each phase fully defines overload, exercise overrides, rest, cues and the
-// next transition. applyPhaseConfig() deep-applies one to a programmeConfig.
+// Each phase defines overload, per-exercise overrides (reps/tempo/weight/cue),
+// rest, cues and the next transition. applyPhaseConfig() deep-applies one.
+// NOTE: the NUMBER OF SETS is defined by each programme block's `rounds`
+// (circuit/superset structure) — NOT by these overrides. Overrides only change
+// rep targets, tempo, suggested weight and cues. Do not add a `sets` field
+// here expecting it to change set count; it won't (expand() uses bl.rounds).
 var PHASE_DEFS = {
   hypertrophy: {
     weeks: 4,
     label: 'Hypertrophy — Tempo + Volume',
-    description: 'Same 15kg ceiling. Overload through 4s eccentrics, pauses, +reps and an extra set on the main compounds. The tempo makes 15kg feel like 22kg.',
+    description: 'Same 15kg ceiling. Overload through 4s eccentrics, pauses and higher reps on the main compounds. The tempo makes 15kg feel like 22kg.',
     overload: { primary: 'tempo+volume', tempo: '4-1-1', pauseSeconds: 0, useHalfReps: false, unilateral: true, restMultiplier: 1.0 },
     exerciseOverrides: {
-      'bench-press': { sets: 5, repsTarget: '12–15', tempo: '4-1-1', weight: 15, cue: 'Same 15kg — 4s lowering, 1s pause on the chest. The slow eccentric IS the new overload. 5 sets.' },
-      'goblet-squat': { sets: 5, repsTarget: '15', tempo: '4-1-1', weight: 15, cue: '15kg, 4s down, 1s pause below parallel. Time under tension replaces heavier load.' },
-      'rdl': { sets: 4, repsTarget: '12', tempo: '4-0-1', weight: 15, cue: '15kg — 4s eccentric, feel the hamstring stretch. Control owns this.' },
-      'one-arm-row': { sets: 4, repsTarget: '12/arm', tempo: '3-1-1', weight: 15, cue: '15kg each arm, 1s squeeze at the top. Your main pull volume — make every rep count.' },
-      'shoulder-press': { sets: 4, repsTarget: '12/arm', tempo: '3-0-1', weight: 10, cue: 'Half-kneeling single-arm — close the overhead gap safely. Ribs down, no shrug. When you hit 4×12/arm clean, jump to 12.5kg.' },
-      'split-squat': { sets: 4, repsTarget: '10/leg', tempo: '3-1-1', weight: 15, cue: 'Unilateral overload — 15kg, 3s down, pause at the bottom. This is how you beat the DB ceiling.' },
-      'step-ups': { sets: 4, repsTarget: '12/leg', tempo: null, weight: 15, cue: '15kg, controlled. Full extension at top, no pushing off the bottom foot.' },
-      'kb-clean-press': { sets: 4, repsTarget: '10/arm', tempo: null, weight: 7.5, cue: '7.5kg — explosive hip drive, then controlled lower. Volume up to 10/arm.' },
-      'kb-swing': { sets: 4, repsTarget: '20', tempo: null, weight: 7.5, cue: '7.5kg — snap the hips hard. 4×20 builds the engine.' },
-      'renegade-row': { sets: 3, repsTarget: '10/arm', tempo: null, weight: 15, cue: '15kg — hips dead still. Anti-rotation core under load.' },
-      'floor-fly': { sets: 4, repsTarget: '15', tempo: '3-1-1', weight: 10, cue: '10kg — 3s out, controlled arc, 1s stretch. Chest isolation with tempo.' }
+      'bench-press': { repsTarget: '12–15', tempo: '4-1-1', weight: 15, cue: 'Same 15kg — 4s lowering, 1s pause on the chest. The slow eccentric IS the new overload.' },
+      'goblet-squat': { repsTarget: '15', tempo: '4-1-1', weight: 15, cue: '15kg, 4s down, 1s pause below parallel. Time under tension replaces heavier load.' },
+      'rdl': { repsTarget: '12', tempo: '4-0-1', weight: 15, cue: '15kg — 4s eccentric, feel the hamstring stretch. Control owns this.' },
+      'one-arm-row': { repsTarget: '12/arm', tempo: '3-1-1', weight: 15, cue: '15kg each arm, 1s squeeze at the top. Your main pull volume — make every rep count.' },
+      'shoulder-press': { repsTarget: '12/arm', tempo: '3-0-1', weight: 10, cue: 'Half-kneeling single-arm — close the overhead gap safely. Ribs down, no shrug. When 12/arm feels clean at 10kg, jump to 12.5kg.' },
+      'split-squat': { repsTarget: '10/leg', tempo: '3-1-1', weight: 15, cue: 'Unilateral overload — 15kg, 3s down, pause at the bottom. This is how you beat the DB ceiling.' },
+      'step-ups': { repsTarget: '12/leg', tempo: null, weight: 15, cue: '15kg, controlled. Full extension at top, no pushing off the bottom foot.' },
+      'kb-clean-press': { repsTarget: '10/arm', tempo: null, weight: 7.5, cue: '7.5kg — explosive hip drive, then controlled lower. Volume up to 10/arm.' },
+      'kb-swing': { repsTarget: '20', tempo: null, weight: 7.5, cue: '7.5kg — snap the hips hard. Higher-rep sets build the engine.' },
+      'renegade-row': { repsTarget: '10/arm', tempo: null, weight: 15, cue: '15kg — hips dead still. Anti-rotation core under load.' },
+      'floor-fly': { repsTarget: '15', tempo: '3-1-1', weight: 10, cue: '10kg — 3s out, controlled arc, 1s stretch. Chest isolation with tempo.' }
     },
     restPeriods: { strength: 90, circuit: 60, emom: 15, core: 0, finisher: 45 },
     globalCues: [
@@ -3364,12 +3368,12 @@ var PHASE_DEFS = {
     description: 'Lower reps (6–8) with maximal intent. Squeeze more out of the 15kg via pauses, 1.5-reps and wave loading.',
     overload: { primary: 'intensity', tempo: '2-1-1', pauseSeconds: 1, useHalfReps: true, unilateral: false, restMultiplier: 1.3 },
     exerciseOverrides: {
-      'bench-press': { sets: 5, repsTarget: '6–8', tempo: '2-1-1', weight: 15, cue: '15kg with a 1s pause + a half-rep out of the bottom — that\'s your intensity at a capped load.' },
-      'goblet-squat': { sets: 5, repsTarget: '8', tempo: '2-1-1', weight: 15, cue: '15kg, pause in the hole, drive up explosively. Low reps, max intent.' },
-      'rdl': { sets: 4, repsTarget: '6–8', tempo: '3-0-1', weight: 15, cue: '15kg — heavy-feel hinge. Brace hard, control the stretch.' },
-      'one-arm-row': { sets: 4, repsTarget: '8/arm', tempo: '2-1-1', weight: 15, cue: '15kg, 1s squeeze. Heavy, deliberate pulls.' },
-      'shoulder-press': { sets: 4, repsTarget: '8/arm', tempo: '2-0-1', weight: 12.5, cue: 'Half-kneeling single-arm — push to 12.5kg if 10kg felt strong and pain-free in hypertrophy.' },
-      'split-squat': { sets: 4, repsTarget: '8/leg', tempo: '2-1-1', weight: 15, cue: '15kg, pause at the bottom. Unilateral strength.' }
+      'bench-press': { repsTarget: '6–8', tempo: '2-1-1', weight: 15, cue: '15kg with a 1s pause + a half-rep out of the bottom — that\'s your intensity at a capped load.' },
+      'goblet-squat': { repsTarget: '8', tempo: '2-1-1', weight: 15, cue: '15kg, pause in the hole, drive up explosively. Low reps, max intent.' },
+      'rdl': { repsTarget: '6–8', tempo: '3-0-1', weight: 15, cue: '15kg — heavy-feel hinge. Brace hard, control the stretch.' },
+      'one-arm-row': { repsTarget: '8/arm', tempo: '2-1-1', weight: 15, cue: '15kg, 1s squeeze. Heavy, deliberate pulls.' },
+      'shoulder-press': { repsTarget: '8/arm', tempo: '2-0-1', weight: 12.5, cue: 'Half-kneeling single-arm — push to 12.5kg if 10kg felt strong and pain-free in hypertrophy.' },
+      'split-squat': { repsTarget: '8/leg', tempo: '2-1-1', weight: 15, cue: '15kg, pause at the bottom. Unilateral strength.' }
     },
     restPeriods: { strength: 150, circuit: 75, emom: 20, core: 0, finisher: 60 },
     globalCues: [
@@ -3447,17 +3451,17 @@ function applyPhaseConfig(cfg, key) {
         restMultiplier:1.0
       },
       exerciseOverrides:{
-        'bench-press':{sets:4,repsTarget:'10–12',tempo:null,cue:'You\'re at 15kg — focus on perfect control and full ROM. When you hit 4×12 clean, Foundation is done.',weight:15},
-        'goblet-squat':{sets:4,repsTarget:'12',tempo:null,cue:'15kg for all 4 sets. Depth below parallel, chest up. Own this weight before we change the stimulus.',weight:15},
-        'rdl':{sets:4,repsTarget:'10',tempo:null,cue:'15kg — hinge from hips, feel the hamstring stretch. Slow and controlled.',weight:15},
-        'one-arm-row':{sets:3,repsTarget:'10/arm',tempo:null,cue:'15kg each arm. Pull to hip, squeeze shoulder blade. This is your main pull volume.',weight:15},
-        'shoulder-press':{sets:4,repsTarget:'10/arm',tempo:null,cue:'Half-kneeling single-arm — if you can do 4×12/arm clean, try 12.5kg next session.',weight:10},
-        'split-squat':{sets:4,repsTarget:'8/leg',tempo:null,cue:'Testing 15kg — if form breaks, drop to 12.5kg on later sets. That\'s smart, not weak.',weight:15},
-        'step-ups':{sets:4,repsTarget:'10/leg',tempo:null,cue:'15kg. Drive through the heel of the working leg. Full extension at top.',weight:15},
-        'kb-clean-press':{sets:4,repsTarget:'8/arm',tempo:null,cue:'7.5kg — this is your only KB. Focus on explosive hip drive into the clean.',weight:7.5},
-        'kb-swing':{sets:3,repsTarget:'15',tempo:null,cue:'7.5kg — snap the hips. Power comes from the hinge, not the arms.',weight:7.5},
-        'renegade-row':{sets:3,repsTarget:'8/arm',tempo:null,cue:'15kg — keep hips dead still. Anti-rotation is the core workout here.',weight:15},
-        'floor-fly':{sets:4,repsTarget:'12',tempo:null,cue:'10kg — controlled arc, slight bend in elbows. Floor limits ROM which protects shoulders.',weight:10}
+        'bench-press':{repsTarget:'10–12',tempo:null,cue:'You\'re at 15kg — focus on perfect control and full ROM. When 12 reps feel clean at 15kg, Foundation is done.',weight:15},
+        'goblet-squat':{repsTarget:'12',tempo:null,cue:'15kg on every set. Depth below parallel, chest up. Own this weight before we change the stimulus.',weight:15},
+        'rdl':{repsTarget:'10',tempo:null,cue:'15kg — hinge from hips, feel the hamstring stretch. Slow and controlled.',weight:15},
+        'one-arm-row':{repsTarget:'10/arm',tempo:null,cue:'15kg each arm. Pull to hip, squeeze shoulder blade. This is your main pull volume.',weight:15},
+        'shoulder-press':{repsTarget:'10/arm',tempo:null,cue:'Half-kneeling single-arm — when 12/arm feels clean at 10kg, try 12.5kg next session.',weight:10},
+        'split-squat':{repsTarget:'8/leg',tempo:null,cue:'Testing 15kg — if form breaks late in a set, drop to 12.5kg. That\'s smart, not weak.',weight:15},
+        'step-ups':{repsTarget:'10/leg',tempo:null,cue:'15kg. Drive through the heel of the working leg. Full extension at top.',weight:15},
+        'kb-clean-press':{repsTarget:'8/arm',tempo:null,cue:'7.5kg — this is your only KB. Focus on explosive hip drive into the clean.',weight:7.5},
+        'kb-swing':{repsTarget:'15',tempo:null,cue:'7.5kg — snap the hips. Power comes from the hinge, not the arms.',weight:7.5},
+        'renegade-row':{repsTarget:'8/arm',tempo:null,cue:'15kg — keep hips dead still. Anti-rotation is the core workout here.',weight:15},
+        'floor-fly':{repsTarget:'12',tempo:null,cue:'10kg — controlled arc, slight bend in elbows. Floor limits ROM which protects shoulders.',weight:10}
       },
       restPeriods:{
         strength:75,
@@ -3472,7 +3476,7 @@ function applyPhaseConfig(cfg, key) {
         previewChanges:[
           'Add 3-4s eccentric (slow lowering) to all compounds',
           'Introduce 1.5 reps on bench, squat, RDL',
-          'Increase to 5 sets on primary compounds',
+          'Higher reps + slow eccentrics on primary compounds',
           'Rest stays at 75-90s (time under tension does the work)',
           'Same 15kg weights — the tempo makes them feel like 22kg'
         ]
@@ -3513,7 +3517,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.07.04.4').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.07.04.5').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);

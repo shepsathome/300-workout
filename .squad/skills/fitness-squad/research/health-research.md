@@ -109,8 +109,10 @@ structural anchor of meals. NOVA is a lens, not a morality test.
 - **Diet as a pattern beats diet as individual nutrients** — the Med pattern is
   the most robustly evidenced framework for eating for long-term health.
 
-**Coaching hook:** Adam is already close (olive oil, beans, fish sometimes) —
-nudging toward the Med pattern is realistic, not a diet overhaul.
+**Coaching hook:** Adam is already close (olive oil, beans, plenty of plants) —
+nudging toward the Med pattern is realistic, not a diet overhaul. (He doesn't
+eat fish, so lean on legumes/poultry for protein and walnuts + a supplement for
+omega-3 rather than the fish leg of the pattern.)
 
 ---
 
@@ -120,10 +122,14 @@ nudging toward the Med pattern is realistic, not a diet overhaul.
   different phytonutrients/antioxidants (e.g. leafy greens → folate/vitamin K;
   orange veg → beta-carotene; berries → polyphenols). No single food covers the
   spectrum — variety is the mechanism.
-- **Omega-3 (EPA/DHA):** **oily fish 1–2×/week** (salmon, mackerel, sardines,
-  herring) is the best-evidenced source; supports cardiovascular and brain
-  health. If fish is absent, an algae/fish-oil supplement is the fallback
-  (defer dose to Layne).
+- **Omega-3 (EPA/DHA) — Adam's constraint:** Adam dislikes fish; **canned tuna
+  is the only fish he'll eat** and it carries negligible EPA/DHA, so oily fish
+  (salmon/mackerel/sardines) is **not an option** — do not recommend it. Route
+  omega-3 two ways: (1) **plant ALA** daily from walnuts, chia, ground flax/
+  linseed and rapeseed oil (ALA converts only partially to EPA/DHA, but still
+  beneficial); (2) an **omega-3 supplement** — algae oil delivers vegan EPA/DHA,
+  or standard fish/cod-liver capsules if acceptable. Defer dose to Layne. Canned
+  tuna still counts as a fine **lean protein**, just not an omega-3 source.
 - **Vitamin D:** commonly low, especially with limited sun/indoor lifestyles —
   worth flagging as a *health* (not performance) consideration; supplement
   decision → Layne.
@@ -154,7 +160,7 @@ nudging toward the Med pattern is realistic, not a diet overhaul.
 |--------|--------|-------|-----|
 | Distinct plants / week | 25–30+ | 15–24 | <15 |
 | Fibre / day | 25–35 g | 18–24 g | <18 g |
-| Oily fish / week | 1–2 servings | — | 0 |
+| Omega-3 source | plant ALA daily + supplement | ALA only, no supp | neither |
 | Veg+fruit | ~½ each plate | side-dish only | rare |
 | UPF-anchored meals | occasional | several/week | most meals |
 | Added-sugar items | topping/occasional | daily habit | structural |
