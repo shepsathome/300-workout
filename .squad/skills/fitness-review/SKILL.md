@@ -55,6 +55,63 @@ Load all six charter files from `~/.github/skills/fitness-squad/charters/`:
 
 Load research files as needed from `~/.github/skills/fitness-squad/research/`.
 
+## Data Accuracy & Verification Protocol (MANDATORY — read before every review)
+
+A review is only valuable if every number and claim is true. Two real
+failures have happened: (a) reporting a bench "5-set prescription" that the
+app never rendered — it came from a dead config field, not the programme;
+(b) attributing an ~11% tonnage rise to "floor flys / the phase change"
+with no evidence. Both eroded trust. This protocol exists to make them
+impossible to repeat.
+
+### Rule 1 — Every claim must trace to a named source
+Before writing any factual or numeric statement, know which source it comes
+from. There are exactly three kinds of claim, and they must never be blurred:
+
+| Claim type | Definitive source of truth | Example |
+|-----------|---------------------------|---------|
+| **Observed** (what Adam actually did) | The **Gist workout/nutrition data** — logged sets, reps, weights, foods, dates | "You logged 3 sets of bench at 15kg on Monday" |
+| **Prescribed** (what the programme asks for) | The **programme block definitions** — the `blocks[].rounds` / `reps` in `index.html` (or `The Spartan-Spider Programme.md`) for the ACTIVE day | "Monday Block A prescribes bench in a 3-round block = 3 sets" |
+| **Inferred** (interpretation/cause) | Explicitly labelled as a hypothesis, never as fact | "Tonnage rose ~11% — cause not verifiable from data; possibly normal variation" |
+
+If a statement cannot be tied to one of these, **do not write it.**
+
+### Rule 2 — The set/rep/tempo trap (the exact bug that burned us)
+**Set count comes ONLY from the programme block's `rounds`** — the workout
+runner (`expand()`) derives it from `bl.rounds` and nothing else.
+- The phase-config `exerciseOverrides` do **NOT** contain a set count (the
+  misleading `sets:` field was removed). They only carry rep targets, tempo,
+  suggested weight and cues.
+- **NEVER state a prescribed set count without opening the active day's block
+  and reading `rounds`.** Do not infer it from phase metadata, from memory, or
+  from what "hypertrophy usually means".
+- Remember the phase logic: the Hypertrophy phase overloads the **same** sets
+  via tempo + reps. It does **not** add sets. Do not imply a set increase.
+
+### Rule 3 — Never claim what the data can't capture
+The logs record weight, reps, sets, dates, foods and body metrics. They do
+**NOT** record: lift **tempo/speed**, RPE/effort, range of motion, or form.
+- Never assert "the tempo landed / didn't land", "you left reps in the tank",
+  etc., as fact. If it matters, ask Adam or clearly frame it as an open
+  question ("the app can't verify tempo — how did the eccentrics feel?").
+
+### Rule 4 — No causation without evidence
+Correlation in one week is not cause. Tonnage changes, plateau breaks, waist
+readings, etc. must be reported as the **number** plus, at most, a **labelled
+hypothesis**. Phrases like "the floor flys drove this" or "the phase change
+caused that" are banned unless the data isolates the cause.
+
+### Rule 5 — Pre-publish claim audit (do this before finalising the report)
+Re-read the drafted report and, for **every** numeric or factual claim, silently
+confirm: *which source is this from, and did I actually check it this session?*
+- Any prescribed set/rep/weight/tempo number → confirm you opened the block.
+- Any "you did X" → confirm it's in the Gist data for this week.
+- Any cause/effect → confirm it's labelled as a hypothesis.
+- Anything you cannot verify → **delete it or explicitly flag it as unverified.**
+When correcting a previously-published claim, state the correction plainly
+(Adam values honesty over a clean-looking report).
+
+
 ## Critical: Programme-Aware Analysis
 
 The Spartan-Spider Programme supports **3, 4, and 5-day splits**. The PWA
@@ -142,11 +199,16 @@ Ashwell presents the week's data:
 ### Section 3 — Training Review (Waterson leads)
 
 Waterson assesses the training week:
-- Were all prescribed exercises completed?
+- Were all prescribed exercises completed? (compare Gist-logged sets/reps
+  against the ACTIVE day's block definition — see Verification Rule 2)
 - Were loads appropriate (progressive overload check)?
 - Movement pattern balance (push:pull ratio, posterior chain coverage)
 - Any exercises that need substitution or progression
 - Phase status: weeks into current phase, staleness indicators
+
+**Before stating any prescribed set/rep/tempo number, apply the Data Accuracy
+& Verification Protocol** — set counts come from the block `rounds`, never
+from phase config; hypertrophy overloads via tempo, not extra sets.
 
 **Format:** Exercise-by-exercise assessment with recommendations
 
@@ -318,4 +380,8 @@ The squad works with whatever data is available. If data is sparse:
 - **No Friday 300 this week:** Skip benchmark section; note gap
 
 Never fabricate data. If a metric is unknown, say so and explain what
-it means for the analysis.
+it means for the analysis. Before finalising, run the **Pre-publish claim
+audit** (Verification Rule 5): every number and factual claim must trace to
+the Gist data (observed), a programme block (prescribed), or be labelled a
+hypothesis (inferred). Delete or flag anything you did not actually verify
+this session.
