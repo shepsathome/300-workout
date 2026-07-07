@@ -85,6 +85,7 @@ var FOODS = [
   { name: 'Grenade Fudged Up Bar', cal: 350, protein: 36, carbs: 32, fat: 13, serving: 60, unit: 'g' },
   { name: 'Nature Valley Protein (Peanut & Choc)', cal: 489, protein: 25.6, carbs: 27.5, fat: 28.3, serving: 40, unit: 'g' },
   { name: 'Dark Chocolate (70%)', cal: 598, protein: 7.8, carbs: 45.9, fat: 42.6, serving: 25, unit: 'g' },
+  { name: 'Brazil Nuts in 70% Dark Chocolate (homemade, per piece)', cal: 3832, protein: 72.8, carbs: 141, fat: 353.6, serving: 5, unit: ' pieces' },
   { name: 'Hummus', cal: 166, protein: 7.9, carbs: 14.3, fat: 9.6, serving: 50, unit: 'g' },
   { name: 'Baked Beans', cal: 78, protein: 4.7, carbs: 12.9, fat: 0.2, serving: 200, unit: 'g' },
   { name: 'Porridge with Milk (prepared)', cal: 84, protein: 3.3, carbs: 12.3, fat: 2.2, serving: 250, unit: 'g' },
