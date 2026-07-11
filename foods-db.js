@@ -65,6 +65,7 @@ var FOODS = [
   { name: 'Mozzarella', cal: 252, protein: 24, carbs: 2.6, fat: 16, serving: 50, unit: 'g' },
   { name: 'Gouda (sliced)', cal: 356, protein: 24, carbs: 0, fat: 28, serving: 20, unit: 'g' },
   { name: 'British Heritage Extra Mature Cheddar (1 slice)', cal: 411, protein: 24, carbs: 0.1, fat: 35, serving: 25, unit: 'g' },
+  { name: 'Provolone Fumé (smoked, 1 slice ~21g)', cal: 349, protein: 26, carbs: 0.5, fat: 27, serving: 21, unit: 'g' },
   { name: 'Butter', cal: 717, protein: 0.9, carbs: 0.1, fat: 81.1, serving: 10, unit: 'g' },
   { name: 'Cream Cheese (light)', cal: 160, protein: 7, carbs: 6, fat: 11, serving: 30, unit: 'g' },
 
