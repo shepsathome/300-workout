@@ -231,23 +231,44 @@ Spector assesses **what** Adam ate this week (quality, not quantity), reading
 the actual logged food identities — not just macro totals:
 - **Plant diversity** — count distinct plants over the week (veg, fruit,
   legumes, whole grains, nuts, seeds, herbs/spices). Target ~30. 🟢 25+ / 🟡 15–24 / 🔴 <15
-- **Fibre** — estimated daily grams vs 25–35 g target. 🟢 25+ / 🟡 18–24 / 🔴 <18
-- **Oily fish / omega-3** — servings this week (target 1–2); flag if zero
+- **Fibre (qualitative estimate)** — the app does NOT track fibre as a field,
+  so estimate it from the fibre-rich foods actually logged (beans/legumes, oats/
+  porridge, whole-grain/seeded bread, berries, veg, nuts/seeds, whole fruit).
+  Comment on roughly where the week sits vs the 25–35 g target and name the single
+  most effective add to close the gap. 🟢 25+ / 🟡 18–24 / 🔴 <18. Fibre is Adam's
+  highest-value untracked quality metric — always give it a real read, not a token line.
+- **Added sugar (qualitative — the app does NOT track sugar as a field)** — you
+  cannot read a sugar number; instead scan the logged food *identities* for where
+  ADDED sugar enters: sugar add-ons (e.g. the brown-sugar porridge topping),
+  sweetened/flavoured items, sauces (ketchup, etc.), honey/maple/syrup, sweet
+  snacks/bars, chocolate. **Critical distinction — do NOT flag intrinsic sugar as
+  a problem:** whole fruit/berries (sugar + fibre) and plain dairy (lactose, e.g.
+  plain Greek yoghurt/Skyr) are NOT added-sugar offenders. Judge whether added
+  sugar is an occasional *topping* or *structurally anchoring* meals. Where a food
+  is homemade (granola, protein bars) and its added sugar is unknown, say so and
+  ask Adam for the recipe rather than inventing a figure.
+- **Omega-3 (fish constraint)** — Adam dislikes fish; canned tuna is the only
+  fish he eats and it's negligible EPA/DHA. Do NOT recommend oily fish. Check for
+  plant ALA (walnuts, chia, ground flax/linseed, rapeseed oil) + an omega-3
+  supplement (algae oil); flag if both are absent and co-flag a supplement to Layne.
 - **Ultra-processed-food (UPF) load** — rough NOVA read: are UPFs occasional or
   structurally anchoring meals?
 - **Veg/fruit proportion** — closer to ½ the plate, or a side-dish afterthought?
 - **Mediterranean/longevity pattern** — how close is the week to a Med-style
-  pattern (plants, olive oil, fish, legumes, minimal red/processed meat)?
-- **Added-sugar items** — occasional topping vs structural
+  pattern (plants, olive oil, legumes, walnuts for omega-3, minimal red/processed
+  meat — no fish leg, given the constraint above)?
 
 **Rules:** judge the **pattern over the week, never a single meal**; frame every
 suggestion as **"add," not "restrict"**; never moralise ("clean eating" is not a
-concept). Where a quality fix tensions with Layne's fuelling needs, surface the
-trade-off for Twight. Cite `research/health-research.md` (Harvard Healthy Eating
-Plate, fibre targets, Spector/ZOE plant diversity, NOVA/UPF, PREDIMED/Med diet).
+concept). Never flag a food as a sugar problem without checking it's *added*
+sugar, not intrinsic (whole-fruit/dairy) — verify against the logged food, don't
+pattern-match a generic warning onto Adam's meal. Where a quality fix tensions
+with Layne's fuelling needs, surface the trade-off for Twight. Cite
+`research/health-research.md` (Harvard Healthy Eating Plate, fibre targets,
+Spector/ZOE plant diversity, NOVA/UPF, PREDIMED/Med diet).
 
-**Format:** Traffic-light scorecard (plants / fibre / oily fish / UPF load) +
-2–3 concrete "add this" swaps.
+**Format:** Traffic-light scorecard (plants / **fibre** / **added sugar** /
+omega-3 source / UPF load) + 2–3 concrete "add this" swaps.
 
 ### Section 6 — Recovery Assessment (Nguyen leads)
 
