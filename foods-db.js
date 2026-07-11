@@ -114,6 +114,7 @@ var FOODS = [
 
   // Itsu Snacks
   { name: 'Itsu 60% Dark Chocolate Moons', cal: 535, protein: 7.5, carbs: 42.5, fat: 35, serving: 40, unit: 'g' },
+  { name: 'M&S Dark Chocolate Rice Cakes (25g pack)', cal: 483, protein: 7.3, carbs: 61.1, fat: 22, serving: 25, unit: 'g' },
   { name: 'Itsu Sweet Chilli Toasted Cashews', cal: 590, protein: 18, carbs: 30, fat: 42.5, serving: 40, unit: 'g' },
 
   // Homemade
