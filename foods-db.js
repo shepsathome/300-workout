@@ -21,6 +21,7 @@ var FOODS = [
   { name: 'HiPRO Chocolat (160g pot)', cal: 74, protein: 11, carbs: 6.3, fat: 0.4, serving: 160, unit: 'g' },
   { name: 'Auchan SPORT Crème Dessert Chocolat 13g (125g pot)', cal: 75, protein: 10, carbs: 4.9, fat: 1.5, serving: 125, unit: 'g' },
   { name: 'Jambon Supérieur (1 slice)', cal: 107, protein: 17, carbs: 1.5, fat: 3.5, serving: 25, unit: 'g' },
+  { name: 'Jambon Cuit Supérieur Chiffonnade (1 slice ~25g)', cal: 111, protein: 20, carbs: 0.9, fat: 3, serving: 25, unit: 'g' },
   { name: 'Herta Le Bon Paris -25% Sel Ham (1 slice)', cal: 107, protein: 18, carbs: 1, fat: 3.4, serving: 35, unit: 'g' },
 
   // Carbs
@@ -168,6 +169,7 @@ var FOODS = [
   { name: 'Dark Chocolate (80%)', cal: 580, protein: 12, carbs: 33, fat: 46, serving: 10, unit: 'g' },
   { name: 'Cachet Almonds & Orange Dark Choc', cal: 532, protein: 6.8, carbs: 43, fat: 35, serving: 8, unit: 'g' },
   { name: 'Sourdough Seeded Toast (1 slice)', cal: 260, protein: 9, carbs: 43, fat: 5, serving: 50, unit: 'g' },
+  { name: 'Sandwich Loaf (homemade, per 100g)', cal: 252, protein: 7.2, carbs: 46.5, fat: 3.8, serving: 50, unit: 'g' },
   { name: 'Grass-Fed Butter (unsalted)', cal: 717, protein: 0.9, carbs: 0.1, fat: 81, serving: 10, unit: 'g' },
   { name: 'Streaky Bacon (cooked)', cal: 541, protein: 37, carbs: 1.4, fat: 42, serving: 25, unit: 'g' },
   { name: 'Streaky Bacon (Nature, 1 slice ~14g)', cal: 292, protein: 16, carbs: 0.8, fat: 25, serving: 43, unit: 'g' },
