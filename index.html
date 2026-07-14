@@ -996,11 +996,10 @@ var QUICK_MEALS = [
     emoji: '\u{1F35D}',
     slot: 2,
     adjustable: true,
-    desc: 'Honey butter chicken, cooked linguine & Tuscan garlic alfredo sauce — set chicken & pasta weight (cooked)',
+    desc: 'Honey butter chicken + linguine in Tuscan garlic alfredo sauce — set chicken & pasta-sauce weight (cooked)',
     items: [
       { name: 'Honey Butter Chicken (cooked)', amt: 150, unit: 'g', calories: 280, protein: 48.3, carbs: 3.8, fat: 9.7 },
-      { name: 'Cooked Linguine/Fettuccine', amt: 132, unit: 'g', calories: 198, protein: 6.9, carbs: 39.6, fat: 0.8 },
-      { name: 'Tuscan Garlic Alfredo Sauce', amt: 1, unit: ' serving', calories: 213, protein: 11.4, carbs: 15, fat: 12.4 }
+      { name: 'Pasta in Alfredo Sauce', amt: 268, unit: 'g', calories: 411, protein: 18.3, carbs: 54.6, fat: 13.3 }
     ]
   },
   {
@@ -2086,7 +2085,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.07.14</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.07.14.2</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -3529,7 +3528,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.07.14').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.07.14.2').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
