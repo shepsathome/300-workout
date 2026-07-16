@@ -84,6 +84,7 @@ var FOODS = [
 
   // Common Meals & Snacks
   { name: 'Protein Bar (average)', cal: 370, protein: 30, carbs: 35, fat: 10, serving: 60, unit: 'g' },
+  { name: 'HiPro Salted Caramel Protein Bar (45g bar)', cal: 362, protein: 34, carbs: 32, fat: 15, serving: 45, unit: 'g' },
   { name: 'Grenade Fudged Up Bar', cal: 350, protein: 36, carbs: 32, fat: 13, serving: 60, unit: 'g' },
   { name: 'Nature Valley Protein (Peanut & Choc)', cal: 489, protein: 25.6, carbs: 27.5, fat: 28.3, serving: 40, unit: 'g' },
   { name: 'Dark Chocolate (70%)', cal: 598, protein: 7.8, carbs: 45.9, fat: 42.6, serving: 25, unit: 'g' },
