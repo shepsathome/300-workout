@@ -143,6 +143,7 @@ var FOODS = [
   { name: 'Movies Star Popcorn Sel de Guérande (100g box)', cal: 416, protein: 10, carbs: 70, fat: 13, serving: 100, unit: 'g' },
   { name: 'Vico Lentil Crisps (Fromage du Jura)', cal: 458, protein: 13, carbs: 55, fat: 19, serving: 30, unit: 'g' },
   { name: 'M&S Olive Oil & Sea Salt Crisps', cal: 523, protein: 5.9, carbs: 52.1, fat: 31.4, serving: 40, unit: 'g' },
+  { name: 'Orange Olive Oil Cake (homemade)', cal: 452, protein: 5.5, carbs: 49.3, fat: 26.2, serving: 80, unit: 'g' },
   { name: 'Romana Pizza Dough (1 ball)', cal: 245, protein: 6.3, carbs: 47.5, fat: 2.5, serving: 220, unit: 'g' },
   { name: 'Sourdough Neapolitan Dough (1 ball)', cal: 241, protein: 6.6, carbs: 50.2, fat: 0.7, serving: 250, unit: 'g' },
   { name: 'Fior di Latte Mozzarella', cal: 280, protein: 22, carbs: 0, fat: 22, serving: 70, unit: 'g' },
