@@ -1009,9 +1009,9 @@ var QUICK_MEALS = [
     adjustable: true,
     desc: 'Chipotle chicken thighs, crispy roast potatoes & creamy chipotle sauce — set each weight (cooked)',
     items: [
-      { name: 'Chipotle Chicken (cooked)', amt: 150, unit: 'g', calories: 375, protein: 38.3, carbs: 6.8, fat: 21.3 },
+      { name: 'Chipotle Chicken Breast (cooked)', amt: 150, unit: 'g', calories: 355, protein: 48.1, carbs: 7.6, fat: 12.9 },
       { name: 'Crispy Seasoned Potatoes (roasted)', amt: 200, unit: 'g', calories: 224, protein: 5.6, carbs: 46.8, fat: 2 },
-      { name: 'Creamy Chipotle Sauce', amt: 100, unit: 'g', calories: 123, protein: 5.6, carbs: 12.1, fat: 5.5 }
+      { name: 'Creamy Chipotle Sauce', amt: 100, unit: 'g', calories: 130, protein: 5.7, carbs: 12.5, fat: 6.2 }
     ]
   },
   {
@@ -2097,7 +2097,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.07.20</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.07.20.2</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -3540,7 +3540,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.07.20').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.07.20.2').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
