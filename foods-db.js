@@ -50,6 +50,7 @@ var FOODS = [
   { name: 'Avocado', cal: 160, protein: 2, carbs: 8.5, fat: 14.7, serving: 100, unit: 'g' },
   { name: 'Olive Oil', cal: 884, protein: 0, carbs: 0, fat: 100, serving: 15, unit: 'g' },
   { name: 'Peanut Butter', cal: 588, protein: 25, carbs: 20, fat: 50, serving: 20, unit: 'g' },
+  { name: 'Crunchy Peanut Butter (100% peanuts)', cal: 608, protein: 30, carbs: 12, fat: 47, serving: 20, unit: 'g' },
   { name: 'Almond Butter', cal: 614, protein: 21, carbs: 19, fat: 56, serving: 20, unit: 'g' },
   { name: 'Almonds', cal: 579, protein: 21.2, carbs: 21.6, fat: 49.9, serving: 30, unit: 'g' },
   { name: 'Walnuts', cal: 654, protein: 15.2, carbs: 13.7, fat: 65.2, serving: 30, unit: 'g' },
