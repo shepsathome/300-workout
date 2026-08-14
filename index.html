@@ -2100,7 +2100,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.08.09.3</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.08.09.4</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2732,7 +2732,7 @@ function renderDayStart(key, days){
   var totalEx=expand(day).filter(function(s){return s.type==='ex'}).length;
   var todayIso=new Date().toISOString().slice(0,10);
   var isToday=(key===currentTodayKey);
-  var completedToday=(isToday&&hasLoggedWorkout(key,todayIso));
+  var completedToday=hasLoggedWorkout(key,todayIso);
   var preview='';
   for(var b=0;b<day.blocks.length;b++){
     var bl=day.blocks[b];
@@ -2746,10 +2746,15 @@ function renderDayStart(key, days){
     preview+='</ul></div>';
   }
   var exerciseListHtml='<div style="margin-top:1rem;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-card);padding:.75rem;box-shadow:var(--sh)"><h3 style="font-size:.88rem;color:var(--accent);margin-bottom:.25rem">\uD83D\uDCCB Exercises</h3><p style="font-size:.72rem;color:var(--muted);margin-bottom:.4rem">'+totalEx+' exercises at a glance</p>'+preview+'</div>';
-  var head='<div class="static" style="text-align:center"><h2>'+day.icon+' '+day.title+'</h2><p style="margin:.5rem 0">'+day.time+' \u00B7 '+totalEx+' exercises</p><div class="warmup-card"><strong>\uD83D\uDD25 Warm-up first</strong> '+day.warmup+'</div>';
-  if(isToday&&!completedToday){panel.innerHTML=head+exerciseListHtml+'</div>';return}
-  if(isToday&&completedToday){panel.innerHTML=head+'<div style="margin:.25rem 0 .15rem;padding:.8rem .9rem;border-radius:14px;background:rgba(52,199,89,.08);border:1px solid rgba(52,199,89,.16);color:var(--green);font-size:.86rem;font-weight:700">✅ Completed today</div><div style="font-size:.76rem;color:var(--muted);margin-top:.55rem"><a href="#" onclick="event.preventDefault();startWorkout(\''+key+'\')" style="color:var(--muted);text-decoration:underline">Redo workout</a></div>'+exerciseListHtml+'</div>';return}
-  panel.innerHTML=head+exerciseListHtml+'</div>';
+  var head='<div class="static" style="text-align:center"><h2>'+day.icon+' '+day.title+'</h2><p style="margin:.5rem 0">'+day.time+' \u00B7 '+totalEx+' exercises</p>';
+  if(!isToday)head+='<div style="font-size:.76rem;color:var(--muted);margin:-.25rem 0 .5rem">Not scheduled for today \u2014 you can still log it now (e.g. catching up a missed day).</div>';
+  head+='<div class="warmup-card"><strong>\uD83D\uDD25 Warm-up first</strong> '+day.warmup+'</div>';
+  var startBtnHtml='<button class="start-btn" onclick="startWorkout(\''+key+'\')">\u25B6 '+(completedToday?'DO IT AGAIN':'START WORKOUT')+'</button>';
+  if(completedToday){
+    panel.innerHTML=head+'<div style="margin:.25rem 0 .15rem;padding:.8rem .9rem;border-radius:14px;background:rgba(52,199,89,.08);border:1px solid rgba(52,199,89,.16);color:var(--green);font-size:.86rem;font-weight:700">\u2705 Already logged today</div><div style="margin-top:.75rem">'+startBtnHtml+'</div>'+exerciseListHtml+'</div>';
+    return;
+  }
+  panel.innerHTML=head+'<div style="margin-top:.75rem">'+startBtnHtml+'</div>'+exerciseListHtml+'</div>';
 }
 function startWorkout(key){
   requestWakeLock();
@@ -3543,7 +3548,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.08.09.3').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.08.09.4').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
