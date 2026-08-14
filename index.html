@@ -1321,16 +1321,33 @@ function historySleepColor(hours){return hours>=7.5?'var(--green)':hours>=6.5?'v
 function historyWorkoutStreak(workouts){
   /* Weekly consistency streak: count consecutive completed weeks (Mon–Sun)
      where Adam trained at least 3 days. Current incomplete week is ignored. */
-  var seen={},dates=[];
-  workouts.forEach(function(w){if(w&&w.date&&!seen[w.date]){seen[w.date]=true;dates.push(w.date)}});
-  if(!dates.length)return{weeks:0,thisWeek:0};
-  /* Build a map: weekKey -> count of training days */
-  var weekMap={};
-  dates.forEach(function(ds){
-    var d=historyParseDate(ds);if(!d)return;
+  /* Sessions are deduped on date+day so that two DIFFERENT workouts on one
+     calendar date (e.g. a catch-up session plus the scheduled one) both count,
+     while an accidental duplicate log of the same workout does not. */
+  var seenSession={},sessions=[],seenDate={},dates=[];
+  workouts.forEach(function(w){
+    if(!w||!w.date)return;
+    var sk=w.date+'|'+(w.day||'');
+    if(!seenSession[sk]){seenSession[sk]=true;sessions.push(w.date)}
+    if(!seenDate[w.date]){seenDate[w.date]=true;dates.push(w.date)}
+  });
+  if(!sessions.length)return{weeks:0,thisWeek:0};
+  function weekKeyFor(ds){
+    var d=historyParseDate(ds);if(!d)return null;
     var day=d.getDay(),mon=new Date(d);mon.setDate(mon.getDate()-((day+6)%7));
-    var key=mon.toISOString().slice(0,10);
+    return mon.toISOString().slice(0,10);
+  }
+  /* weekMap: weekKey -> count of sessions (used for the weekly target) */
+  var weekMap={};
+  sessions.forEach(function(ds){
+    var key=weekKeyFor(ds);if(!key)return;
     weekMap[key]=(weekMap[key]||0)+1;
+  });
+  /* weekDayMap: weekKey -> count of distinct training days (used for the streak) */
+  var weekDayMap={};
+  dates.forEach(function(ds){
+    var key=weekKeyFor(ds);if(!key)return;
+    weekDayMap[key]=(weekDayMap[key]||0)+1;
   });
   /* Current week key */
   var now=new Date(),nowDay=now.getDay(),curMon=new Date(now);
@@ -1342,7 +1359,7 @@ function historyWorkoutStreak(workouts){
   checkDate.setDate(checkDate.getDate()-7);
   while(true){
     var wk=checkDate.toISOString().slice(0,10);
-    if((weekMap[wk]||0)>=3)streak++;else break;
+    if((weekDayMap[wk]||0)>=3)streak++;else break;
     checkDate.setDate(checkDate.getDate()-7);
   }
   return{weeks:streak,thisWeek:thisWeek};
@@ -2100,7 +2117,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.08.09.4</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.08.09.5</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -3548,7 +3565,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.08.09.4').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.08.09.5').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
