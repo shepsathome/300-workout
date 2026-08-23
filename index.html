@@ -657,7 +657,7 @@ const EX={
 'dead-bugs':{n:'Dead Bugs',h:'<strong>Setup:</strong> Lie on back, arms to ceiling, knees 90deg above hips.<br><strong>Move:</strong> Extend RIGHT arm overhead + LEFT leg out straight, hovering above floor. Return, switch. Back stays flat.',c:'Deep lower abs. If back arches off floor, gone too far.',v:'I5xbsA71JVo',img:'Dead_Bug'},
 'russian-twists':{n:'Medicine Ball Russian Twists',h:'<strong>Setup:</strong> Sit, knees bent, feet flat, ball at chest. Lean back until abs engage.<br><strong>Move:</strong> Rotate torso RIGHT then LEFT. Rotation from ribcage, not arms.',c:'Obliques. Lift feet to make harder.',v:'wkD8rjkodUI',img:'Russian_Twist'},
 'side-plank':{n:'Side Plank',h:'<strong>Setup:</strong> Lie on side, prop on forearm, elbow under shoulder.<br><strong>Move:</strong> Lift hips so body forms straight line. Hold. Switch sides after.',c:'Obliques + hip stabilisers.',v:'K2VljzCC16g',img:'Push_Up_to_Side_Plank'},
-'row-sprint':{n:'Rowing Sprint',h:'Drive with legs first, lean back, pull arms. Reverse on recovery.',c:'80% power from legs. Push hard!',v:'mrexeRFo4UM',img:'Jogging_Treadmill'},
+'row-sprint':{n:'Rowing Sprint',h:'Drive with legs first, lean back, pull arms. Reverse on recovery.',c:'80% power from legs. Push hard!',v:'mrexeRFo4UM',img:'Rowing_Stationary'},
 'bosu-hops':{n:'Bosu Ball Lateral Hops',h:'<strong>Setup:</strong> Bosu dome-side up, stand to one side.<br><strong>Move:</strong> Hop laterally over Bosu, landing softly. Quick feet, not big jumps.',c:'Calves, quads, ankle stability. Quiet = good form.',v:'ZbMFLaGvsFY',img:'YT_bosu-hops'},
 'thruster':{n:'Dumbbell Thruster',h:'<strong>Setup:</strong> DBs at shoulder height, feet shoulder-width.<br><strong>Move:</strong> Squat then drive up pressing DBs overhead in one motion.',c:'Everything. King of full-body conditioning.',v:'M0IRrU4MTKA',img:'Dumbbell_Shoulder_Press'},
 'mtn-climbers':{n:'Mountain Climbers',h:'<strong>Setup:</strong> Push-up position, body straight.<br><strong>Move:</strong> Drive knees to chest alternating, like running horizontally. Keep hips low.',c:'Core, hip flexors, cardio burn. Speed = intensity.',v:'nmwgirgXLYM',img:'Mountain_Climbers'},
@@ -719,15 +719,15 @@ const EX={
 'hammer-curl':{n:'Dumbbell Hammer Curl',h:'<strong>Setup:</strong> Stand tall, DB in each hand at sides, palms facing each other (neutral grip).<br><strong>Move:</strong> Curl DBs to shoulders keeping palms neutral. Squeeze at top. Lower slowly.',c:'Biceps + brachialis (outer arm thickness). Neutral grip = forearm bonus.',v:'zC3nLlEvin4',img:'hammer_curl'},
 'band-pull-apart':{n:'Resistance Band Pull-Apart',h:'<strong>Setup:</strong> Hold band at shoulder height, arms straight in front, palms down.<br><strong>Move:</strong> Pull band apart by squeezing shoulder blades together. Arms go wide. Slow return.',c:'Rear delts + upper back. High reps, constant tension. Shoulder health essential.',v:'JObYtU7Y7ag',img:'band_pull_apart'},
 'decline-pushup':{n:'Decline Push-Up (feet on bench)',h:'<strong>Setup:</strong> Feet on bench, hands on floor wider than shoulders. Body straight.<br><strong>Move:</strong> Lower chest to floor, push back up. Elbows at 45 degrees.',c:'Upper chest emphasis + front delts. Harder than regular push-ups — the elevation shifts the load.',v:'SKPab2YC8BE',img:'decline_pushup'},
-'tread-intervals':{n:'Treadmill Intervals',h:'<strong>Setup:</strong> Treadmill at a hard effort — a fast flat run, or a steep incline (8–12%) power-walk/run.<br><strong>Move:</strong> Go HARD for the work period, then step wide onto the side rails (or drop the incline/speed) for the rest. Repeat.',c:'Zone 5 engine work — pushes VO2max. Incline intervals spare the knees while still spiking the heart rate. Last interval should feel 8–9/10.',v:'',img:'Jogging_Treadmill'},
-'tread-zone2':{n:'Zone 2 Treadmill',h:'<strong>Setup:</strong> Treadmill on an incline (start ~4–6%) at a brisk walk — or flat at an easy jog.<br><strong>Move:</strong> Hold a conversational pace — you should be able to speak in full sentences the whole time. Incline walking gets you into Zone 2 with almost no joint impact.',c:'Aerobic base, low impact. Incline walking is the joint-friendly way to build the engine — ideal on recovery days. If you\'re gasping, drop the incline or pace.',v:'',img:'Jogging_Treadmill'},
+'row-intervals':{n:'Rowing Intervals',h:'<strong>Setup:</strong> Damper moderate, feet strapped, monitor visible. Easy paddle for 2 minutes before the first rep.<br><strong>Move:</strong> Drive hard for the work interval, then row very easy during the recovery. Keep stroke rate crisp, not frantic.',c:'Zone 5 engine work without treadmill impact. Last rep should feel 8–9/10 while technique stays clean: legs, hips, arms.',v:'mrexeRFo4UM',img:'Rowing_Stationary'},
+'row-zone2':{n:'Zone 2 Row',h:'<strong>Setup:</strong> Damper moderate, nasal/conversational pace. Keep stroke rate roughly 18–22 spm.<br><strong>Move:</strong> Hold steady pressure for the full duration. You should be able to speak in full sentences the whole time.',c:'Aerobic base and recovery blood flow. If you are gasping, slow the split — this is engine-building, not a test.',v:'4zWu1yuJ0_g',img:'Rowing_Stationary'},
 'ham-curl':{n:'Sliding Leg Curl',h:'<strong>Setup:</strong> Lie on back, heels on a towel (or wear socks on a smooth floor). Lift hips into a glute bridge.<br><strong>Move:</strong> Keep hips HIGH and slowly slide both heels out until legs are nearly straight, then pull them back in by curling the hamstrings. Lower hips only to reset.',c:'Knee-flexion hamstring work — pairs with RDLs to build the full hamstring and protect the knee. Fewer reps, hips locked up high.',v:'',img:'Single_Leg_Glute_Bridge'}
 };
 const DAYS={
 mon:{title:'Monday — Upper Body + Core',icon:'💪',time:'55–65 min',warmup:'2 min easy row → arm circles → band pull-aparts → push-up to downward dog x 5',blocks:[{name:'Block A — Strength',rounds:3,rest:60,ex:[{k:'bench-press',reps:'10–12'},{k:'one-arm-row',reps:'10/arm'},{k:'shoulder-press',reps:'10/arm'},{k:'kb-clean-press',reps:'8/arm'}]},{name:'Block B — Hypertrophy',rounds:3,rest:45,ex:[{k:'decline-pushup',reps:'12–15'},{k:'db-pullover',reps:'12'},{k:'ytw-raises',reps:'8–10'},{k:'db-curl',reps:'10-12'},{k:'hammer-curl',reps:'10'}]},{name:'Block C — Core',rounds:2,rest:0,ex:[{k:'hollow-body',reps:'30s',timed:1,sec:30},{k:'dead-bugs',reps:'12/side'},{k:'side-plank',reps:'20s/side',timed:1,sec:20}]},{name:'Finisher — Rowing',rounds:3,rest:45,ex:[{k:'row-sprint',reps:'250m'}]}]},
-tue:{title:'Tuesday — Conditioning & Agility',icon:'⚡',time:'50–55 min',warmup:'Dynamic stretches → high knees → lateral shuffles',blocks:[{name:'Block A — EMOM x 12 min (start each min, rest remaining)',rounds:4,rest:15,ex:[{k:'thruster',reps:'10'},{k:'renegade-row',reps:'8/arm'},{k:'burpee',reps:'10'}]},{name:'Block B — Agility Circuit',rounds:3,rest:60,ex:[{k:'bear-crawl',reps:'30s',timed:1,sec:30},{k:'bosu-hops',reps:'30s',timed:1,sec:30},{k:'mtn-climbers',reps:'30s',timed:1,sec:30},{k:'kb-swing',reps:'15'},{k:'bosu-balance',reps:'8/leg'},{k:'woodchops',reps:'12/side'},{k:'band-pull-apart',reps:'20'}]},{name:'Block C — Treadmill Intervals (Zone 5)',rounds:5,rest:75,ex:[{k:'tread-intervals',reps:'40s hard',timed:1,sec:40}]},{name:'Rowing Pyramid (optional — skip if you did the Zone 5 intervals)',rounds:1,rest:0,ex:[{k:'row-distance',reps:'500m',ra:60},{k:'row-distance',reps:'400m',ra:60},{k:'row-distance',reps:'300m',ra:60},{k:'row-distance',reps:'200m',ra:60},{k:'row-distance',reps:'100m'}]}]},
+tue:{title:'Tuesday — Conditioning & Agility',icon:'⚡',time:'50–55 min',warmup:'Dynamic stretches → high knees → lateral shuffles → 2 min easy row',blocks:[{name:'Block A — EMOM x 12 min (start each min, rest remaining)',rounds:4,rest:15,ex:[{k:'thruster',reps:'10'},{k:'renegade-row',reps:'8/arm'},{k:'burpee',reps:'10'}]},{name:'Block B — Agility Circuit',rounds:3,rest:60,ex:[{k:'bear-crawl',reps:'30s',timed:1,sec:30},{k:'bosu-hops',reps:'30s',timed:1,sec:30},{k:'mtn-climbers',reps:'30s',timed:1,sec:30},{k:'kb-swing',reps:'15'},{k:'bosu-balance',reps:'8/leg'},{k:'woodchops',reps:'12/side'},{k:'band-pull-apart',reps:'20'}]},{name:'Block C — Rowing Intervals (Zone 5)',rounds:5,rest:75,ex:[{k:'row-intervals',reps:'40s hard',timed:1,sec:40}]},{name:'Rowing Pyramid (optional — skip if you did the Zone 5 intervals)',rounds:1,rest:0,ex:[{k:'row-distance',reps:'500m',ra:60},{k:'row-distance',reps:'400m',ra:60},{k:'row-distance',reps:'300m',ra:60},{k:'row-distance',reps:'200m',ra:60},{k:'row-distance',reps:'100m'}]}]},
 wed:{title:'Wednesday \u2014 Lower Body + Power',icon:'\ud83e\uddb5',time:'50\u201355 min',warmup:'2 min easy row \u2192 squats x 10 \u2192 walking lunges x 10 \u2192 leg swings',blocks:[{name:'Block A \u2014 Strength',rounds:4,rest:75,ex:[{k:'goblet-squat',reps:'12'},{k:'rdl',reps:'10'},{k:'nordic-curl',reps:'8/leg'},{k:'ham-curl',reps:'8\u201310'},{k:'split-squat',reps:'8/leg'},{k:'step-ups',reps:'10/leg'}]},{name:'Block B \u2014 Power',rounds:3,rest:60,ex:[{k:'kb-swing',reps:'15'},{k:'jump-squat',reps:'10'},{k:'tuck-jumps',reps:'10'},{k:'calf-raises',reps:'15/leg'}]},{name:'Block C \u2014 Core',rounds:2,rest:0,ex:[{k:'hollow-body',reps:'30s',timed:1,sec:30},{k:'floor-wipers',reps:'12/side'},{k:'flutter-kicks',reps:'30 (4-count)'},{k:'leg-levers',reps:'20'},{k:'glute-bridge',reps:'10/side'}]}]},
-thu:{title:'Thursday — Recovery & Mobility',icon:'🧘',time:'35–45 min',warmup:'Take it slow today — this is recovery.',blocks:[{name:'Foam/Band Activation',rounds:2,rest:0,ex:[{k:'shoulder-dislocates',reps:'10'},{k:'hip-circles',reps:'10/dir'},{k:'kb-halos',reps:'8/dir'},{k:'arm-haulers',reps:'15'},{k:'band-pull-apart',reps:'15'}]},{name:'Turkish Get-Up & Carry',rounds:1,rest:0,ex:[{k:'turkish-getup',reps:'3/side'},{k:'farmer-carry',reps:'40s',timed:1,sec:40}]},{name:'Yoga Block Flow',rounds:1,rest:0,ex:[{k:'pigeon',reps:'90s/side',timed:1,sec:90},{k:'thoracic-ext',reps:'60s',timed:1,sec:60},{k:'childs-pose',reps:'60s',timed:1,sec:60},{k:'lizard-lunge',reps:'60s/side',timed:1,sec:60}]},{name:'Bosu Balance',rounds:3,rest:0,ex:[{k:'sl-stand',reps:'30s/leg',timed:1,sec:30},{k:'bosu-hold',reps:'30s',timed:1,sec:30}]},{name:'Zone 2 Engine',rounds:1,rest:0,ex:[{k:'tread-zone2',reps:'20 min'},{k:'static-stretch',reps:'5 min'}]}]},
+thu:{title:'Thursday — Recovery & Mobility',icon:'🧘',time:'35–45 min',warmup:'Take it slow today — this is recovery.',blocks:[{name:'Foam/Band Activation',rounds:2,rest:0,ex:[{k:'shoulder-dislocates',reps:'10'},{k:'hip-circles',reps:'10/dir'},{k:'kb-halos',reps:'8/dir'},{k:'arm-haulers',reps:'15'},{k:'band-pull-apart',reps:'15'}]},{name:'Turkish Get-Up & Carry',rounds:1,rest:0,ex:[{k:'turkish-getup',reps:'3/side'},{k:'farmer-carry',reps:'40s',timed:1,sec:40}]},{name:'Yoga Block Flow',rounds:1,rest:0,ex:[{k:'pigeon',reps:'90s/side',timed:1,sec:90},{k:'thoracic-ext',reps:'60s',timed:1,sec:60},{k:'childs-pose',reps:'60s',timed:1,sec:60},{k:'lizard-lunge',reps:'60s/side',timed:1,sec:60}]},{name:'Bosu Balance',rounds:3,rest:0,ex:[{k:'sl-stand',reps:'30s/leg',timed:1,sec:30},{k:'bosu-hold',reps:'30s',timed:1,sec:30}]},{name:'Zone 2 Engine',rounds:1,rest:0,ex:[{k:'row-zone2',reps:'20 min',timed:1,sec:1200},{k:'static-stretch',reps:'5 min'}]}]},
 fri:{title:'Friday \u2014 "The 300"',icon:'\u2694\ufe0f',time:'40\u201350 min',sessionTimer:1,warmup:'500m row (moderate) \u2192 dynamic stretches',blocks:[{name:'The 300 \u2014 Minimal rest. Beat your time.',rounds:1,rest:0,ex:[{k:'row-distance',reps:'500m'},{k:'db-deadlift',reps:'25'},{k:'push-ups',reps:'50'},{k:'tuck-jumps',reps:'25'},{k:'floor-wipers',reps:'25'},{k:'kb-clean-press',reps:'25 total'},{k:'goblet-squat',reps:'25'},{k:'renegade-row',reps:'25 total'},{k:'reverse-lunge',reps:'25 total'},{k:'eight-count',reps:'15'},{k:'kb-swing',reps:'25'},{k:'ball-slams',reps:'15'},{k:'hollow-body',reps:'60s',timed:1,sec:60},{k:'row-distance',reps:'500m'}]}]}
 };
 var DAYS_4={
@@ -747,7 +747,7 @@ d4_3:{title:'Day 3 — Active Recovery + Core',icon:'🧘',time:'40–45 min',wa
 {name:'Turkish Get-Up Practice',rounds:1,rest:0,ex:[{k:'turkish-getup',reps:'3/side'}]},
 {name:'Yoga Flow',rounds:1,rest:0,ex:[{k:'pigeon',reps:'90s/side',timed:1,sec:90},{k:'thoracic-ext',reps:'60s',timed:1,sec:60},{k:'childs-pose',reps:'60s',timed:1,sec:60},{k:'lizard-lunge',reps:'60s/side',timed:1,sec:60}]},
 {name:'Core Circuit',rounds:3,rest:30,ex:[{k:'hollow-body',reps:'30s',timed:1,sec:30},{k:'dead-bugs',reps:'12/side'},{k:'russian-twists',reps:'20 total'},{k:'plank',reps:'45s',timed:1,sec:45},{k:'side-plank',reps:'20s/side',timed:1,sec:20}]},
-{name:'Bosu Balance + Zone 2',rounds:1,rest:0,ex:[{k:'bosu-hold',reps:'30s',timed:1,sec:30},{k:'sl-stand',reps:'30s/leg',timed:1,sec:30},{k:'tread-zone2',reps:'15 min'},{k:'static-stretch',reps:'5 min'}]}
+{name:'Bosu Balance + Zone 2 Row',rounds:1,rest:0,ex:[{k:'bosu-hold',reps:'30s',timed:1,sec:30},{k:'sl-stand',reps:'30s/leg',timed:1,sec:30},{k:'row-zone2',reps:'15 min',timed:1,sec:900},{k:'static-stretch',reps:'5 min'}]}
 ]},
 d4_4:{title:'Day 4 — "The 300"',icon:'⚔️',time:'40–50 min',sessionTimer:1,warmup:'500m row (moderate) → dynamic stretches',blocks:[
 {name:'The 300 — Minimal rest. Beat your time.',rounds:1,rest:0,ex:[{k:'row-distance',reps:'500m'},{k:'db-deadlift',reps:'25'},{k:'push-ups',reps:'50'},{k:'tuck-jumps',reps:'25'},{k:'floor-wipers',reps:'25'},{k:'kb-clean-press',reps:'25 total'},{k:'goblet-squat',reps:'25'},{k:'renegade-row',reps:'25 total'},{k:'reverse-lunge',reps:'25 total'},{k:'eight-count',reps:'15'},{k:'kb-swing',reps:'25'},{k:'ball-slams',reps:'15'},{k:'hollow-body',reps:'60s',timed:1,sec:60},{k:'row-distance',reps:'500m'}]}
@@ -787,7 +787,7 @@ const EX_CLASS={
   'weighted-db':['bench-press','one-arm-row','shoulder-press','floor-fly','farmer-carry','goblet-squat','rdl','split-squat','step-ups','curl-to-press','renegade-row','db-deadlift','reverse-lunge'],
   'weighted-kb':['kb-swing','kb-clean-press','kb-halos','turkish-getup'],
   'weighted-med':['ball-slams','russian-twists','woodchops','overhead-situp','floor-wipers'],
-  rowing:['row-sprint','row-distance','easy-row','tread-intervals','tread-zone2'],
+  rowing:['row-sprint','row-distance','easy-row','row-intervals','row-zone2'],
   bodyweight:['push-ups','burpee','mtn-climbers','plank','plank-taps','dead-bugs','hollow-body','bench-dips','diamond-pushups','ytw-raises','nordic-curl','ham-curl','tuck-jumps','thruster','bosu-hops','bosu-balance','bosu-squat','bosu-hold','jump-squat','calf-raises','wall-sit','pike-pushup','superman-hold','split-squat-bw','plank-reach','glute-bridge','side-plank'],
   mobility:['shoulder-dislocates','hip-circles','pigeon','thoracic-ext','childs-pose','lizard-lunge','sl-stand','static-stretch','face-pulls']
 };
@@ -817,7 +817,10 @@ var DS={
             stepsLog:[],
             recentFoods:[],
       suggestions:null,
-      programmeConfig:null
+      programmeConfig:null,
+      /* ISO dates (Monday) of weeks marked as intentional time off. These
+         bridge the consistency streak instead of breaking it. */
+      holidayWeeks:[]
     };
   },
   load:function(){
@@ -839,6 +842,14 @@ var DS={
   lastWeight:function(exKey){var d=this.get();for(var i=d.workouts.length-1;i>=0;i--){var w=d.workouts[i];for(var j=0;j<w.exercises.length;j++){if(w.exercises[j].key===exKey&&w.exercises[j].sets&&w.exercises[j].sets.length>0){return w.exercises[j].sets[w.exercises[j].sets.length-1].weight}}}return null},
   lastExerciseDetail:function(exKey){var d=this.get();for(var i=d.workouts.length-1;i>=0;i--){var w=d.workouts[i];for(var j=0;j<w.exercises.length;j++){var ex=w.exercises[j];if(ex.key===exKey&&ex.sets&&ex.sets.length>0){var weights=[],reps=[];ex.sets.forEach(function(s){if(s.weight!=null)weights.push(s.weight);if(s.reps!=null)reps.push(s.reps)});return {date:w.date,sets:ex.sets.length,weights:weights,reps:reps,avgWeight:weights.length?Math.round(weights.reduce(function(a,b){return a+b},0)/weights.length*10)/10:null,avgReps:reps.length?Math.round(reps.reduce(function(a,b){return a+b},0)/reps.length*10)/10:null}}}}return null},
   getPhase:function(){var d=this.get();return d.programmeConfig&&d.programmeConfig.phase?d.programmeConfig.phase:null},
+  getHolidayWeeks:function(){var d=this.get();if(!d.holidayWeeks)d.holidayWeeks=[];d.holidayWeeks=d.holidayWeeks.filter(function(wk){return typeof wk==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(wk)});return d.holidayWeeks},
+  isHolidayWeek:function(weekKey){return this.getHolidayWeeks().indexOf(weekKey)>=0},
+  toggleHolidayWeek:function(weekKey){
+    var hw=this.getHolidayWeeks(),i=hw.indexOf(weekKey);
+    if(i>=0)hw.splice(i,1);else hw.push(weekKey);
+    this.save();this.syncToGist();
+    return i<0;
+  },
   getOverload:function(){var d=this.get();return d.programmeConfig&&d.programmeConfig.overload?d.programmeConfig.overload:null},
   getExOverride:function(exKey){var d=this.get();return d.programmeConfig&&d.programmeConfig.exerciseOverrides?d.programmeConfig.exerciseOverrides[exKey]||null:null},
   getPhaseRest:function(blockType){var d=this.get();if(!d.programmeConfig||!d.programmeConfig.restPeriods)return null;var r=d.programmeConfig.restPeriods[blockType];return r!=null?r:null},
@@ -908,6 +919,12 @@ var DS={
         }
         if(remote.recentFoods&&remote.recentFoods.length>(d.recentFoods||[]).length)d.recentFoods=remote.recentFoods;
         if(remote.stepsLog&&remote.stepsLog.length>(d.stepsLog||[]).length)d.stepsLog=remote.stepsLog;
+        if(remote.holidayWeeks&&remote.holidayWeeks.length){
+          var holidaySeen={};
+          (d.holidayWeeks||[]).forEach(function(wk){holidaySeen[wk]=1});
+          remote.holidayWeeks.forEach(function(wk){if(typeof wk==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(wk)&&!holidaySeen[wk]){holidaySeen[wk]=1;(d.holidayWeeks||(d.holidayWeeks=[])).push(wk)}});
+          d.holidayWeeks.sort();
+        }
         this.save();
         setSyncState('Pulled latest gist','sync-ok');
         return true;
@@ -941,7 +958,9 @@ function buildWeightInputArea(step){
     }
     h+='<label>Log load'+(paired?' — enter weight per dumbbell':'')+'</label><div class="wi-row"><input id="wi-weight" type="number" step="0.5" value="'+safeNum(logged&&logged.weight!=null?logged.weight:defaultWeight,defaultWeight)+'"><span class="wi-unit">'+unitLabel+'</span><input id="wi-repsdone" type="number" step="1" value="'+repsVal+'"><span class="wi-unit">'+(step.timed?'seconds':'reps completed')+'</span></div>';
   }else if(kind==='rowing'){
-    h+='<label>Log row effort</label><div class="wi-row"><input id="wi-time" type="number" step="1" value="'+(logged&&logged.time!=null?logged.time:'')+'"><span class="wi-unit">seconds</span><input id="wi-distance" type="number" step="1" value="'+(logged&&logged.distance!=null?logged.distance:(parseRepCount(step.reps)||''))+'"><span class="wi-unit">metres</span></div>';
+    var rowTime=logged&&logged.time!=null?logged.time:(step.timed&&step.sec?step.sec:'');
+    var rowDistance=logged&&logged.distance!=null?logged.distance:(step.timed?'':(parseRepCount(step.reps)||''));
+    h+='<label>Log row effort</label><div class="wi-row"><input id="wi-time" type="number" step="1" value="'+rowTime+'"><span class="wi-unit">seconds</span><input id="wi-distance" type="number" step="1" value="'+rowDistance+'"><span class="wi-unit">metres</span></div>';
   }else if(kind==='bodyweight'){
     h+='<label>Log completion</label><div class="wi-row"><input id="wi-repsdone" type="number" step="1" value="'+(logged&&logged.reps!=null?logged.reps:(parseRepCount(step.reps)||''))+'"><span class="wi-unit">'+(step.timed?'seconds':'reps done')+'</span></div>';
   }else{
@@ -1314,6 +1333,7 @@ function renderNutritionTrends(){
 var _historyCharts=[];
 function destroyHistoryCharts(){_historyCharts.forEach(function(c){try{c.destroy()}catch(e){}});_historyCharts=[];}
 function historyParseDate(dateStr){if(!dateStr)return null;var dt=new Date(dateStr+'T00:00:00');return isNaN(dt.getTime())?null:dt}
+function localIsoDate(dt){var y=dt.getFullYear(),m=String(dt.getMonth()+1).padStart(2,'0'),d=String(dt.getDate()).padStart(2,'0');return y+'-'+m+'-'+d}
 function historyLabelDate(dateStr){var dt=historyParseDate(dateStr);if(!dt)return String(dateStr||'—');var opts={day:'numeric',month:'short'};if(dt.getFullYear()!==new Date().getFullYear())opts.year='numeric';return dt.toLocaleDateString('en-GB',opts)}
 function historyDayLabel(workout){if(workout.dayOfWeek)return workout.dayOfWeek;var dt=historyParseDate(workout.date);if(dt)return dt.toLocaleDateString('en-GB',{weekday:'long'});return workout.day?slugDay(workout.day):'Workout'}
 function historyWeightBadge(diff){if(diff==null||isNaN(diff))return '';return '<span class="delta-badge" style="color:'+(diff<=0?'var(--green)':'var(--red)')+'">'+(diff>0?'+':'')+diff.toFixed(1)+' kg</span>'}
@@ -1331,11 +1351,11 @@ function historyWorkoutStreak(workouts){
     if(!seenSession[sk]){seenSession[sk]=true;sessions.push(w.date)}
     if(!seenDate[w.date]){seenDate[w.date]=true;dates.push(w.date)}
   });
-  if(!sessions.length)return{weeks:0,thisWeek:0};
+  if(!sessions.length)return{weeks:0,thisWeek:0,holidaysBridged:0};
   function weekKeyFor(ds){
     var d=historyParseDate(ds);if(!d)return null;
     var day=d.getDay(),mon=new Date(d);mon.setDate(mon.getDate()-((day+6)%7));
-    return mon.toISOString().slice(0,10);
+    return localIsoDate(mon);
   }
   /* weekMap: weekKey -> count of sessions (used for the weekly target) */
   var weekMap={};
@@ -1352,17 +1372,26 @@ function historyWorkoutStreak(workouts){
   /* Current week key */
   var now=new Date(),nowDay=now.getDay(),curMon=new Date(now);
   curMon.setDate(curMon.getDate()-((nowDay+6)%7));curMon.setHours(0,0,0,0);
-  var curKey=curMon.toISOString().slice(0,10);
+  var curKey=localIsoDate(curMon);
   var thisWeek=weekMap[curKey]||0;
-  /* Count consecutive past weeks with >=3 sessions */
-  var streak=0,checkDate=new Date(curMon);
+  /* Earliest week with any training — the streak search stops here so a run of
+     holiday weeks before Adam ever trained can't loop forever. */
+  var allWeeks=Object.keys(weekDayMap).sort();
+  var earliestWeek=allWeeks[0];
+  /* Count consecutive past weeks with >=3 training days. Weeks explicitly
+     marked as holiday/time off are bridged: they neither add to nor break the
+     streak, so a planned break doesn't look like falling off the wagon. */
+  var streak=0,holidaysBridged=0,checkDate=new Date(curMon);
   checkDate.setDate(checkDate.getDate()-7);
   while(true){
-    var wk=checkDate.toISOString().slice(0,10);
-    if((weekDayMap[wk]||0)>=3)streak++;else break;
+    var wk=localIsoDate(checkDate);
+    if(wk<earliestWeek)break;
+    if(DS.isHolidayWeek(wk)){holidaysBridged++}
+    else if((weekDayMap[wk]||0)>=3){streak++}
+    else break;
     checkDate.setDate(checkDate.getDate()-7);
   }
-  return{weeks:streak,thisWeek:thisWeek};
+  return{weeks:streak,thisWeek:thisWeek,holidaysBridged:holidaysBridged};
 }
 function historyLatestWeight(metrics){
   var latest=null,previous=null;
@@ -1533,7 +1562,7 @@ function renderHistoryOverview(){
     h+='<div style="text-align:center;padding:var(--sp-3) 0">';
     h+='<div style="font-size:1.6rem;font-weight:800;color:var(--green)">✅ '+weekDone+' / '+weekTarget+' — Week Complete!</div>';
     h+='<div style="margin-top:var(--sp-2);height:8px;border-radius:4px;background:var(--border)"><div style="width:100%;height:100%;border-radius:4px;background:var(--green)"></div></div>';
-    if(streak.weeks>0) h+='<div style="font-size:.88rem;color:var(--accent);font-weight:700;margin-top:var(--sp-3)">🔥 '+streak.weeks+'-week consistency streak</div>';
+    if(streak.weeks>0) h+='<div style="font-size:.88rem;color:var(--accent);font-weight:700;margin-top:var(--sp-3)">🔥 '+streak.weeks+'-week consistency streak'+(streak.holidaysBridged?' <span style="color:var(--blue);font-weight:600">(🏖 '+streak.holidaysBridged+' week'+(streak.holidaysBridged===1?'':'s')+' off bridged)</span>':'')+'</div>';
     h+='</div>';
   } else {
     h+='<div style="text-align:center;padding:var(--sp-3) 0">';
@@ -1653,6 +1682,8 @@ function renderHistoryTraining(){
   }else h+='<p style="font-size:.8rem;color:var(--muted)">No workouts saved yet.</p>';
   h+='</div>';
 
+  h+=renderWeeklyConsistency();
+
   /* Volume & Friday 300 charts */
   var volS=workouts.filter(function(w){var s=sessionSummary(w);return s.volume>0}).slice(0,21);
   var fri300=workouts.filter(function(w){return w.day==='fri'&&w.duration>0}).slice(0,15);
@@ -1670,6 +1701,59 @@ function renderHistoryTraining(){
 
   h+='</div>';
   return h;
+}
+function weekKeyForDate(ds){
+  var d=historyParseDate(ds);if(!d)return null;
+  var day=d.getDay(),mon=new Date(d);mon.setDate(mon.getDate()-((day+6)%7));
+  return localIsoDate(mon);
+}
+function weekRangeLabel(weekKey){
+  var mon=historyParseDate(weekKey);if(!mon)return weekKey;
+  var sun=new Date(mon);sun.setDate(sun.getDate()+6);
+  var M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var a=mon.getDate()+' '+M[mon.getMonth()],b=sun.getDate()+' '+M[sun.getMonth()];
+  return a+' – '+b;
+}
+/* Last 10 weeks with session counts, and a toggle to mark a week as
+   intentional time off so it bridges the consistency streak. */
+function renderWeeklyConsistency(){
+  var d=DS.get(),workouts=d.workouts||[];
+  var scheduled=(PROGRAMMES[getActiveProgramme()]||{}).keys;
+  var target=scheduled?scheduled.length:5;
+  var seenSession={},weekMap={};
+  workouts.forEach(function(w){
+    if(!w||!w.date)return;
+    var sk=w.date+'|'+(w.day||'');
+    if(seenSession[sk])return;
+    seenSession[sk]=true;
+    var key=weekKeyForDate(w.date);if(!key)return;
+    weekMap[key]=(weekMap[key]||0)+1;
+  });
+  var now=new Date(),nowDay=now.getDay(),curMon=new Date(now);
+  curMon.setDate(curMon.getDate()-((nowDay+6)%7));curMon.setHours(0,0,0,0);
+  var curKey=localIsoDate(curMon);
+  var h='<div class="settings-section"><div class="spread"><div><h3>📅 Weekly Consistency</h3><p class="settings-copy" style="margin:0">Tap 🏖 to mark a week as planned time off — it bridges your streak instead of breaking it.</p></div></div>';
+  var cur=new Date(curMon),rows=0;
+  for(var i=0;i<10;i++){
+    var wk=localIsoDate(cur);
+    var count=weekMap[wk]||0,isHol=DS.isHolidayWeek(wk),isCur=(wk===curKey);
+    if(count===0&&!isHol&&rows===0&&!isCur){cur.setDate(cur.getDate()-7);continue}
+    rows++;
+    var statusColor=isHol?'var(--blue)':count>=3?'var(--green)':count>0?'var(--yellow)':'var(--muted)';
+    var statusText=isHol?'🏖 Time off':count+' / '+target+' sessions';
+    h+='<div style="display:flex;align-items:center;gap:var(--sp-3);padding:.55rem 0;border-bottom:1px solid var(--border)">';
+    h+='<div style="flex:1"><div style="font-size:.86rem;font-weight:700">'+esc(weekRangeLabel(wk))+(isCur?' <span style="font-size:.7rem;color:var(--accent);font-weight:700">THIS WEEK</span>':'')+'</div>';
+    h+='<div style="font-size:.76rem;color:'+statusColor+';font-weight:600">'+statusText+'</div></div>';
+    h+='<button onclick="toggleHolidayWeek(\''+wk+'\')" style="border:1px solid '+(isHol?'var(--blue)':'var(--border)')+';background:'+(isHol?'rgba(93,127,150,.12)':'transparent')+';color:'+(isHol?'var(--blue)':'var(--muted)')+';padding:.35rem .7rem;border-radius:var(--radius-pill);font-size:.74rem;font-weight:700;cursor:pointer;min-height:36px">'+(isHol?'🏖 Time off':'🏖 Mark off')+'</button>';
+    h+='</div>';
+    cur.setDate(cur.getDate()-7);
+  }
+  if(!rows)h+='<p style="font-size:.8rem;color:var(--muted)">No workouts saved yet.</p>';
+  return h+'</div>';
+}
+function toggleHolidayWeek(weekKey){
+  DS.toggleHolidayWeek(weekKey);
+  if(currentMainSection==='home')renderHome();else renderHistory();
 }
 function renderTrainingCharts(){
   if(typeof Chart==='undefined')return;
@@ -2117,7 +2201,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.08.09.5</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.08.23</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -3406,14 +3490,15 @@ var PHASE_DEFS = {
         'Add 1.5-reps + pauses to keep the 15kg challenging at low reps',
         'Wave-load across the week (heavy / medium / light days)',
         'Longer rest (2–3 min) — these are strength efforts',
-        'Friday 300 stays your conditioning benchmark'
+        'Friday 300 stays your conditioning benchmark',
+        'All engine work stays rower-focused — no treadmill block'
       ]
     }
   },
   strength: {
     weeks: 4,
-    label: 'Strength — Intensity',
-    description: 'Lower reps (6–8) with maximal intent. Squeeze more out of the 15kg via pauses, 1.5-reps and wave loading.',
+    label: 'Strength — Rowing-Led Intensity',
+    description: 'Lower reps (6–8) with maximal intent. Squeeze more out of the 15kg via pauses, 1.5-reps and wave loading, with rowing as the conditioning anchor.',
     overload: { primary: 'intensity', tempo: '2-1-1', pauseSeconds: 1, useHalfReps: true, unilateral: false, restMultiplier: 1.3 },
     exerciseOverrides: {
       'bench-press': { repsTarget: '6–8', tempo: '2-1-1', weight: 15, cue: '15kg with a 1s pause + a half-rep out of the bottom — that\'s your intensity at a capped load.' },
@@ -3553,6 +3638,21 @@ function applyPhaseConfig(cfg, key) {
   }
 })();
 
+// Auto-advance stale Hypertrophy → Strength once the review window has passed
+// (squad-authorised 2026-08-23 after successful post-holiday consistency).
+(function(){
+  var d=DS.get();var cfg=d.programmeConfig;
+  if(cfg&&cfg.phase&&cfg.phase.current==='hypertrophy'){
+    var today=new Date().toISOString().slice(0,10);
+    var due=(cfg.phase.targetEndDate&&today>=cfg.phase.targetEndDate)||phaseWeekNum(cfg.phase)>=5;
+    if(due&&PHASE_DEFS['strength']){
+      applyPhaseConfig(cfg,'strength');
+      DS.save();
+      try{DS.syncToGist();}catch(e){}
+    }
+  }
+})();
+
 // === INIT ===
 showMainSection('home');
 
@@ -3565,7 +3665,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.08.09.5').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.08.23').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
