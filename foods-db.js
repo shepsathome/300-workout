@@ -122,6 +122,7 @@ var FOODS = [
 
   // Homemade
   { name: 'Taco Beef 5% (homemade)', cal: 133, protein: 20, carbs: 3.7, fat: 4.8, serving: 400, unit: 'g' },
+  { name: 'Chilli Con Carne (homemade, 750g beef)', cal: 111, protein: 9.8, carbs: 9.7, fat: 3.6, serving: 350, unit: 'g' },
   { name: 'Beef Burger 5% (homemade, raw weight)', cal: 133, protein: 22, carbs: 0.5, fat: 5, serving: 150, unit: 'g' },
   { name: 'Taco Salsa Sauce', cal: 52, protein: 1, carbs: 11, fat: 0.5, serving: 30, unit: 'g' },
   { name: 'Mexican Street Corn (CPK copycat, homemade)', cal: 236, protein: 4.9, carbs: 11.7, fat: 18.8, serving: 150, unit: 'g' },
