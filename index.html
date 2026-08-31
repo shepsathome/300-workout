@@ -779,7 +779,18 @@ hotel:{title:'Hotel Room Workout',icon:'✈️',time:'25–35 min',sessionTimer:
 {name:'Finisher — Tabata',rounds:1,rest:0,ex:[{k:'burpee',reps:'20s on / 10s off × 4',timed:1,sec:240},{k:'mtn-climbers',reps:'20s on / 10s off × 4',timed:1,sec:240}]}
 ]}
 };
-function expand(day){var steps=[];var restMult=DS.getRestMultiplier();for(var b=0;b<day.blocks.length;b++){var bl=day.blocks[b];var adjRest=bl.rest>0?Math.round(bl.rest*restMult):0;for(var r=0;r<bl.rounds;r++){for(var e=0;e<bl.ex.length;e++){var ex=bl.ex[e],info=EX[ex.k];steps.push({type:'ex',name:info.n,reps:ex.reps,timed:!!ex.timed,sec:ex.sec||0,cue:info.c,howTo:info.h,vid:info.v,imgKey:info.img,block:bl.name,set:r+1,of:bl.rounds,key:ex.k});if(ex.ra)steps.push({type:'rest',sec:Math.round((ex.ra||0)*restMult),block:bl.name})}if(adjRest>0&&r<bl.rounds-1)steps.push({type:'rest',sec:adjRest,block:bl.name})}}return steps}
+var DAYS_OFF={
+primer:{title:'Optional Strength Primer',icon:'🔧',time:'25–30 min',warmup:'3 min easy row → arm circles → 8 bodyweight squats. Keep every set at 3–4 reps in reserve.',blocks:[
+{name:'Full-Body Primer — 60–70% effort',rounds:2,rest:75,ex:[{k:'bench-press',reps:'8'},{k:'one-arm-row',reps:'8/arm'},{k:'goblet-squat',reps:'8'},{k:'rdl',reps:'8'},{k:'shoulder-press',reps:'6/arm'}]},
+{name:'Easy Flush',rounds:1,rest:0,ex:[{k:'easy-row',reps:'5 min',timed:1,sec:300},{k:'static-stretch',reps:'3 min'}]}
+]},
+reset:{title:'No-Equipment Travel Reset',icon:'🧳',time:'20–25 min',warmup:'2 min easy marching → arm circles → hip openers. This should leave you fresher, not flattened.',blocks:[
+{name:'Mobility Flow',rounds:1,rest:0,ex:[{k:'pigeon',reps:'60s/side',timed:1,sec:60},{k:'thoracic-ext',reps:'45s',timed:1,sec:45},{k:'childs-pose',reps:'60s',timed:1,sec:60},{k:'lizard-lunge',reps:'45s/side',timed:1,sec:45}]},
+{name:'Movement Maintenance — Easy',rounds:2,rest:45,ex:[{k:'push-ups',reps:'8–12'},{k:'split-squat-bw',reps:'8/leg'},{k:'glute-bridge',reps:'12/side'},{k:'side-plank',reps:'20s/side',timed:1,sec:20},{k:'superman-hold',reps:'20s',timed:1,sec:20}]},
+{name:'Downshift',rounds:1,rest:0,ex:[{k:'static-stretch',reps:'5 min'}]}
+]}
+};
+function expand(day){var steps=[];var restMult=getActiveProgramme()==='off'?1:DS.getRestMultiplier();for(var b=0;b<day.blocks.length;b++){var bl=day.blocks[b];var adjRest=bl.rest>0?Math.round(bl.rest*restMult):0;for(var r=0;r<bl.rounds;r++){for(var e=0;e<bl.ex.length;e++){var ex=bl.ex[e],info=EX[ex.k];steps.push({type:'ex',name:info.n,reps:ex.reps,timed:!!ex.timed,sec:ex.sec||0,cue:info.c,howTo:info.h,vid:info.v,imgKey:info.img,block:bl.name,set:r+1,of:bl.rounds,key:ex.k});if(ex.ra)steps.push({type:'rest',sec:Math.round((ex.ra||0)*restMult),block:bl.name})}if(adjRest>0&&r<bl.rounds-1)steps.push({type:'rest',sec:adjRest,block:bl.name})}}return steps}
 var currentDay=null,currentTodayKey=null,steps=[],idx=0,started=false,cdInterval=null,cdRemaining=0,stInterval=null,stSeconds=0,stStartMs=0,stAccumMs=0,stPB=null,demoTimer=null,currentSession=null;
 var audioCtx=null;
 var syncState={text:'Not configured',cls:''};
@@ -1520,7 +1531,7 @@ function renderHistoryOverview(){
   var d=DS.get(),workouts=(d.workouts||[]).slice().reverse(),metrics=(d.bodyMetrics||[]).slice(),sleep=(d.sleepLog||[]).slice(),steps=(d.stepsLog||[]).slice(),nutrition=(d.nutrition||[]).slice().reverse();
   var streak=historyWorkoutStreak(workouts),ws=historyLatestWeight(metrics),sa=historySleepAverage(sleep),stepsAvg=historyStepsAverage(steps);
   var lastW=workouts[0],lastNut=nutrition[0],lastNutTotals=lastNut?nutritionTotals(lastNut):null;
-  var prog=getActiveProgramme(),scheduled=PROGRAMMES[prog].keys.length;
+  var prog=getActiveProgramme(),scheduled=PROGRAMMES[prog].keys.length,isOffWeek=(prog==='off');
 
   var h='<div class="dash">';
 
@@ -1558,7 +1569,13 @@ function renderHistoryOverview(){
   h+='<div class="dash-heading">🏋️ Training</div>';
   h+='<a href="#" onclick="event.preventDefault();setHistoryView(\'training\')" style="font-size:.75rem;color:var(--accent);text-decoration:none;font-weight:600">View details →</a>';
   h+='</div>';
-  if(weekComplete){
+  if(isOffWeek){
+    h+='<div style="text-align:center;padding:var(--sp-3) 0">';
+    h+='<div style="font-size:1.6rem;font-weight:800;color:var(--blue)">🏖 Planned Off Week</div>';
+    h+='<div style="font-size:.86rem;color:var(--muted);margin-top:4px">Recovery is the target. '+weekDone+' optional session'+(weekDone===1?'':'s')+' logged — no catch-up required.</div>';
+    h+='<button class="dash-action" style="margin-top:var(--sp-3)" onclick="showMainSection(\'train\')">View optional deload sessions</button>';
+    h+='</div>';
+  } else if(weekComplete){
     h+='<div style="text-align:center;padding:var(--sp-3) 0">';
     h+='<div style="font-size:1.6rem;font-weight:800;color:var(--green)">✅ '+weekDone+' / '+weekTarget+' — Week Complete!</div>';
     h+='<div style="margin-top:var(--sp-2);height:8px;border-radius:4px;background:var(--border)"><div style="width:100%;height:100%;border-radius:4px;background:var(--green)"></div></div>';
@@ -1638,7 +1655,7 @@ function renderHistoryOverview(){
   if(ws.diff!=null&&ws.diff>1&&(goal==='cut'||goal==='recomp'))alerts.push({icon:'📈',text:'Up '+ws.diff.toFixed(1)+'kg — review nutrition against your '+goal+' goal',color:'var(--accent)'});
   if(stepsAvg.avgSteps!=null&&stepsAvg.avgSteps<5000)alerts.push({icon:'🚶',text:'Steps averaging '+stepsAvg.avgSteps.toLocaleString()+'/day — try to move more',color:'var(--accent)'});
   if(streak.weeks>=2)alerts.push({icon:'🔥',text:streak.weeks+'-week consistency streak',color:'var(--green)'});
-  if(weekTarget>0&&weekDone<weekTarget)alerts.push({icon:'🏋️',text:(weekTarget-weekDone)+' session'+(weekTarget-weekDone===1?'':'s')+' still to go this week',color:'var(--accent)'});
+  if(!isOffWeek&&weekTarget>0&&weekDone<weekTarget)alerts.push({icon:'🏋️',text:(weekTarget-weekDone)+' session'+(weekTarget-weekDone===1?'':'s')+' still to go this week',color:'var(--accent)'});
   if(alerts.length){
     h+='<div class="dash-section">';
     h+='<div class="dash-heading">⚡ Attention</div>';
@@ -1718,7 +1735,7 @@ function weekRangeLabel(weekKey){
    intentional time off so it bridges the consistency streak. */
 function renderWeeklyConsistency(){
   var d=DS.get(),workouts=d.workouts||[];
-  var scheduled=(PROGRAMMES[getActiveProgramme()]||{}).keys;
+  var scheduled=(PROGRAMMES[getConfiguredProgramme()]||{}).keys;
   var target=scheduled?scheduled.length:5;
   var seenSession={},weekMap={};
   workouts.forEach(function(w){
@@ -2122,7 +2139,8 @@ function renderSettings(){
         '<h3>Programme</h3>'+
         '<p class="settings-copy">Choose your training split. The Train tab will schedule your days accordingly.</p>'+
         '<div class="prog-select" style="justify-content:flex-start;padding:0;margin-bottom:.75rem">'+
-        (function(){var prog=getActiveProgramme();var ph='';[5,4,3,'travel'].forEach(function(n){var label=n==='travel'?'✈️ Travel':n+'-Day';ph+='<button class="prog-pill'+(n===prog?' active':'')+'" onclick="switchProgramme('+( typeof n==='string'?"'"+n+"'":n)+')">'+label+'</button>'});return ph})()+
+        (function(){var prog=getConfiguredProgramme();var ph='';[5,4,3,'travel'].forEach(function(n){var label=n==='travel'?'✈️ Travel':n+'-Day';ph+='<button class="prog-pill'+(n===prog?' active':'')+'" onclick="switchProgramme('+( typeof n==='string'?"'"+n+"'":n)+')">'+label+'</button>'});return ph})()+
+        (isCurrentOffWeek()?'<p class="settings-copy" style="color:var(--blue);font-weight:700">🏖 This week is marked as planned time off. Your '+getConfiguredProgramme()+'-day programme will return automatically next week.</p>':'')+
         '</div>'+
         '<h3>Default Weights</h3>'+
         '<div class="settings-row"><label>Dumbbell (kg)</label><input id="dw-db" type="number" step="1" value="'+(s.defaultWeights&&s.defaultWeights.db||12)+'" onchange="updateSettingsFromForm()"></div>'+
@@ -2201,7 +2219,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.08.23.2</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.08.31</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2887,8 +2905,9 @@ function renderStep(key){
   if(step.type==='rest')autoStartRest(step.sec);
 }
 function renderExStep(s){
-  var exOverride=DS.getExOverride(s.key);
-  var overload=DS.getOverload();
+  var offWeek=(getActiveProgramme()==='off');
+  var exOverride=offWeek?null:DS.getExOverride(s.key);
+  var overload=offWeek?null:DS.getOverload();
   var tempo=exOverride&&exOverride.tempo?exOverride.tempo:(overload&&overload.tempo?overload.tempo:null);
   var phaseCue=exOverride&&exOverride.cue?exOverride.cue:null;
   var displayReps=exOverride&&exOverride.repsTarget?exOverride.repsTarget:s.reps;
@@ -2997,12 +3016,24 @@ var PROGRAMMES = {
   5: { days: DAYS, keys: ['mon','tue','wed','thu','fri'], labels: ['MON','TUE','WED','THU','FRI'], restLabel: 'SAT/SUN' },
   4: { days: DAYS_4, keys: ['d4_1','d4_2','d4_3','d4_4'], labels: ['DAY 1','DAY 2','DAY 3','DAY 4'], restLabel: 'REST DAYS' },
   3: { days: DAYS_3, keys: ['d3_1','d3_2','d3_3'], labels: ['DAY 1','DAY 2','DAY 3'], restLabel: 'REST DAYS' },
-  'travel': { days: DAYS_TRAVEL, keys: ['hotel'], labels: ['HOTEL'], restLabel: 'REST' }
+  'travel': { days: DAYS_TRAVEL, keys: ['hotel'], labels: ['HOTEL'], restLabel: 'REST' },
+  'off': { days: DAYS_OFF, keys: ['primer','reset'], labels: ['OPTIONAL 1','OPTIONAL 2'], restLabel: 'RECOVER' }
 };
 
-function getActiveProgramme() {
-  var d = DS.get();
+function currentWeekKey() {
+  var now=new Date(),day=now.getDay(),mon=new Date(now);
+  mon.setDate(mon.getDate()-((day+6)%7));
+  return localIsoDate(mon);
+}
+function isCurrentOffWeek() {
+  return DS.isHolidayWeek(currentWeekKey());
+}
+function getConfiguredProgramme() {
+  var d=DS.get();
   return d.settings.programme || 5;
+}
+function getActiveProgramme() {
+  return isCurrentOffWeek() ? 'off' : getConfiguredProgramme();
 }
 function setActiveProgramme(n) {
   var d = DS.get();
@@ -3243,9 +3274,11 @@ function renderTrainDashboard() {
   var todayMap5 = {1:'mon',2:'tue',3:'wed',4:'thu',5:'fri'};
   var todayMap4 = {1:'d4_1',2:'d4_2',3:'d4_3',4:'d4_4'};
   var todayMap3 = {1:'d3_1',2:'d3_2',3:'d3_3'};
+  var todayMapOff = {2:'primer',4:'reset',5:'reset'};
   var dow = new Date().getDay();
   var todayKey;
-  if (prog === 'travel') todayKey = 'hotel';
+  if (prog === 'off') todayKey = todayMapOff[dow];
+  else if (prog === 'travel') todayKey = 'hotel';
   else if (prog === 5) todayKey = todayMap5[dow];
   else if (prog === 4) todayKey = todayMap4[dow <= 4 ? dow : undefined];
   else todayKey = todayMap3[dow <= 3 ? dow : undefined];
@@ -3261,7 +3294,13 @@ function renderTrainDashboard() {
   var overload = DS.getOverload();
   var transition = DS.getTransition();
   var globalCues = DS.getGlobalCues();
-  if (phase) {
+  if (prog === 'off') {
+    h += '<div class="phase-banner">';
+    h += '<div class="pb-row"><div class="pb-phase">🏖 Deload / Travel</div><div class="pb-week">Planned off week</div></div>';
+    h += '<div class="pb-label">Recover without going completely static</div>';
+    h += '<div class="pb-desc">No missed sessions to repay. Choose at most one short strength primer and one easy no-equipment reset.</div>';
+    h += '</div>';
+  } else if (phase) {
     var weekNum = phaseWeekNum(phase);
     var targetWeeks = transition && transition.autoPromptAtWeek ? transition.autoPromptAtWeek : 4;
     h += '<div class="phase-banner" onclick="this.querySelector(\'.pb-detail\').style.display=this.querySelector(\'.pb-detail\').style.display===\'none\'?\'block\':\'none\'">';
@@ -3282,14 +3321,14 @@ function renderTrainDashboard() {
   }
 
   /* === GLOBAL CUES === */
-  if (globalCues.length) {
+  if (prog !== 'off' && globalCues.length) {
     h += '<div class="global-cues">';
     for (var gc = 0; gc < globalCues.length; gc++) h += '<div class="gc-chip">' + esc(globalCues[gc]) + '</div>';
     h += '</div>';
   }
 
   /* === PHASE TRANSITION PROMPT === */
-  if (transition && phase && phaseWeekNum(phase) >= (transition.autoPromptAtWeek || 99)) {
+  if (prog !== 'off' && transition && phase && phaseWeekNum(phase) >= (transition.autoPromptAtWeek || 99)) {
     h += '<div class="phase-transition">';
     h += '<div class="pt-title">🔄 Phase Review Due</div>';
     h += '<div style="font-size:.82rem;color:var(--muted)">You\'ve completed ' + phaseWeekNum(phase) + ' weeks of ' + esc(phase.current) + '.</div>';
@@ -3306,7 +3345,22 @@ function renderTrainDashboard() {
   }
 
   /* === TODAY HERO CARD === */
-  if (isRestDay) {
+  if (prog === 'off') {
+    h += '<div class="train-home"><div class="now-card" style="text-align:center;padding:1.5rem 1rem;background:rgba(93,127,150,.07);border-color:rgba(93,127,150,.2)">';
+    h += '<div style="font-size:2.2rem;margin-bottom:.5rem">🏖</div>';
+    h += '<div style="font-size:1.1rem;font-weight:800;color:var(--blue)">Off Week — Recovery Counts</div>';
+    if (todayDay) {
+      var offTotalEx=expand(todayDay).filter(function(s){return s.type==='ex'}).length;
+      var offTodayIso=new Date().toISOString().slice(0,10);
+      var offCompleted=hasLoggedWorkout(todayKey,offTodayIso);
+      h += '<div style="font-size:.88rem;color:var(--muted);margin-top:.4rem">Optional today: <strong style="color:var(--text)">'+todayDay.icon+' '+todayDay.title+'</strong> · '+todayDay.time+'</div>';
+      if(offCompleted)h += '<div style="font-size:.84rem;color:var(--green);font-weight:700;margin-top:.6rem">✅ Optional session logged</div>';
+      else h += '<button class="start-btn" style="margin-top:.85rem;margin-bottom:0" onclick="startWorkout(\''+todayKey+'\')">▶ START OPTIONAL SESSION</button>';
+    } else {
+      h += '<div style="font-size:.88rem;color:var(--muted);margin-top:.4rem">Today: walk if convenient, do five minutes of mobility, and prioritise sleep. No workout is owed.</div>';
+    }
+    h += '</div></div>';
+  } else if (isRestDay) {
     h += '<div class="train-home"><div class="now-card rest-card-home" style="text-align:center;padding:1.5rem 1rem;background:rgba(52,199,89,.06);border-color:rgba(52,199,89,.16)">';
     h += '<div style="font-size:2.2rem;margin-bottom:.5rem">😴</div>';
     h += '<div style="font-size:1.1rem;font-weight:800;color:var(--green)">Rest Day</div>';
@@ -3346,11 +3400,11 @@ function renderTrainDashboard() {
   var chipStyle = 'flex:1 1 0;min-width:0;padding:var(--sp-3) var(--sp-4);border-radius:var(--radius-card);background:rgba(255,255,255,.03);border:1px solid var(--border);text-align:center';
   h += '<div style="display:flex;gap:var(--sp-2);margin:.75rem 0">';
   var remaining = conf.keys.length - streak.thisWeek;
-  var weekMsg = remaining <= 0 ? '<span style="color:var(--green)">Complete ✓</span>' : remaining + ' left';
+  var weekMsg = prog==='off' ? '<span style="color:var(--blue)">'+streak.thisWeek+' optional logged</span>' : (remaining <= 0 ? '<span style="color:var(--green)">Complete ✓</span>' : remaining + ' left');
   h += '<div style="' + chipStyle + '"><div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;font-weight:700">This week</div><div style="font-size:.92rem;font-weight:800;margin-top:2px">' + weekMsg + '</div></div>';
   h += '<div style="' + chipStyle + '"><div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;font-weight:700">Streak</div><div style="font-size:.92rem;font-weight:800;margin-top:2px">' + (streak.weeks > 0 ? '🔥 ' + streak.weeks + (streak.weeks === 1 ? ' week' : ' weeks') : 'Building…') + '</div></div>';
   var nextLabel = '—';
-  (function(){ var dw=new Date().getDay(),dayNames=['Sun','Mon','Tue','Wed','Thu','Fri','Sat']; for(var lk=1;lk<=7;lk++){var cd=(dw+lk)%7,ck=null;if(prog==='travel')ck='hotel';else if(prog===5)ck=todayMap5[cd];else if(prog===4)ck=todayMap4[cd];else ck=todayMap3[cd];if(ck&&conf.days[ck]){nextLabel=(lk===1?'Tomorrow':dayNames[cd])+' · '+conf.days[ck].icon;break}} })();
+  (function(){ var dw=new Date().getDay(),dayNames=['Sun','Mon','Tue','Wed','Thu','Fri','Sat']; for(var lk=1;lk<=7;lk++){var cd=(dw+lk)%7,ck=null;if(prog==='off')ck=todayMapOff[cd];else if(prog==='travel')ck='hotel';else if(prog===5)ck=todayMap5[cd];else if(prog===4)ck=todayMap4[cd];else ck=todayMap3[cd];if(ck&&conf.days[ck]){nextLabel=(lk===1?'Tomorrow':dayNames[cd])+' · '+conf.days[ck].icon;break}} })();
   h += '<div style="' + chipStyle + '"><div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;font-weight:700">Next</div><div style="font-size:.92rem;font-weight:800;margin-top:2px">' + nextLabel + '</div></div>';
   h += '</div>';
 
@@ -3393,7 +3447,8 @@ function renderTrainDashboard() {
     for (var look = 1; look <= 7; look++) {
       var checkDow = (todayDow + look) % 7;
       var candidate = null;
-      if (prog === 'travel') candidate = 'hotel';
+      if (prog === 'off') candidate = todayMapOff[checkDow];
+      else if (prog === 'travel') candidate = 'hotel';
       else if (prog === 5) candidate = todayMap5[checkDow];
       else if (prog === 4) candidate = todayMap4[checkDow];
       else candidate = todayMap3[checkDow];
@@ -3665,7 +3720,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.08.23.2').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.08.31').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
