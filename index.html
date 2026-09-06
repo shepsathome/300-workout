@@ -721,15 +721,17 @@ const EX={
 'decline-pushup':{n:'Decline Push-Up (feet on bench)',h:'<strong>Setup:</strong> Feet on bench, hands on floor wider than shoulders. Body straight.<br><strong>Move:</strong> Lower chest to floor, push back up. Elbows at 45 degrees.',c:'Upper chest emphasis + front delts. Harder than regular push-ups — the elevation shifts the load.',v:'SKPab2YC8BE',img:'decline_pushup'},
 'row-intervals':{n:'Rowing Intervals',h:'<strong>Setup:</strong> Damper moderate, feet strapped, monitor visible. Easy paddle for 2 minutes before the first rep.<br><strong>Move:</strong> Drive hard for the work interval, then row very easy during the recovery. Keep stroke rate crisp, not frantic.',c:'Zone 5 engine work without treadmill impact. Last rep should feel 8–9/10 while technique stays clean: legs, hips, arms.',v:'mrexeRFo4UM',img:'Rowing_Stationary'},
 'row-zone2':{n:'Zone 2 Row',h:'<strong>Setup:</strong> Damper moderate, nasal/conversational pace. Keep stroke rate roughly 18–22 spm.<br><strong>Move:</strong> Hold steady pressure for the full duration. You should be able to speak in full sentences the whole time.',c:'Aerobic base and recovery blood flow. If you are gasping, slow the split — this is engine-building, not a test.',v:'4zWu1yuJ0_g',img:'Rowing_Stationary'},
+'lateral-raise':{n:'Dumbbell Lateral Raise',h:'<strong>Setup:</strong> Stand tall with light DBs at your sides, palms facing in, ribs down.<br><strong>Move:</strong> Raise arms out to shoulder height with soft elbows. Lead with elbows, pause briefly, then lower under control. Stop the set when you need to shrug or swing.',c:'Side delts for shoulder width. Use 2–5kg with strict form. Only the final set may reach technical failure.',v:'',img:null},
 'ham-curl':{n:'Sliding Leg Curl',h:'<strong>Setup:</strong> Lie on back, heels on a towel (or wear socks on a smooth floor). Lift hips into a glute bridge.<br><strong>Move:</strong> Keep hips HIGH and slowly slide both heels out until legs are nearly straight, then pull them back in by curling the hamstrings. Lower hips only to reset.',c:'Knee-flexion hamstring work — pairs with RDLs to build the full hamstring and protect the knee. Fewer reps, hips locked up high.',v:'',img:'Single_Leg_Glute_Bridge'}
 };
 const DAYS={
-mon:{title:'Monday — Upper Body + Core',icon:'💪',time:'55–65 min',warmup:'2 min easy row → arm circles → band pull-aparts → push-up to downward dog x 5',blocks:[{name:'Block A — Strength',rounds:3,rest:60,ex:[{k:'bench-press',reps:'10–12'},{k:'one-arm-row',reps:'10/arm'},{k:'shoulder-press',reps:'10/arm'},{k:'kb-clean-press',reps:'8/arm'}]},{name:'Block B — Hypertrophy',rounds:3,rest:45,ex:[{k:'decline-pushup',reps:'12–15'},{k:'db-pullover',reps:'12'},{k:'ytw-raises',reps:'8–10'},{k:'db-curl',reps:'10-12'},{k:'hammer-curl',reps:'10'}]},{name:'Block C — Core',rounds:2,rest:0,ex:[{k:'hollow-body',reps:'30s',timed:1,sec:30},{k:'dead-bugs',reps:'12/side'},{k:'side-plank',reps:'20s/side',timed:1,sec:20}]},{name:'Finisher — Rowing',rounds:3,rest:45,ex:[{k:'row-sprint',reps:'250m'}]}]},
-tue:{title:'Tuesday — Conditioning & Agility',icon:'⚡',time:'50–55 min',warmup:'Dynamic stretches → high knees → lateral shuffles → 2 min easy row',blocks:[{name:'Block A — EMOM x 12 min (start each min, rest remaining)',rounds:4,rest:15,ex:[{k:'thruster',reps:'10'},{k:'renegade-row',reps:'8/arm'},{k:'burpee',reps:'10'}]},{name:'Block B — Agility Circuit',rounds:3,rest:60,ex:[{k:'bear-crawl',reps:'30s',timed:1,sec:30},{k:'bosu-hops',reps:'30s',timed:1,sec:30},{k:'mtn-climbers',reps:'30s',timed:1,sec:30},{k:'kb-swing',reps:'15'},{k:'bosu-balance',reps:'8/leg'},{k:'woodchops',reps:'12/side'},{k:'band-pull-apart',reps:'20'}]},{name:'Block C — Rowing Intervals (Zone 5)',rounds:5,rest:75,ex:[{k:'row-intervals',reps:'40s hard',timed:1,sec:40}]},{name:'Rowing Pyramid (optional — skip if you did the Zone 5 intervals)',rounds:1,rest:0,ex:[{k:'row-distance',reps:'500m',ra:60},{k:'row-distance',reps:'400m',ra:60},{k:'row-distance',reps:'300m',ra:60},{k:'row-distance',reps:'200m',ra:60},{k:'row-distance',reps:'100m'}]}]},
-wed:{title:'Wednesday \u2014 Lower Body + Power',icon:'\ud83e\uddb5',time:'50\u201355 min',warmup:'2 min easy row \u2192 squats x 10 \u2192 walking lunges x 10 \u2192 leg swings',blocks:[{name:'Block A \u2014 Strength',rounds:4,rest:75,ex:[{k:'goblet-squat',reps:'12'},{k:'rdl',reps:'10'},{k:'nordic-curl',reps:'8/leg'},{k:'ham-curl',reps:'8\u201310'},{k:'split-squat',reps:'8/leg'},{k:'step-ups',reps:'10/leg'}]},{name:'Block B \u2014 Power',rounds:3,rest:60,ex:[{k:'kb-swing',reps:'15'},{k:'jump-squat',reps:'10'},{k:'tuck-jumps',reps:'10'},{k:'calf-raises',reps:'15/leg'}]},{name:'Block C \u2014 Core',rounds:2,rest:0,ex:[{k:'hollow-body',reps:'30s',timed:1,sec:30},{k:'floor-wipers',reps:'12/side'},{k:'flutter-kicks',reps:'30 (4-count)'},{k:'leg-levers',reps:'20'},{k:'glute-bridge',reps:'10/side'}]}]},
-thu:{title:'Thursday — Recovery & Mobility',icon:'🧘',time:'35–45 min',warmup:'Take it slow today — this is recovery.',blocks:[{name:'Foam/Band Activation',rounds:2,rest:0,ex:[{k:'shoulder-dislocates',reps:'10'},{k:'hip-circles',reps:'10/dir'},{k:'kb-halos',reps:'8/dir'},{k:'arm-haulers',reps:'15'},{k:'band-pull-apart',reps:'15'}]},{name:'Turkish Get-Up & Carry',rounds:1,rest:0,ex:[{k:'turkish-getup',reps:'3/side'},{k:'farmer-carry',reps:'40s',timed:1,sec:40}]},{name:'Yoga Block Flow',rounds:1,rest:0,ex:[{k:'pigeon',reps:'90s/side',timed:1,sec:90},{k:'thoracic-ext',reps:'60s',timed:1,sec:60},{k:'childs-pose',reps:'60s',timed:1,sec:60},{k:'lizard-lunge',reps:'60s/side',timed:1,sec:60}]},{name:'Bosu Balance',rounds:3,rest:0,ex:[{k:'sl-stand',reps:'30s/leg',timed:1,sec:30},{k:'bosu-hold',reps:'30s',timed:1,sec:30}]},{name:'Zone 2 Engine',rounds:1,rest:0,ex:[{k:'row-zone2',reps:'20 min',timed:1,sec:1200},{k:'static-stretch',reps:'5 min'}]}]},
+mon:{title:'Monday — Upper Aesthetic Strength',icon:'💪',time:'50–60 min',warmup:'2 min easy row → arm circles → band pull-aparts → push-up to downward dog x 5',blocks:[{name:'Block A — Strength (leave 1–2 reps in reserve)',rounds:3,rest:75,ex:[{k:'bench-press',reps:'8–10'},{k:'one-arm-row',reps:'8–12/arm'},{k:'shoulder-press',reps:'8–10/arm'}]},{name:'Block B — V-Taper Superset',rounds:3,rest:45,ex:[{k:'decline-pushup',reps:'10–15'},{k:'db-pullover',reps:'10–12'},{k:'band-lat-pulldown',reps:'10–12'},{k:'lateral-raise',reps:'12–20'},{k:'face-pulls',reps:'15–25'}]},{name:'Block C — Core',rounds:2,rest:0,ex:[{k:'hollow-body',reps:'30s',timed:1,sec:30},{k:'dead-bugs',reps:'10/side'},{k:'side-plank',reps:'30s/side',timed:1,sec:30}]}]},
+tue:{title:'Tuesday — Rowing Intervals + Agility',icon:'⚡',time:'40–45 min',warmup:'Dynamic stretches → high knees → lateral shuffles → 3 min easy row',blocks:[{name:'Block A — Rowing Intervals (Zone 5)',rounds:6,rest:80,ex:[{k:'row-intervals',reps:'40s hard',timed:1,sec:40}]},{name:'Block B — Athletic Circuit',rounds:3,rest:60,ex:[{k:'thruster',reps:'8'},{k:'renegade-row',reps:'8/arm'},{k:'bear-crawl',reps:'30s',timed:1,sec:30},{k:'bosu-hops',reps:'30s',timed:1,sec:30},{k:'woodchops',reps:'12/side'}]},{name:'Cool-down',rounds:1,rest:0,ex:[{k:'easy-row',reps:'5 min',timed:1,sec:300},{k:'static-stretch',reps:'5 min'}]}]},
+wed:{title:'Wednesday \u2014 Lower Strength + Power',icon:'\ud83e\uddb5',time:'45\u201355 min',warmup:'2 min easy row \u2192 squats x 10 \u2192 walking lunges x 10 \u2192 leg swings',blocks:[{name:'Block A \u2014 Strength (leave 1\u20132 reps in reserve)',rounds:4,rest:75,ex:[{k:'split-squat',reps:'8/leg'},{k:'rdl',reps:'8\u201310'},{k:'goblet-squat',reps:'10\u201312'},{k:'ham-curl',reps:'8\u201310'}]},{name:'Block B \u2014 Power',rounds:3,rest:60,ex:[{k:'kb-swing',reps:'15\u201320'},{k:'tuck-jumps',reps:'6'}]},{name:'Block C \u2014 Core',rounds:2,rest:0,ex:[{k:'floor-wipers',reps:'10/side'},{k:'side-plank',reps:'30s/side',timed:1,sec:30}]}]},
+thu:{title:'Thursday — Mobility + Zone 2',icon:'🧘',time:'45–50 min',warmup:'Take it slow today — this is recovery.',blocks:[{name:'Mobility Activation',rounds:1,rest:0,ex:[{k:'shoulder-dislocates',reps:'10'},{k:'hip-circles',reps:'10/dir'},{k:'kb-halos',reps:'8/dir'},{k:'arm-haulers',reps:'15'},{k:'band-pull-apart',reps:'20'}]},{name:'Movement Quality',rounds:1,rest:0,ex:[{k:'turkish-getup',reps:'3/side'},{k:'farmer-carry',reps:'40s',timed:1,sec:40},{k:'bosu-balance',reps:'8/leg'}]},{name:'Yoga Block Flow',rounds:1,rest:0,ex:[{k:'pigeon',reps:'60s/side',timed:1,sec:60},{k:'thoracic-ext',reps:'60s',timed:1,sec:60},{k:'lizard-lunge',reps:'60s/side',timed:1,sec:60}]},{name:'Zone 2 Engine',rounds:1,rest:0,ex:[{k:'row-zone2',reps:'25–30 min',timed:1,sec:1500},{k:'static-stretch',reps:'5 min'}]}]},
 fri:{title:'Friday \u2014 "The 300"',icon:'\u2694\ufe0f',time:'40\u201350 min',sessionTimer:1,warmup:'500m row (moderate) \u2192 dynamic stretches',blocks:[{name:'The 300 \u2014 Minimal rest. Beat your time.',rounds:1,rest:0,ex:[{k:'row-distance',reps:'500m'},{k:'db-deadlift',reps:'25'},{k:'push-ups',reps:'50'},{k:'tuck-jumps',reps:'25'},{k:'floor-wipers',reps:'25'},{k:'kb-clean-press',reps:'25 total'},{k:'goblet-squat',reps:'25'},{k:'renegade-row',reps:'25 total'},{k:'reverse-lunge',reps:'25 total'},{k:'eight-count',reps:'15'},{k:'kb-swing',reps:'25'},{k:'ball-slams',reps:'15'},{k:'hollow-body',reps:'60s',timed:1,sec:60},{k:'row-distance',reps:'500m'}]}]}
 };
+var FRIDAY_DENSITY={title:'Friday — Spartan Density',icon:'⚔️',time:'40–45 min',warmup:'500m easy row → dynamic stretches',blocks:[{name:'Block A — Strength Retention',rounds:3,rest:60,ex:[{k:'db-deadlift',reps:'12'},{k:'push-ups',reps:'15'},{k:'goblet-squat',reps:'12'},{k:'renegade-row',reps:'8/arm'}]},{name:'Block B — Athletic Density',rounds:3,rest:45,ex:[{k:'kb-clean-press',reps:'8 total'},{k:'reverse-lunge',reps:'10 total'},{k:'ball-slams',reps:'12'},{k:'bear-crawl',reps:'30s',timed:1,sec:30}]},{name:'Block C — Core + Engine',rounds:2,rest:45,ex:[{k:'floor-wipers',reps:'10/side'},{k:'hollow-body',reps:'30s',timed:1,sec:30},{k:'row-sprint',reps:'250m'}]}]};
 var DAYS_4={
 d4_1:{title:'Day 1 — Upper Body + Conditioning',icon:'💪',time:'50–55 min',warmup:'2 min easy row → arm circles → band pull-aparts → push-up to downward dog x 5',blocks:[
 {name:'Block A — Upper Supersets',rounds:3,rest:60,ex:[{k:'bench-press',reps:'10–12'},{k:'one-arm-row',reps:'10/arm'},{k:'shoulder-press',reps:'10/arm'},{k:'face-pulls',reps:'15'},{k:'kb-clean-press',reps:'8/arm'}]},
@@ -795,16 +797,16 @@ var currentDay=null,currentTodayKey=null,steps=[],idx=0,started=false,cdInterval
 var audioCtx=null;
 var syncState={text:'Not configured',cls:''};
 const EX_CLASS={
-  'weighted-db':['bench-press','one-arm-row','shoulder-press','floor-fly','farmer-carry','goblet-squat','rdl','split-squat','step-ups','curl-to-press','renegade-row','db-deadlift','reverse-lunge'],
+  'weighted-db':['bench-press','one-arm-row','shoulder-press','floor-fly','farmer-carry','goblet-squat','rdl','split-squat','step-ups','curl-to-press','renegade-row','db-deadlift','reverse-lunge','db-pullover','band-lat-pulldown','lateral-raise'],
   'weighted-kb':['kb-swing','kb-clean-press','kb-halos','turkish-getup'],
   'weighted-med':['ball-slams','russian-twists','woodchops','overhead-situp','floor-wipers'],
   rowing:['row-sprint','row-distance','easy-row','row-intervals','row-zone2'],
-  bodyweight:['push-ups','burpee','mtn-climbers','plank','plank-taps','dead-bugs','hollow-body','bench-dips','diamond-pushups','ytw-raises','nordic-curl','ham-curl','tuck-jumps','thruster','bosu-hops','bosu-balance','bosu-squat','bosu-hold','jump-squat','calf-raises','wall-sit','pike-pushup','superman-hold','split-squat-bw','plank-reach','glute-bridge','side-plank'],
+  bodyweight:['push-ups','burpee','mtn-climbers','plank','plank-taps','dead-bugs','hollow-body','bench-dips','diamond-pushups','decline-pushup','ytw-raises','nordic-curl','ham-curl','tuck-jumps','thruster','bosu-hops','bosu-balance','bosu-squat','bosu-hold','jump-squat','calf-raises','wall-sit','pike-pushup','superman-hold','split-squat-bw','plank-reach','glute-bridge','side-plank'],
   mobility:['shoulder-dislocates','hip-circles','pigeon','thoracic-ext','childs-pose','lizard-lunge','sl-stand','static-stretch','face-pulls']
 };
 var EX_KIND={};
 Object.keys(EX_CLASS).forEach(function(kind){EX_CLASS[kind].forEach(function(k){EX_KIND[k]=kind})});
-var PAIRED_DB=new Set(['bench-press','floor-fly','farmer-carry','rdl','split-squat','step-ups','curl-to-press','renegade-row','db-deadlift','reverse-lunge']);
+var PAIRED_DB=new Set(['bench-press','floor-fly','farmer-carry','rdl','split-squat','step-ups','curl-to-press','renegade-row','db-deadlift','reverse-lunge','band-lat-pulldown','lateral-raise']);
 function isPairedDB(key){return PAIRED_DB.has(key)}
 var DS={
   _key:'300-data',
@@ -817,8 +819,9 @@ var DS={
         gistId:'',
         defaultDbWeight:10,
         defaultKbWeight:7.5,
-        nutritionTargets:{calories:2200,protein:150,carbs:250,fat:70},
-        macroCalc:{weight:80,height:178,age:35,sex:'M',activity:'moderate',goal:'recomp'},
+        nutritionTargets:{calories:2240,protein:165,carbs:250,fat:65},
+        stepsTarget:8000,
+        macroCalc:{weight:77.6,height:180,age:46,sex:'male',activity:'moderate',goal:'cut'},
         intermittentFasting:{enabled:false,windowStart:'10:00',windowEnd:'18:00',daysActive:'weekdays'}
       },
       workouts:[],
@@ -1441,7 +1444,8 @@ function historyStepsAverage(logs){
   });
   return {avgSteps:count?Math.round(total/count):null,count:count};
 }
-function historyStepsColor(steps){return steps>=10000?'var(--green)':steps>=6000?'var(--yellow)':'var(--red)'}
+function historyStepsTarget(){var d=DS.get();return d.settings&&d.settings.stepsTarget||8000}
+function historyStepsColor(steps){var target=historyStepsTarget();return steps>=target?'var(--green)':steps>=target*.75?'var(--yellow)':'var(--red)'}
 
 /* === BOTTOM SHEET === */
 var _fabOpen=false;
@@ -1653,7 +1657,8 @@ function renderHistoryOverview(){
   if(sa.avgHours!=null&&sa.avgHours<6.5)alerts.push({icon:'⚠️',text:'Sleep averaging '+sa.avgHours.toFixed(1)+'h — recovery at risk',color:'var(--red)'});
   if(ws.diff!=null&&ws.diff<0&&(goal==='bulk'||goal==='lean_bulk'))alerts.push({icon:'📉',text:'Down '+Math.abs(ws.diff).toFixed(1)+'kg — unexpected on a '+goal.replace('_',' ')+' goal',color:'var(--red)'});
   if(ws.diff!=null&&ws.diff>1&&(goal==='cut'||goal==='recomp'))alerts.push({icon:'📈',text:'Up '+ws.diff.toFixed(1)+'kg — review nutrition against your '+goal+' goal',color:'var(--accent)'});
-  if(stepsAvg.avgSteps!=null&&stepsAvg.avgSteps<5000)alerts.push({icon:'🚶',text:'Steps averaging '+stepsAvg.avgSteps.toLocaleString()+'/day — try to move more',color:'var(--accent)'});
+  var stepsTarget=historyStepsTarget();
+  if(stepsAvg.avgSteps!=null&&stepsAvg.avgSteps<stepsTarget)alerts.push({icon:'🚶',text:'Steps averaging '+stepsAvg.avgSteps.toLocaleString()+'/day — target '+stepsTarget.toLocaleString(),color:'var(--accent)'});
   if(streak.weeks>=2)alerts.push({icon:'🔥',text:streak.weeks+'-week consistency streak',color:'var(--green)'});
   if(!isOffWeek&&weekTarget>0&&weekDone<weekTarget)alerts.push({icon:'🏋️',text:(weekTarget-weekDone)+' session'+(weekTarget-weekDone===1?'':'s')+' still to go this week',color:'var(--accent)'});
   if(alerts.length){
@@ -1922,12 +1927,13 @@ function renderRecoveryCharts(){
 function renderHistorySteps(){
   var d=DS.get(),steps=(d.stepsLog||[]).slice(),stepsAvg=historyStepsAverage(steps);
   var stepsEntries=steps.filter(function(s){return s.steps!=null});
-  var stepsBarW=stepsAvg.avgSteps!=null?Math.max(8,Math.min(100,(stepsAvg.avgSteps/12000)*100)):0;
+  var stepsTarget=historyStepsTarget();
+  var stepsBarW=stepsAvg.avgSteps!=null?Math.max(8,Math.min(100,(stepsAvg.avgSteps/stepsTarget)*100)):0;
   var h='<div class="history-view">';
   h+='<div class="section-header"><button class="sh-back" onclick="setHistoryView(\'overview\')">‹</button><h3>🚶 Steps</h3></div>';
   h+='<div class="settings-section"><div class="spread"><div><h3>🚶 Daily Movement</h3><p class="settings-copy" style="margin:0">NEAT and active recovery — every step counts.</p></div><span class="tag">'+steps.length+' days</span></div>';
   if(stepsAvg.avgSteps!=null){
-    h+='<div class="sleep-bar"><div class="spread"><strong>7-day average</strong><span class="hist-sub">'+stepsAvg.avgSteps.toLocaleString()+' steps</span></div><div class="bar-track"><div class="bar-fill" style="width:'+stepsBarW+'%;background:linear-gradient(90deg,var(--accent),var(--accent2))"></div></div></div>';
+    h+='<div class="sleep-bar"><div class="spread"><strong>7-day average</strong><span class="hist-sub">'+stepsAvg.avgSteps.toLocaleString()+' / '+stepsTarget.toLocaleString()+' steps</span></div><div class="bar-track"><div class="bar-fill" style="width:'+stepsBarW+'%;background:linear-gradient(90deg,var(--accent),var(--accent2))"></div></div></div>';
   }
   if(stepsEntries.length>=3){h+='<div class="trend-mini"><canvas id="trend-steps"></canvas></div>';}
   if(steps.length){
@@ -1947,7 +1953,7 @@ function renderStepsCharts(){
   var stepsSeries=steps.filter(function(s){return s.steps!=null}).slice(0,14).reverse();
   if(stepsSeries.length>=3){
     historyPushChart('trend-steps',{type:'bar',
-      data:{labels:stepsSeries.map(function(s){return historyLabelDate(s.date)}),datasets:[{label:'Steps',data:stepsSeries.map(function(s){return s.steps}),backgroundColor:stepsSeries.map(function(s){return s.steps>=10000?'rgba(232,89,12,.8)':s.steps>=6000?'rgba(217,164,65,.8)':'rgba(255,107,99,.8)'}),borderRadius:8,maxBarThickness:26}]},
+      data:{labels:stepsSeries.map(function(s){return historyLabelDate(s.date)}),datasets:[{label:'Steps',data:stepsSeries.map(function(s){return s.steps}),backgroundColor:stepsSeries.map(function(s){var target=historyStepsTarget();return s.steps>=target?'rgba(79,191,117,.8)':s.steps>=target*.75?'rgba(217,164,65,.8)':'rgba(255,107,99,.8)'}),borderRadius:8,maxBarThickness:26}]},
       options:function(){var o=opts(false);o.scales.y={beginAtZero:true,ticks:{color:cT,callback:function(v){return v>=1000?(v/1000)+'k':v},font:{size:10}},grid:{color:cG}};return o}()
     });
   }
@@ -2092,19 +2098,19 @@ function calcMacros(){
     var w=safeNum(mc.weight,80),h=safeNum(mc.height,178),a=safeNum(mc.age,35);
     var sex=(mc.sex||'M'),act=(mc.activity||'moderate'),goal=(mc.goal||'recomp');
     var bmr;
-    if(sex==='F') bmr=10*w+6.25*h-5*a-161;
+    if(String(sex).toLowerCase().charAt(0)==='f') bmr=10*w+6.25*h-5*a-161;
     else bmr=10*w+6.25*h-5*a+5;
     var actMult={sedentary:1.2,light:1.375,moderate:1.55,active:1.725,very_active:1.9};
     var tdee=bmr*(actMult[act]||1.55);
-    var goalAdj={cut:-300,recomp:-150,maintain:0,lean_bulk:250,bulk:500};
-    var target=Math.round(tdee+(goalAdj[goal]||0));
-    var proteinPerKg=goal==='recomp'?2.2:2;
-    var fatPerKg=goal==='recomp'?0.85:1;
-    var proteinG=Math.round(w*proteinPerKg);
-    var fatG=Math.round(w*fatPerKg);
+    var goalAdj={cut:-360,recomp:-150,maintain:0,lean_bulk:250,bulk:500};
+    var target=Math.round((tdee+(goalAdj[goal]||0))/10)*10;
+    var proteinPerKg=(goal==='cut'||goal==='recomp')?2.1:2;
+    var fatPerKg=(goal==='cut'||goal==='recomp')?0.85:1;
+    var proteinG=Math.round(w*proteinPerKg/5)*5;
+    var fatG=Math.round(w*fatPerKg/5)*5;
     var proteinCal=proteinG*4,fatCal=fatG*9;
     var carbsCal=target-proteinCal-fatCal;
-    var carbsG=Math.round(Math.max(carbsCal/4,50));
+    var carbsG=Math.round(Math.max(carbsCal/4,50)/5)*5;
     var t=d.settings.nutritionTargets;
     t.calories=target;t.protein=proteinG;t.carbs=carbsG;t.fat=fatG;
     DS.save();
@@ -2142,6 +2148,8 @@ function renderSettings(){
         (function(){var prog=getConfiguredProgramme();var ph='';[5,4,3,'travel'].forEach(function(n){var label=n==='travel'?'✈️ Travel':n+'-Day';ph+='<button class="prog-pill'+(n===prog?' active':'')+'" onclick="switchProgramme('+( typeof n==='string'?"'"+n+"'":n)+')">'+label+'</button>'});return ph})()+
         (isCurrentOffWeek()?'<p class="settings-copy" style="color:var(--blue);font-weight:700">🏖 This week is marked as planned time off. Your '+getConfiguredProgramme()+'-day programme will return automatically next week.</p>':'')+
         '</div>'+
+        '<h3>Daily Movement</h3>'+
+        '<div class="settings-row"><label>Steps target</label><input id="steps-target" type="number" step="500" min="1000" value="'+(s.stepsTarget||8000)+'" onchange="updateSettingsFromForm()"></div>'+
         '<h3>Default Weights</h3>'+
         '<div class="settings-row"><label>Dumbbell (kg)</label><input id="dw-db" type="number" step="1" value="'+(s.defaultWeights&&s.defaultWeights.db||12)+'" onchange="updateSettingsFromForm()"></div>'+
         '<div class="settings-row"><label>Kettlebell (kg)</label><input id="dw-kb" type="number" step="1" value="'+(s.defaultWeights&&s.defaultWeights.kb||16)+'" onchange="updateSettingsFromForm()"></div>'+
@@ -2168,10 +2176,11 @@ function renderSettings(){
         '</details>'+
 
         '<div class="settings-subhead">Nutrition Targets</div>'+
-        '<div class="settings-row"><label>Calories</label><input id="nt-cal" type="number" step="1" value="'+(t.calories||2500)+'" onchange="updateSettingsFromForm()"></div>'+
-        '<div class="settings-row"><label>Protein (g)</label><input id="nt-p" type="number" step="1" value="'+(t.protein||180)+'" onchange="updateSettingsFromForm()"></div>'+
-        '<div class="settings-row"><label>Carbs (g)</label><input id="nt-c" type="number" step="1" value="'+(t.carbs||220)+'" onchange="updateSettingsFromForm()"></div>'+
-        '<div class="settings-row"><label>Fat (g)</label><input id="nt-f" type="number" step="1" value="'+(t.fat||70)+'" onchange="updateSettingsFromForm()"></div>'+
+        '<p class="settings-copy">Lean Athletic Cut baseline. Keep protein fixed; bias extra carbohydrates toward training days.</p>'+
+        '<div class="settings-row"><label>Calories</label><input id="nt-cal" type="number" step="1" value="'+(t.calories||2240)+'" onchange="updateSettingsFromForm()"></div>'+
+        '<div class="settings-row"><label>Protein (g)</label><input id="nt-p" type="number" step="1" value="'+(t.protein||165)+'" onchange="updateSettingsFromForm()"></div>'+
+        '<div class="settings-row"><label>Carbs (g)</label><input id="nt-c" type="number" step="1" value="'+(t.carbs||250)+'" onchange="updateSettingsFromForm()"></div>'+
+        '<div class="settings-row"><label>Fat (g)</label><input id="nt-f" type="number" step="1" value="'+(t.fat||65)+'" onchange="updateSettingsFromForm()"></div>'+
 
         '<div class="settings-subhead">Intermittent Fasting</div>'+
         '<p class="settings-copy">Set a feeding window and choose the days you want fasting reminders enabled.</p>'+
@@ -2219,7 +2228,7 @@ function renderSettings(){
           '<button class="settings-btn secondary" onclick="checkForAppUpdate()">🔄 Check for Updates</button>'+
           '<button class="settings-btn secondary" onclick="forceAppRefresh()">🔥 Force Refresh</button>'+
         '</div>'+
-        '<div class="settings-status">App version: <strong>2026.08.31</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
+        '<div class="settings-status">App version: <strong>2026.09.06</strong> · Home-screen installs can take a beat to pick up service worker updates, so force refresh if something looks stale.</div>'+
       '</div>'+
     '</div>';
 }
@@ -2229,10 +2238,11 @@ function updateSettingsFromForm(){
   d.settings.gistId=(document.getElementById('gist-id-input')||{}).value||'';
   d.settings.defaultDbWeight=safeNum((document.getElementById('dw-db')||{}).value,d.settings.defaultDbWeight||10);
   d.settings.defaultKbWeight=safeNum((document.getElementById('dw-kb')||{}).value,d.settings.defaultKbWeight||7.5);
-  t.calories=safeNum((document.getElementById('nt-cal')||{}).value,t.calories||2200);
-  t.protein=safeNum((document.getElementById('nt-p')||{}).value,t.protein||150);
+  d.settings.stepsTarget=safeNum((document.getElementById('steps-target')||{}).value,d.settings.stepsTarget||8000);
+  t.calories=safeNum((document.getElementById('nt-cal')||{}).value,t.calories||2240);
+  t.protein=safeNum((document.getElementById('nt-p')||{}).value,t.protein||165);
   t.carbs=safeNum((document.getElementById('nt-c')||{}).value,t.carbs||250);
-  t.fat=safeNum((document.getElementById('nt-f')||{}).value,t.fat||70);
+  t.fat=safeNum((document.getElementById('nt-f')||{}).value,t.fat||65);
   d.settings.intermittentFasting=d.settings.intermittentFasting||{};
   d.settings.intermittentFasting.enabled=!!(document.getElementById('if-enabled')||{}).checked;
   d.settings.intermittentFasting.windowStart=(document.getElementById('if-start')||{}).value||'10:00';
@@ -3404,7 +3414,7 @@ function renderTrainDashboard() {
   h += '<div style="' + chipStyle + '"><div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;font-weight:700">This week</div><div style="font-size:.92rem;font-weight:800;margin-top:2px">' + weekMsg + '</div></div>';
   h += '<div style="' + chipStyle + '"><div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;font-weight:700">Streak</div><div style="font-size:.92rem;font-weight:800;margin-top:2px">' + (streak.weeks > 0 ? '🔥 ' + streak.weeks + (streak.weeks === 1 ? ' week' : ' weeks') : 'Building…') + '</div></div>';
   var nextLabel = '—';
-  (function(){ var dw=new Date().getDay(),dayNames=['Sun','Mon','Tue','Wed','Thu','Fri','Sat']; for(var lk=1;lk<=7;lk++){var cd=(dw+lk)%7,ck=null;if(prog==='off')ck=todayMapOff[cd];else if(prog==='travel')ck='hotel';else if(prog===5)ck=todayMap5[cd];else if(prog===4)ck=todayMap4[cd];else ck=todayMap3[cd];if(ck&&conf.days[ck]){nextLabel=(lk===1?'Tomorrow':dayNames[cd])+' · '+conf.days[ck].icon;break}} })();
+  (function(){ var dw=new Date().getDay(),dayNames=['Sun','Mon','Tue','Wed','Thu','Fri','Sat']; for(var lk=1;lk<=7;lk++){var cd=(dw+lk)%7,ck=null;if(prog==='off')ck=todayMapOff[cd];else if(prog==='travel')ck='hotel';else if(prog===5)ck=todayMap5[cd];else if(prog===4)ck=todayMap4[cd];else ck=todayMap3[cd];if(ck&&days[ck]){nextLabel=(lk===1?'Tomorrow':dayNames[cd])+' · '+days[ck].icon;break}} })();
   h += '<div style="' + chipStyle + '"><div style="font-size:.68rem;color:var(--muted);text-transform:uppercase;font-weight:700">Next</div><div style="font-size:.92rem;font-weight:800;margin-top:2px">' + nextLabel + '</div></div>';
   h += '</div>';
 
@@ -3452,7 +3462,7 @@ function renderTrainDashboard() {
       else if (prog === 5) candidate = todayMap5[checkDow];
       else if (prog === 4) candidate = todayMap4[checkDow];
       else candidate = todayMap3[checkDow];
-      if (candidate && conf.days[candidate]) { nextKey = candidate; break; }
+      if (candidate && days[candidate]) { nextKey = candidate; break; }
     }
     if (nextKey) showDayPanel(nextKey);
   }
@@ -3481,8 +3491,7 @@ function showDayPanel(key) {
   var panel = document.getElementById('p-' + key);
   if (panel) {
     panel.classList.add('active');
-    var prog = getActiveProgramme();
-    var days = PROGRAMMES[prog].days;
+    var days = getActiveDays();
     if (days[key]) {
       currentDay = key;
       renderDayStart(key, days);
@@ -3491,7 +3500,15 @@ function showDayPanel(key) {
 }
 
 function getActiveDays() {
-  return PROGRAMMES[getActiveProgramme()].days;
+  var prog=getActiveProgramme();
+  var days=PROGRAMMES[prog].days;
+  var phase=DS.getPhase();
+  if(prog===5&&phase&&phase.current==='conditioning'){
+    var active=Object.assign({},days);
+    active.fri=phaseWeekNum(phase)%2===0?DAYS.fri:FRIDAY_DENSITY;
+    return active;
+  }
+  return days;
 }
 
 function showPanel(key) {
@@ -3580,6 +3597,60 @@ var PHASE_DEFS = {
         'Maintain strength on the main lifts (1-2 top sets)'
       ]
     }
+  },
+  conditioning: {
+    weeks: 5,
+    label: 'Lean Athletic Cut — V-Taper + Density',
+    description: 'Preserve strength and muscle while reducing waist. Upper-body work biases shoulders, lats and upper chest; conditioning comes from rowing, density and an 8,000-step floor.',
+    overload: { primary: 'recomposition+density', tempo: null, pauseSeconds: 0, useHalfReps: false, unilateral: false, restMultiplier: 1.0 },
+    exerciseOverrides: {
+      'bench-press': { repsTarget: '8–10', tempo: '2-0-1', weight: 15, cue: 'Stop with 1–2 clean reps in reserve. Preserve pressing strength while cutting.' },
+      'one-arm-row': { repsTarget: '8–12/arm', tempo: '2-1-1', weight: 15, cue: 'Pull to the hip and squeeze for 1s. Build the back that creates the V-taper.' },
+      'shoulder-press': { repsTarget: '8–10/arm', tempo: '2-0-1', weight: 10, cue: 'Half-kneeling and strict. No shrugging; leave 1–2 reps in reserve.' },
+      'decline-pushup': { repsTarget: '10–15', tempo: '2-0-1', cue: 'Upper-chest volume. Stop before body position or shoulder control breaks.' },
+      'db-pullover': { repsTarget: '10–12', tempo: '3-1-1', weight: 15, cue: 'Own the stretched position and pull with the lats, not the arms.' },
+      'band-lat-pulldown': { repsTarget: '10–12', tempo: '2-1-1', weight: 12.5, cue: 'Strict chest-supported rows. Squeeze the shoulder blades and do not bounce.' },
+      'lateral-raise': { repsTarget: '12–20', tempo: '2-1-2', weight: 5, cue: 'Use 2–5kg. Only the final set may reach technical failure; stop when you shrug or swing.' },
+      'face-pulls': { repsTarget: '15–25', tempo: '2-1-2', cue: 'Rear delts and posture. Keep every rep controlled and finish with 1–2 reps in reserve.' },
+      'split-squat': { repsTarget: '8/leg', tempo: '2-1-1', weight: 15, cue: 'Heavy unilateral strength. Keep 1–2 reps in reserve and own the bottom position.' },
+      'rdl': { repsTarget: '8–10', tempo: '3-0-1', weight: 15, cue: 'Slow eccentric, full hamstring stretch, strong brace. No grinding reps.' },
+      'goblet-squat': { repsTarget: '10–12', tempo: '2-1-1', weight: 15, cue: 'Pause briefly below parallel and drive up. Finish with 1–2 reps in reserve.' },
+      'ham-curl': { repsTarget: '8–10', tempo: '3-0-1', cue: 'Keep hips high. Stop when the hips drop or the hamstrings lose control.' },
+      'kb-swing': { repsTarget: '15–20', tempo: null, weight: 7.5, cue: 'Explosive hip snap. End the set before power or hinge position degrades.' },
+      'tuck-jumps': { repsTarget: '6', tempo: null, cue: 'Low-volume power: six crisp, quiet landings. Stop before jump height falls.' }
+    },
+    restPeriods: { strength: 75, circuit: 45, emom: 60, core: 0, finisher: 60 },
+    globalCues: [
+      'Compounds stop with 1–2 reps in reserve — preserve muscle and strength',
+      'Only the final lateral-raise set may reach technical failure',
+      'Daily floor: 8,000 steps before adding more HIIT',
+      'Nutrition baseline: 2,240 kcal, 165g protein, 250g carbs, 65g fat',
+      'Friday alternates controlled Spartan Density with the full timed 300'
+    ],
+    phaseTransition: {
+      autoPromptAtWeek: 5,
+      nextPhase: 'deload',
+      previewChanges: [
+        'Reduce strength and circuit volume for one week',
+        'Keep easy Zone 2 rowing and mobility',
+        'Review waist, average weight, strength retention and 300 time',
+        'Set the next block from measured progress'
+      ]
+    }
+  },
+  deload: {
+    weeks: 1,
+    label: 'Deload — Absorb the Cut',
+    description: 'One lower-volume week to recover, review measurements and prepare the next block.',
+    overload: { primary: 'recovery', tempo: null, pauseSeconds: 0, useHalfReps: false, unilateral: false, restMultiplier: 1.2 },
+    exerciseOverrides: {},
+    restPeriods: { strength: 90, circuit: 60, emom: 75, core: 0, finisher: 75 },
+    globalCues: [
+      'Use about 60% of normal volume and finish every set fresh',
+      'Keep walking, mobility and conversational rowing',
+      'Record waist, average weight and progress photos before the next block'
+    ],
+    phaseTransition: null
   }
 };
 
@@ -3595,9 +3666,9 @@ function phaseWeekNum(phase) {
   return phase.week || 1;
 }
 
-function applyPhaseConfig(cfg, key) {
+function applyPhaseConfig(cfg, key, startDate) {
   if (!cfg) return;
-  var today = new Date().toISOString().slice(0, 10);
+  var today = startDate || new Date().toISOString().slice(0, 10);
   var def = PHASE_DEFS[key];
   if (!def) {
     cfg.phase.current = key; cfg.phase.startDate = today; cfg.phase.week = 1;
@@ -3708,6 +3779,34 @@ function applyPhaseConfig(cfg, key) {
   }
 })();
 
+// Personalised 2026-09-07 transition: migrate existing saved data, not only
+// fresh installs, into the squad-approved Lean Athletic Cut block.
+(function(){
+  var d=DS.get(),cfg=d.programmeConfig,changed=false;
+  if(!d.settings.leanAthleticCut20260906){
+    d.settings.nutritionTargets={calories:2240,protein:165,carbs:250,fat:65};
+    d.settings.stepsTarget=8000;
+    d.settings.macroCalc=d.settings.macroCalc||{};
+    d.settings.macroCalc.weight=77.6;
+    d.settings.macroCalc.height=180;
+    d.settings.macroCalc.age=46;
+    d.settings.macroCalc.sex='male';
+    d.settings.macroCalc.goal='cut';
+    d.settings.leanAthleticCut20260906=true;
+    changed=true;
+  }
+  if(cfg&&cfg.phase&&(cfg.phase.current==='strength'||cfg.phase.current==='conditioning')&&cfg.leanAthleticCutVersion!==1){
+    applyPhaseConfig(cfg,'conditioning','2026-09-07');
+    cfg.version=2;
+    cfg.leanAthleticCutVersion=1;
+    changed=true;
+  }
+  if(changed){
+    DS.save();
+    try{DS.syncToGist();}catch(e){}
+  }
+})();
+
 // === INIT ===
 showMainSection('home');
 
@@ -3720,7 +3819,7 @@ document.addEventListener('touchstart',function unlockAudio(){
 },true);
 /* === SERVICE WORKER REGISTRATION === */
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js?v=2026.08.31').then(function(reg) {
+  navigator.serviceWorker.register('./sw.js?v=2026.09.06').then(function(reg) {
     console.log('SW registered, scope:', reg.scope);
   }).catch(function(err) {
     console.log('SW registration failed:', err);
